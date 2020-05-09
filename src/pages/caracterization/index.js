@@ -21,8 +21,8 @@ export default function Caracterization() {
                     <Feather name='arrow-left' size={35} color='#00753E' />
                 </TouchableOpacity>
             </View>
+            <Text style={styles.title}>PORTE DA PROPRIEDADE</Text>
             <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
-                <Text style={styles.title}>PORTE DA PROPRIEDADE</Text>
                 <Text style={styles.description}>Responda as questões para saber o porte de sua propriedade</Text>
             </ScrollView>
             

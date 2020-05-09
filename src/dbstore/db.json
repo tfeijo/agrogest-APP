@@ -1,0 +1,16 @@
+{
+    "initialState": {
+        "boolCaracterization": false,
+        "boolProduction": false,
+        "boolLegislation": false,
+        "boolWaterResource": false,
+        "boolSoilVegetation": false,
+        "boolWasteManagement": false
+    },
+    "boolCaracterization": false,
+    "boolProduction": false,
+    "boolLegislation": false,
+    "boolWaterResource": false,
+    "boolSoilVegetation": false,
+    "boolWasteManagement": false
+}

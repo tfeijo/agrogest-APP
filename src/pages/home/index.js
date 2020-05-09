@@ -26,6 +26,8 @@ export default function Home() {
         boolSoilVegetation : false,
         boolWasteManagement :  false
     };
+
+    
     console.log(json.boolCaracterization)
     return <>
                 <StatusBar backgroundColor="#00753E" barStyle='light-content' />
