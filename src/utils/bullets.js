@@ -1,6 +1,6 @@
-
-
-export default function Bullets() {
+function Bullets() {
 
     
 }
+
+export default Bullets();
