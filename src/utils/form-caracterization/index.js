@@ -3,7 +3,8 @@ import {
   View, 
   TextInput, 
   TouchableOpacity,
-  Switch
+  Switch,
+  ActivityIndicator
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import React, { useState } from 'react';
@@ -108,7 +109,13 @@ function Form(props) {
         style={styles.Button}
         onPress={props.handleSubmit}
       >
-        <Text style={styles.ButtonText}>Salvar</Text>
+        { 
+          props.isSubmitting ? 
+            <ActivityIndicator color='#fff' size= 'large' />
+            :
+            <Text style={styles.ButtonText}>Salvar</Text>
+        }
+       
       </TouchableOpacity>
     </View>
   </>
@@ -122,8 +129,9 @@ export default withFormik({
     licensing: '',
   }),
   
-  handleSubmit: (values) => {
+  handleSubmit: (values, { setSubmitting,  }) => {
     console.log(values);
+    setSubmitting(false);
   }
 
 })(Form);
