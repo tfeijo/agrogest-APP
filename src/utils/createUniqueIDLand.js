@@ -22,10 +22,15 @@ function createUUID() {
       return false;
     }
   }
+
+  async function addFarm() {
+    return false;
+  }
   
   return {
     getData,
-    update
+    update,
+    addFarm
   }
 
 }

@@ -1,16 +1,17 @@
 import { AsyncStorage } from 'react-native';
 import api from '../services/api';
+import createControl from './createControl';
 
 function createLand() {
   
   async function getData(){
     try{ 
-      let jsonValue = await AsyncStorage.getItem('land');
+      const jsonValue = await AsyncStorage.getItem('land');
       
       if (jsonValue != null) {
         try {
-          jsonValue = JSON.parse(jsonValue);
-          let { data } = await api.get(`lands/${jsonValue.id}`)
+          let jsonValueParsed = JSON.parse(jsonValue);
+          let { data } = await api.get(`lands/${jsonValueParsed.id}`)
           return data;
         } catch(err) {
           console.warn(err);
@@ -27,7 +28,6 @@ function createLand() {
   async function update(data = null){
     try{ 
       if (data != null) {
-        console.log(JSON.stringify(data));
         await AsyncStorage.setItem('land', JSON.stringify(data));
         return true
       }
@@ -39,6 +39,10 @@ function createLand() {
   }
 
   async function clean(){
+    let control = createControl;
+    
+    await control.clean();
+
     return {
       "id": null,
       "installation_id": null,

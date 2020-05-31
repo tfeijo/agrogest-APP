@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
     View,
     Image,
@@ -9,8 +9,8 @@ import {
     Switch,
     Alert,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
-import {Feather} from '@expo/vector-icons';
+import { Picker } from '@react-native-community/picker';
+import { Feather } from '@expo/vector-icons';
 import { AppLoading } from 'expo';
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,10 +26,7 @@ import createUID from './../../utils/createUniqueIDLand';
 
 export default function Caracterization() {
     
-    const controlCreate = createControl;
-    const caracCreate = createCaracterization;
-    const landCreate = createLand;
-    const UIDCreate = createUID;
+    
     const [enableCity, setenableCity] = useState(false);
     const [isLoading,setLoading] = useState(true);
     const [landData, setLand] = useState(null);
@@ -48,10 +45,10 @@ export default function Caracterization() {
         try {
             stateList.push({'id':999, 'name': 'Selecione um estado'});
             setStates(stateList);
-            setControl(await controlCreate.getData());
-            setLand(await landCreate.getData());
-            setUID(await UIDCreate.getData());
-            setCarac(await caracCreate.getData());
+            setControl(await createControl.getData());
+            setLand(await createLand.getData());
+            setUID(await createUID.getData());
+            setCarac(await createCaracterization.getData());
         } catch(err) {
             console.warn(err);
         }
@@ -66,7 +63,7 @@ export default function Caracterization() {
 
     async function saveData(){
         try{
-            controlCreate.update({
+            createControl.update({
                 ...controlData, 
                 'boolCaracterization': true
             });
@@ -76,12 +73,11 @@ export default function Caracterization() {
                 installation_id: UniqueID,
             }); 
 
-            landCreate.update(newLand);
-            console.log(newLand);
+            createLand.update(newLand);
             createUID.update(newLand.installation_id);
 
         } catch(err) {
-            controlCreate.update({
+            createControl.update({
                 ...controlData,
                  'boolCaracterization': false
             })
@@ -130,7 +126,7 @@ export default function Caracterization() {
                     selectedValue={caracData.state_id}
                     onValueChange={async (itemValue, itemIndex) => {
                             loadCities(itemValue);
-                            setCarac({...caracData, state_id:itemValue})
+                            setCarac({...caracData, state_id:itemValue});
                         }
                     }
                 >
@@ -141,9 +137,8 @@ export default function Caracterization() {
                 <Picker
                     style={styles.picker}
                     selectedValue={caracData.city_id}
-                    onValueChange={(itemValue, itemIndex) => {
+                    onValueChange={(itemValue, itemIndex) => 
                         setCarac({...caracData, city_id:itemValue})
-                        }
                     }
                     enabled={enableCity}
                 >
@@ -156,7 +151,7 @@ export default function Caracterization() {
                 <TextInput  
                     name='size'
                     onChangeText={text => {
-                        setCarac({...caracData, hectare:text});
+                            setCarac({...caracData, hectare:text});
                         }
                     }
                     placeholder="Hectares (ha)"
@@ -179,7 +174,7 @@ export default function Caracterization() {
                     style={styles.Button}
                     onPress={() => {
                             if(caracData.state_id == 999 ||
-                               caracData.city_id== null ||
+                               caracData.city_id == null ||
                                caracData.hectare ==null
                             ){
                                 Alert.alert(
