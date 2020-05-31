@@ -4,8 +4,8 @@ import Constants from 'expo-constants';
 export default StyleSheet.create({
     container: {
         flex:1,
-        paddingHorizontal: 24,
-        paddingTop: Constants.statusBarHeight + 20,
+        paddingHorizontal: 10,
+
     },
     header : {
         flexDirection: 'row',

@@ -27,13 +27,8 @@ export default function Home() {
 
     async function getInfo(){
         try {
-            
             setControl(await createControl.getData());
-            console.log('getting control - ok');
-            
             setLand(await createLand.getData());
-            console.log('getting land - ok');
-
         } catch(err) {
             console.warn(err);
         }
@@ -42,7 +37,6 @@ export default function Home() {
     useEffect(() => {
         if (isFocused && !isLoading){
             getInfo();
-
         }
     }, [isFocused])
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
     View,
     Image,
@@ -6,8 +6,8 @@ import {
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 
 import FormCaracterization from  './../../utils/form-caracterization';
 import logoImg from '../../assets/logo.png';
@@ -34,9 +34,7 @@ export default function Caracterization() {
                 <Text style={styles.description}>
                     Responda as questões para saber o porte de sua propriedade
                 </Text>
-
                 <FormCaracterization />
-
             </ScrollView>
  
         </View>
