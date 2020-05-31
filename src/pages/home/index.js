@@ -27,8 +27,13 @@ export default function Home() {
 
     async function getInfo(){
         try {
+            
             setControl(await createControl.getData());
+            console.log('getting control - ok');
+            
             setLand(await createLand.getData());
+            console.log('getting land - ok');
+
         } catch(err) {
             console.warn(err);
         }

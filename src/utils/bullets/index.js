@@ -14,10 +14,6 @@ export default function BulletFull (props) {
         </>
 }
 
-function navigateTo(page=''){
-    useNavigation().navigate(page);
-}
-
 function BulletTitle(props){
     return  <View style={styles.stepTitle}>
                 <Text style={styles.stepTitleText}>
@@ -122,12 +118,14 @@ function WasteManagment(props) {
 }
 
 function BulletEmpty(props){
+    let navigation = useNavigation(); 
+
     if(props.stepBefore) 
         return <View style={styles.stepListEmpty}>
                     <View style={styles.stepEmpty}>
                         <TouchableOpacity
                             style={styles.fowardButtonEmpty}
-                            onPress={() => navigateTo(props.page)}
+                            onPress={() => navigation.navigate(props.page)}
                         >
                             <Text style={{color: '#000', fontSize: 20}}>Clique para preencher.</Text>
                             <Feather name='arrow-right' size={25} color='#00753E' />
@@ -144,6 +142,9 @@ function BulletEmpty(props){
 }
 
 function FowardButton(props) {
+    
+    let navigation = useNavigation(); 
+    
     return  <TouchableOpacity
             style={styles.fowardButton}
             onPress={() => {
@@ -154,7 +155,7 @@ function FowardButton(props) {
                     [
                         { text: 'SIM', onPress: () => {
                             console.log('SIM Pressed')
-                            navigateTo(props.page)
+                            navigation.navigate(props.page);
                         }
                         },
                         { text: 'NÃO', onPress: () => console.log('Não Pressed') },

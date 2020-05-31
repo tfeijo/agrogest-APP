@@ -10,8 +10,11 @@ function createLand() {
       
       if (jsonValue != null) {
         try {
+          
           let jsonValueParsed = JSON.parse(jsonValue);
+
           let { data } = await api.get(`lands/${jsonValueParsed.id}`)
+
           return data;
         } catch(err) {
           console.warn(err);
