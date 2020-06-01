@@ -20,6 +20,13 @@ export default StyleSheet.create({
         elevation: 3,
         height: 50,
     },
+    err: {
+        fontSize: 16,
+        lineHeight: 24,
+        color: '#f00',
+        marginBottom: 32,
+        fontWeight: 'normal'
+    },
     pickerItem : {
         marginLeft: 5,
         marginRight: 5,

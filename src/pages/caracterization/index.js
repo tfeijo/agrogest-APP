@@ -9,7 +9,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
-import FormCaracterization from  './../../utils/form-caracterization';
+import Form from  './../../utils/form-caracterization';
 import logoImg from '../../assets/logo.png';
 import styles from './styles';
 
@@ -34,7 +34,7 @@ export default function Caracterization() {
                 <Text style={styles.description}>
                     Responda as questões para saber o porte de sua propriedade
                 </Text>
-                <FormCaracterization />
+                <Form />
             </ScrollView>
  
         </View>
