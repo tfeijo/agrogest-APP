@@ -56,6 +56,7 @@ function createLand() {
         "state": {}
       },
       "size": null,
+      "productions": {}
     }
   }
   
