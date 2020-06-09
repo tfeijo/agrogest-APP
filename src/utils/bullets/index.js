@@ -121,6 +121,7 @@ function BulletEmpty(props){
     let navigation = useNavigation(); 
 
     if(props.stepBefore) 
+        
         return <View style={styles.stepListEmpty}>
                     <View style={styles.stepEmpty}>
                         <TouchableOpacity

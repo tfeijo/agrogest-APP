@@ -13,7 +13,7 @@ function createLand() {
           
           let jsonValueParsed = JSON.parse(jsonValue);
 
-          let { data } = await api.get(`lands/${jsonValueParsed.id}`)
+          let { data } = await api.get(`farms/${jsonValueParsed.id}`)
 
           return data;
         } catch(err) {

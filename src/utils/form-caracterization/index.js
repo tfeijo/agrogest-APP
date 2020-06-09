@@ -19,7 +19,6 @@ import createLand from '../createLand';
 import createControl from '../createControl';
 import UniqueID from '../createUniqueIDLand';
 
-
 export default function Form(props) {
   
   const navigation = useNavigation();
@@ -28,8 +27,8 @@ export default function Form(props) {
     initialValues: {
       state_id: 9999,
       city_id: 9999,
-      hectare: '',
-      licensing: '',
+      hectare: 1,
+      licensing: false,
       installation_id: null,
     },
     validateOnChange: false,
@@ -51,11 +50,11 @@ export default function Form(props) {
       var newLand = null;
   
       UniqueID.getData()
-        .then(response => {
-          values.installation_id = response
-        })
+      .then(response => {
+        values.installation_id = response
+      })
      
-      api.post('lands', values)
+      api.post('farms', values)
       .then(response => {
         newLand = response.data;
         createLand.update(newLand);
@@ -74,15 +73,13 @@ export default function Form(props) {
     },
   });
 
-
   const [enableCity, setenableCity] = useState(false);
   const [isLoading,setLoading] = useState(true);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
-
   async function loadCities(state){
-    const { data } = await api.get(`cities/state/${state}`);
+    const { data } = await api.get(`states/${state}/cities`);
     data.unshift({'id':9999, 'name': 'Selecione uma cidade'});
     setCities(data);
     setenableCity(true);
