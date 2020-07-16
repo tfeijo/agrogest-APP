@@ -7,19 +7,16 @@ function createLand() {
   async function getData(){
     try{ 
       const jsonValue = await AsyncStorage.getItem('land');
-      
       if (jsonValue != null) {
-        try {
-          
           let jsonValueParsed = JSON.parse(jsonValue);
-
-          let { data } = await api.get(`farms/${jsonValueParsed.id}`)
-
-          return data;
-        } catch(err) {
-          console.warn(err);
-          return JSON.parse(jsonValue);
-        }
+          try {
+            let response = await api.get(`farms/${jsonValueParsed.id}`)
+            if (response.status != 200) return clean();
+            return response.data;
+          } catch(err) {
+            console.log(err)
+            return clean();
+          }
       } else {
         return clean()
       }

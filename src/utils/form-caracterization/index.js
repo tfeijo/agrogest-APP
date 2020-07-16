@@ -58,6 +58,7 @@ export default function Form(props) {
       .then(response => {
         newLand = response.data;
         createLand.update(newLand);
+        setSubmitting(true);
         UniqueID.update(newLand.installation_id);
         createControl.update({
           ...createControl.getData(),

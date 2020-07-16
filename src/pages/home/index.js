@@ -26,6 +26,10 @@ export default function Home() {
     const isFocused = useIsFocused();
 
     async function getInfo(){
+        // await AsyncStorage.removeItem('control')
+        // await AsyncStorage.removeItem('land')
+        // await AsyncStorage.removeItem('UniqueIDLand')
+
         try {
             setControl(await createControl.getData());
             setLand(await createLand.getData());
