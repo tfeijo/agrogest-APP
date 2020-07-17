@@ -1,0 +1,12 @@
+version: "3.5"
+
+services:
+  agrogest-app:
+    build: .
+    command: "npm start"
+    ports:
+      - 3002:3002
+      - 3003:3003
+      
+    volumes:
+      - .:/app

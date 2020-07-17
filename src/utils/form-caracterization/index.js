@@ -46,34 +46,34 @@ export default function Form(props) {
         .moreThan(0, 'O número deve ser maior que 0.')
     }),
     handleSubmit: () => {},
-    onSubmit: async (values, { setSubmitting, setErrors}) => {
+    onSubmit: async (values, {setSubmitting, setErrors}) => {
       var newLand = null;
   
       UniqueID.getData()
       .then(response => {
         values.installation_id = response
       })
-     
+
+      setSubmitting(true);
       api.post('farms', values)
       .then(response => {
         newLand = response.data;
         createLand.update(newLand);
-        setSubmitting(true);
         UniqueID.update(newLand.installation_id);
         createControl.update({
           ...createControl.getData(),
           'boolCaracterization': true
         })
-        setSubmitting(false);
         navigation.goBack()
       })
       .catch(err => {
         setSubmitting(false);
         setErrors({ message: err.message });
       });
+      setSubmitting(false);
     },
   });
-
+  
   const [enableCity, setenableCity] = useState(false);
   const [isLoading,setLoading] = useState(true);
   const [states, setStates] = useState([]);
