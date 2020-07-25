@@ -96,6 +96,6 @@ export default StyleSheet.create({
 
     fowardButtonText: {
         color: '#00753E',
-        fontWeight: 'bold'
+        // fontWeight: 'bold'
     }
 }); 

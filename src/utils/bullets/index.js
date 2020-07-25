@@ -68,7 +68,7 @@ function Caracterization(props) {
                     {licensing}
                 </Text>
                 <Text style={styles.stepProperty}>
-                    Porte:
+                    Tamanho:
                 </Text>
                 <Text style={styles.stepValue}>
                     {props.data.size.name}
@@ -148,24 +148,9 @@ function FowardButton(props) {
     
     return  <TouchableOpacity
             style={styles.fowardButton}
-            onPress={() => {
-                Alert.alert(
-                    'Cuidado',
-                    'Todos os dados relativos a sua propriedade serão \
-    apagados, até este passo. Deseja continuar?',
-                    [
-                        { text: 'SIM', onPress: () => {
-                            console.log('SIM Pressed')
-                            navigation.navigate(props.page);
-                        }
-                        },
-                        { text: 'NÃO', onPress: () => console.log('Não Pressed') },
-                    ],
-                    { cancelable: false }
-                );
-            }}
+            onPress={() => navigation.navigate(props.page)}
             >
-                <Text style={styles.fowardButtonText}>Preencha com novos dados</Text>
+                <Text style={styles.fowardButtonText}>Corrigir o preenchimento deste passo</Text>
                 <Feather name='arrow-right' size={16} color='#00753E' />
             </TouchableOpacity>
 }

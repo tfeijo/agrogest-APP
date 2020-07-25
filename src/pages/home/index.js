@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { AppLoading } from 'expo';
+import { AsyncStorage } from 'react-native';
 
 import createControl from './../../utils/createControl';
 import BulletFull  from '../../utils/bullets';
@@ -29,27 +29,48 @@ export default function Home() {
         // await AsyncStorage.removeItem('control')
         // await AsyncStorage.removeItem('land')
         // await AsyncStorage.removeItem('UniqueIDLand')
-
-        try {
-            setControl(await createControl.getData());
-            setLand(await createLand.getData());
-        } catch(err) {
-            console.warn(err);
-        }
+        
+        setControl(await createControl.getData());
+        setLand(await createLand.getData());
+                
     }
 
     useEffect(() => {
+        async function fetchData() {
+            setLoading(true)
+            await getInfo();
+            setLoading(false)
+
+        }
         if (isFocused && !isLoading){
-            getInfo();
+            fetchData()
         }
     }, [isFocused])
+    
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true)
+            await getInfo();
+            setLoading(false)
+        }
+        fetchData()
+    }, [])
 
     return isLoading === true ?
-        <AppLoading
-         startAsync={getInfo}
-         onFinish={() => setLoading(false)}
-         onError={console.warn}
-       />
+        <>
+            <StatusBar backgroundColor="#00753E" barStyle='light-content' />
+            <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#000',
+            }}>
+                <Image
+                style={{width: 300, height: 200}}
+                source={{uri: 'https://media.giphy.com/media/VseXvvxwowwCc/giphy.gif'}} />
+                <Text style={{color:'#fff'}}>Buscando dados...</Text>
+            </View>
+        </>
     :
         <>
             <StatusBar backgroundColor="#00753E" barStyle='light-content' />
@@ -69,7 +90,7 @@ export default function Home() {
                 <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
                       <BulletFull
                         number={1}
-                        description='Porte da propriedade'
+                        description='Caracterização da propriedade'
                         stepBefore={true}
                         data={land}
                         currentStep={control.boolCaracterization}
@@ -77,7 +98,7 @@ export default function Home() {
 
                      <BulletFull 
                         number={2}
-                        description='Produção da propriedade'
+                        description='Caracterização do sistema de produção'
                         stepBefore={control.boolCaracterization}
                         currentStep={control.boolProduction}
                         page="Production"/>

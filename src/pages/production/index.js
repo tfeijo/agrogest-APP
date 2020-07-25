@@ -28,11 +28,11 @@ export default function Production() {
                     <Feather name='arrow-left' size={35} color='#00753E' />
                 </TouchableOpacity>
             </View>
-            <Text style={styles.title}>PORTE DA PRODUÇÃO</Text>
+            <Text style={styles.title}>Caracterização da produção</Text>
             <ScrollView style={styles.stepList}
                         showsVerticalScrollIndicator={false}>
                 <Text style={styles.description}>
-                    Responda as questões sobre suas produções
+                    Responda as questões sobre seus sistemas de produção
                 </Text>
                 <Form />
             </ScrollView>

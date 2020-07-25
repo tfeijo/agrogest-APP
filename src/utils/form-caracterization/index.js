@@ -4,7 +4,7 @@ import {
   TextInput, 
   TouchableOpacity,
   Switch,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import React, { useState } from 'react';
@@ -47,6 +47,7 @@ export default function Form(props) {
     }),
     handleSubmit: () => {},
     onSubmit: async (values, {setSubmitting, setErrors}) => {
+      
       var newLand = null;
   
       UniqueID.getData()
@@ -55,7 +56,7 @@ export default function Form(props) {
       })
 
       setSubmitting(true);
-      api.post('farms', values)
+      await api.post('farms', values)
       .then(response => {
         newLand = response.data;
         createLand.update(newLand);
@@ -186,7 +187,7 @@ export default function Form(props) {
         >
         { 
           formik.isSubmitting ? 
-          <ActivityIndicator color='#fff' size= 'large' />
+          <><Text style={styles.ButtonText}>Salvando </Text><ActivityIndicator color='#fff' size= 'large' /></>
           :
           <Text style={styles.ButtonText}>Salvar</Text>
         }
