@@ -6,7 +6,7 @@ import {
   Switch,
   ActivityIndicator,
 } from 'react-native';
-import { Picker } from '@react-native-community/picker';
+import { Picker } from 'react-native-picker-dropdown';
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
@@ -170,17 +170,17 @@ export default function Form(props) {
         style={styles.NumberInputStyle}
         keyboardType={'numeric'}
         />
-      <Text style={styles.caption}>
-        A propriedade rural já é licenciada?
-      </Text>
-      <Switch 
-        style={{marginTop:-25}}
-        onValueChange = {text => {
-          formik.setFieldValue('licensing', text)
-        }}
-        value = {formik.values.licensing}
-        />
-
+      <View style={styles.switchButton}>
+        <Text style={styles.caption}>
+          A propriedade rural já é licenciada?
+        </Text>
+        <Switch 
+          onValueChange = {text => {
+            formik.setFieldValue('licensing', text)
+          }}
+          value = {formik.values.licensing}
+          />
+      </View>
       <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}

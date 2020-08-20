@@ -7,13 +7,12 @@ export default StyleSheet.create({
         paddingHorizontal: 10,
 
     },
-    header : {
+    switchButton : {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     picker : {
-        flexDirection: 'row',
         backgroundColor: "#fff",
         fontSize:17,
         marginBottom: 16,

@@ -13,7 +13,6 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     picker : {
-        flexDirection: 'row',
         backgroundColor: "#fff",
         fontSize:17,
         marginBottom: 16,

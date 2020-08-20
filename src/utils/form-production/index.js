@@ -6,7 +6,7 @@ import {
   Switch,
   ActivityIndicator
 } from 'react-native';
-import { Picker } from '@react-native-community/picker';
+import { Picker } from 'react-native-picker-dropdown';
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';

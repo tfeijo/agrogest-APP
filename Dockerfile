@@ -5,10 +5,10 @@ COPY . /app
 RUN npm install
 RUN npm install -g expo-cli
 
-EXPOSE 3007
-EXPOSE 3008
+EXPOSE 3002
+EXPOSE 3003
 
-#ENV REACT\_NATIVE\_PACKAGER\_HOSTNAME="192.168.31.15"
-ENV REACT\_NATIVE\_PACKAGER\_HOSTNAME="agrogest-embrapa.ddns.net"
+ENV REACT\_NATIVE\_PACKAGER\_HOSTNAME="192.168.31.15" 
+# 200.131.52.32
 
-CMD ["npm", "start"]
+CMD ["expo", "start"]
