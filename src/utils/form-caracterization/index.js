@@ -83,7 +83,13 @@ export default function Form(props) {
   async function loadCities(state){
     const { data } = await api.get(`states/${state}/cities`);
     data.unshift({'id':9999, 'name': 'Selecione uma cidade'});
-    setCities(data);
+    
+    let cityItems = data.map((city) => {
+      return <Picker.Item
+                  key={city.id} value={city.id} label={city.name} />
+    });
+
+    setCities(cityItems);
     setenableCity(true);
     return data;
   }
@@ -92,21 +98,17 @@ export default function Form(props) {
     try {
       const {data:stateList} = await api.get('/states')|| [];
       stateList.unshift({'id':9999, 'name': 'Selecione um estado'});
-      setStates(stateList);
+      
+      let stateItems = stateList.map((state) => {
+        return (<Picker.Item
+          key={state.id} value={state.id} label={state.name} />)
+      });
+
+      setStates(stateItems);
     } catch(err) {
       console.warn(err);
     }
   }
-
-  let stateItems = states.map( (state) => {
-    return <Picker.Item
-                key={state.id} value={state.id} label={state.name} />
-  });
-  
-  let cityItems = cities.map( (city) => {
-    return <Picker.Item
-                key={city.id} value={city.id} label={city.name} />
-  });
 
   return isLoading === true ?
   (<AppLoading
@@ -133,7 +135,7 @@ export default function Form(props) {
           formik.setFieldValue('state_id', itemValue)
         }}
       >
-          {stateItems}
+          {states}
       </Picker>
       <Text style={styles.caption}>
         Selecione a cidade:
@@ -151,7 +153,7 @@ export default function Form(props) {
         }}
         enabled={enableCity}
         >
-          {cityItems}
+          {cities}
       </Picker>
       <Text style={styles.caption}>
         Tamanho da propriedade (ha):

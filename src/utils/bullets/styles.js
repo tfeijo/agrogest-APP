@@ -68,8 +68,8 @@ export default StyleSheet.create({
         backgroundColor: '#FFF',
         marginBottom: 16
     },
-    stepTitle: {
-        
+    biomes: {
+        color: '#737380'
     },
     stepProperty: {
         fontSize: 14,
@@ -96,6 +96,5 @@ export default StyleSheet.create({
 
     fowardButtonText: {
         color: '#00753E',
-        // fontWeight: 'bold'
-    }
+    },
 }); 

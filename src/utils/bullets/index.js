@@ -47,7 +47,7 @@ function BulletContainer(props) {
 function Caracterization(props) {
 
     let biomeItems = props.data.city.biomes.map( (biome) => {
-        return `[ ${biome.name} ]`
+        return <Text style={styles.biomes} key={biome.name}>{biome.name}</Text>
     });
     
     let licensing = props.data.licensing? 'SIM': 'NÃO';
@@ -58,9 +58,8 @@ function Caracterization(props) {
                     {props.data.city.name} / {props.data.city.state.uf}
                 </Text>
                 <Text style={styles.stepProperty}>BIOMA:</Text>
-                <Text style={styles.stepValue}>
                     {biomeItems}
-                </Text>
+                <Text></Text>
                 <Text style={styles.stepProperty}>
                     Possui licenciamento?
                 </Text>
