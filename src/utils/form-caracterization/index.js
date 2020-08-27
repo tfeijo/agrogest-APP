@@ -5,24 +5,23 @@ import {
   TouchableOpacity,
   Switch,
   ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 import { Picker } from 'react-native-picker-dropdown';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import { AppLoading } from 'expo';
 import * as Yup from 'yup';
-
 import api from '../../services/api';
 import styles from './styles';
 import createLand from '../createLand';
 import createControl from '../createControl';
 import UniqueID from '../createUniqueIDLand';
+import { useIsFocused } from '@react-navigation/native';
 
-export default function Form(props) {
-  
-  const navigation = useNavigation();
-  
+export default function Form( props ) {
+  const navigator = useNavigation();
   const formik = useFormik({
     initialValues: {
       state_id: 9999,
@@ -56,6 +55,7 @@ export default function Form(props) {
       })
 
       setSubmitting(true);
+      await AsyncStorage.removeItem('city')
       await api.post('farms', values)
       .then(response => {
         newLand = response.data;
@@ -65,7 +65,7 @@ export default function Form(props) {
           ...createControl.getData(),
           'boolCaracterization': true
         })
-        navigation.goBack()
+        navigator.goBack()
       })
       .catch(err => {
         setSubmitting(false);
@@ -74,23 +74,14 @@ export default function Form(props) {
       setSubmitting(false);
     },
   });
-  
-  const [enableCity, setenableCity] = useState(false);
+  const isFocused = useIsFocused();
   const [isLoading,setLoading] = useState(true);
   const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
+  const [city, setCity] = useState({});
 
   async function loadCities(state){
     const { data } = await api.get(`states/${state}/cities`);
-    data.unshift({'id':9999, 'name': 'Selecione uma cidade'});
-    
-    let cityItems = data.map((city) => {
-      return <Picker.Item
-                  key={city.id} value={city.id} label={city.name} />
-    });
-
-    setCities(cityItems);
-    setenableCity(true);
+    navigator.navigate("CitySearch", { cities : data })
     return data;
   }
   
@@ -98,18 +89,37 @@ export default function Form(props) {
     try {
       const {data:stateList} = await api.get('/states')|| [];
       stateList.unshift({'id':9999, 'name': 'Selecione um estado'});
-      
       let stateItems = stateList.map((state) => {
         return (<Picker.Item
           key={state.id} value={state.id} label={state.name} />)
       });
-
       setStates(stateItems);
     } catch(err) {
-      console.warn(err);
+      console.log(err);
     }
   }
+  async function getCity(){
+    let jsonValue = JSON.parse(await AsyncStorage.getItem('city'))
+    if (jsonValue != null){
+      setCity(jsonValue)
+      formik.setFieldValue('city_id', jsonValue.id)
+    } else {
+      await AsyncStorage.removeItem('city')
+      setCity({'name':'-'})
+    }
+  }
+  
+  useEffect(() => {
+    async function asyncFunction(){
+      await getCity();
+    }
+    asyncFunction();
+  }, [isFocused])
 
+  useEffect(() => {
+    setCity({'name':'-'})
+  }, [])
+   
   return isLoading === true ?
   (<AppLoading
     startAsync={getInfo}
@@ -128,33 +138,26 @@ export default function Form(props) {
       </Text>
         <Picker
         style={styles.picker}
+        textStyle={styles.pickerItem}
         selectedValue={formik.values.state_id}
-        onValueChange={(itemValue, itemIndex) => {
+        onValueChange={(itemValue) => {
           loadCities(itemValue)
-          formik.setFieldValue('city_id', 9999)
           formik.setFieldValue('state_id', itemValue)
         }}
       >
           {states}
       </Picker>
       <Text style={styles.caption}>
-        Selecione a cidade:
+        Cidade:
       { formik.errors.city_id && 
         <Text style={styles.err}>
           {formik.errors.city_id}
         </Text> 
       }
       </Text>
-      <Picker
-        style={styles.picker}
-        selectedValue={formik.values.city_id}
-        onValueChange={(itemValue, itemIndex) => {
-          formik.setFieldValue('city_id', itemValue)
-        }}
-        enabled={enableCity}
-        >
-          {cities}
-      </Picker>
+      <View style={ styles.cityView}>
+        <Text style={styles.city}>{city.name}</Text>
+      </View>
       <Text style={styles.caption}>
         Tamanho da propriedade (ha):
         
@@ -171,8 +174,9 @@ export default function Form(props) {
         placeholder="Hectares (ha)"
         style={styles.NumberInputStyle}
         keyboardType={'numeric'}
+        returnKeyType={ 'done' }
         />
-      <View style={styles.switchButton}>
+      <View style={styles.flexView}>
         <Text style={styles.caption}>
           A propriedade rural já é licenciada?
         </Text>
@@ -187,9 +191,10 @@ export default function Form(props) {
         style={styles.Button}
         onPress={formik.handleSubmit}
         >
-        { 
+        {
           formik.isSubmitting ? 
-          <><Text style={styles.ButtonText}>Salvando </Text><ActivityIndicator color='#fff' size= 'large' /></>
+          <><Text style={styles.ButtonText}>Salvando </Text>
+          <ActivityIndicator color='#fff' size= 'large' /></>
           :
           <Text style={styles.ButtonText}>Salvar</Text>
         }

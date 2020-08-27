@@ -5,6 +5,7 @@ import {
     Text,
     ScrollView,
     TouchableOpacity,
+    AsyncStorage
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
@@ -23,7 +24,10 @@ export default function Caracterization() {
                 <Image source={logoImg} />
                 <TouchableOpacity
                             style={styles.fowardButtonEmpty}
-                            onPress={() => navigator.goBack()}
+                            onPress={async () => {
+                                await AsyncStorage.removeItem('city')
+                                navigator.goBack()
+                            }}
                 >
                     <Feather name='arrow-left' size={35} color='#00753E' />
                 </TouchableOpacity>

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage } from 'react-native';
+
 
 import createControl from './../../utils/createControl';
 import BulletFull  from '../../utils/bullets';

@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
 
 export default StyleSheet.create({
     container: {
@@ -7,14 +6,32 @@ export default StyleSheet.create({
         paddingHorizontal: 10,
 
     },
-    switchButton : {
+    city: {
+        height: 25,
+        fontSize: 15,
+        marginBottom: 10,
+        marginTop: 10,
+        marginLeft: 15,
+    },
+
+    cityView : {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: "#fff",
+        fontSize:15,
+        marginBottom: 16,
+        elevation: 3,
+        height: 50,
+    },
+    flexView : {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     picker : {
         backgroundColor: "#fff",
-        fontSize:17,
+        fontSize:15,
         marginBottom: 16,
         elevation: 3,
         height: 50,
@@ -29,6 +46,7 @@ export default StyleSheet.create({
     pickerItem : {
         marginLeft: 5,
         marginRight: 5,
+        fontSize: 15
     },
     headerText: {
         color:'#737373'
