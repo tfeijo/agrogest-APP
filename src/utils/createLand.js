@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import api from '../services/api';
 import createControl from './createControl';
+import UniqueID from './createUniqueIDFarm';
 
 function createLand() {
   
@@ -8,15 +9,30 @@ function createLand() {
     try{ 
       const jsonValue = await AsyncStorage.getItem('land');
       if (jsonValue != null) {
-          let jsonValueParsed = JSON.parse(jsonValue);
-          try {
-            let response = await api.get(`farms/${jsonValueParsed.id}`)
-            if (response.status != 200) return clean();
-            return response.data;
-          } catch(err) {
-            console.log(err)
-            return clean();
+        let jsonValueParsed = JSON.parse(jsonValue);
+        try {
+          let response = await api.get(`farms/${jsonValueParsed.id}`)
+          return response.data;
+        } catch(err) {
+
+          let installation_id = await UniqueID.getData();
+          let data = {
+            id: jsonValueParsed.id,
+            installation_id,
+            hectare:jsonValueParsed.hectare,
+            licensing:jsonValueParsed.licensing,
+            city_id: jsonValueParsed.city.id,
           }
+          api.post('farms', data)
+          .then(async (response) => {
+            newLand = response.data;
+            this.update(newLand);
+          })
+          .catch(err => {console.log(err);});
+
+   
+          return jsonValueParsed;
+        }
       } else {
         return clean()
       }

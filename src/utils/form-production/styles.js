@@ -79,7 +79,9 @@ export default StyleSheet.create({
         fontSize:20
     },
     produtionItem: {
-        paddingVertical: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     boxList: {
         paddingVertical: 20,
@@ -88,6 +90,18 @@ export default StyleSheet.create({
         paddingHorizontal: 30,
         marginTop: 15,
         marginBottom: 15,
+    },
+    activityBox: {
+        marginBottom:50,
+        paddingTop:10,
+        borderColor: "#00753E",
+        borderTopWidth: 3,
+    },
+    activityTitle: {
+        fontSize: 16,
+        fontWeight:'bold',
+        marginBottom: 20,
+        color:'#00753E',
+
     }
-    
 });

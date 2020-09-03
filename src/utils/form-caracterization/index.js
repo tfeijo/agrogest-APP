@@ -17,7 +17,7 @@ import api from '../../services/api';
 import styles from './styles';
 import createLand from '../createLand';
 import createControl from '../createControl';
-import UniqueID from '../createUniqueIDLand';
+import UniqueID from '../createUniqueIDFarm';
 import { useIsFocused } from '@react-navigation/native';
 
 export default function Form( props ) {
@@ -57,14 +57,19 @@ export default function Form( props ) {
       setSubmitting(true);
       await AsyncStorage.removeItem('city')
       await api.post('farms', values)
-      .then(response => {
+      .then(async response => {
         newLand = response.data;
         createLand.update(newLand);
         UniqueID.update(newLand.installation_id);
-        createControl.update({
-          ...createControl.getData(),
-          'boolCaracterization': true
-        })
+
+        await AsyncStorage.setItem('control',JSON.stringify({
+          boolCaracterization : true,
+          boolProduction : false,
+          boolLegislation :  false,
+          boolWaterResource :  false,
+          boolSoilVegetation : false,
+          boolWasteManagement :  false,
+        }))
         navigator.goBack()
       })
       .catch(err => {
@@ -72,6 +77,7 @@ export default function Form( props ) {
         setErrors({ message: err.message });
       });
       setSubmitting(false);
+
     },
   });
   const isFocused = useIsFocused();

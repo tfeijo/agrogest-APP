@@ -90,7 +90,7 @@ export default class App extends React.Component {
         />
         <FlatList
           data={this.state.dataSource}
-          ItemSeparatorComponent={this.ListViewItemSeparator}
+          // ItemSeparatorComponent={this.ListViewItemSeparator}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={async () => {

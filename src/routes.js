@@ -11,6 +11,7 @@ import SoilVegetation from '../src/pages/soilVegetation';
 import WasteManagement from '../src/pages/wasteManagement';
 import WaterResources from '../src/pages/waterResources';
 import CitySearch from '../src/pages/citySearch';
+import BlankScreen from '../src/pages/blankScreen';
 
 const AppStack = createStackNavigator();
 
@@ -27,6 +28,7 @@ export default function Routes() {
                 <AppStack.Screen name='WasteManagement' component={WasteManagement} />
                 <AppStack.Screen name='WaterResources' component={WaterResources} />
                 <AppStack.Screen name='CitySearch' component={CitySearch} />
+                <AppStack.Screen name='BlankScreen' component={BlankScreen} />
             </AppStack.Navigator>
         </NavigationContainer>
     );

@@ -4,61 +4,58 @@ import {
   TextInput, 
   TouchableOpacity,
   Switch,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 import { Picker } from 'react-native-picker-dropdown';
-import React, { useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
-import { AppLoading } from 'expo';
-import * as Yup from 'yup';
-
-import api from '../../services/api';
-import styles from './styles';
 import createLand from '../createLand';
 import createControl from '../createControl';
-import UniqueID from '../createUniqueIDLand';
-
+import api from '../../services/api';
+import styles from './styles';
 export default function Form(props) {
   
   const navigation = useNavigation();
-  
+  const control = createControl
   const formik = useFormik({
     initialValues: {
+      farm_id:null,
       bovi_leite: {
         enabled: false,
-        activity_id: 1,
-        system_id: null,
-        head_animals: null,
-        area_size: null
+        activity : "bovinocultura de leite",
+        num_animals : null,
+        handling : null,
+        num_area : null
       },
       bovi_corte: {
         enabled: false,
-        activity_id: 1,
-        system_id: null,
-        head_animals: null,
-        area_size: null
+        activity : "bovinocultura de corte",
+        num_animals : null,
+        handling : null,
+        num_area : null
       },
       avicultura: {
         enabled: false,
-        activity_id: 1,
-        system_id: null,
-        head_animals: null,
-        area_size: null
+        activity : "avicultura",
+        num_animals : null,
+        handling : null,
+        num_area : null
       },
       suinocultura: {
         enabled: false,
-        activity_id: 1,
-        system_id: null,
-        head_animals: null,
-        area_size: null
+        activity : "suinocultura",
+        num_animals : null,
+        handling : null,
+        num_area : null,
       },
       agricultura: {
         enabled: false,
-        activity_id: 1,
-        system_id: null,
-        handling_id:null,
-        area_size: null
+        activity : "agricultura",
+        handling : null,
+        num_area : null,
+        cultivation: null
       },
     },
     validateOnChange: false,
@@ -69,398 +66,330 @@ export default function Form(props) {
     //     .lessThan(9999, 'Preencha o estado.'),
     //   }
     // }),
-    handleSubmit: () => {},
+    handleSubmit: ()=>{
+
+    },
     onSubmit: async (values, { setSubmitting, setErrors}) => {
-  
-      UniqueID.getData()
-      .then(response => {
-        values.installation_id = response
+      // alert(JSON.stringify(formik.values))
+
+      let productions = []
+      setSubmitting(true);
+
+      
+      if (values.bovi_corte.enabled) {
+        productions.push(values.bovi_corte)
+      }
+      if (values.bovi_leite.enabled) {
+        productions.push(values.bovi_leite)
+      }
+      if (values.avicultura.enabled) {
+        productions.push(values.avicultura)
+      }
+      if (values.suinocultura.enabled) {
+        productions.push(values.suinocultura)
+      }
+      if (values.agricultura.enabled) {
+        productions.push(values.agricultura)
+      }
+      let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+
+      await api.post('productions', {
+        productions,
+        farm_id: jsonValue.id,
       })
-
-      const farm = await createLand.getData();
-
-      api.post(`farms/${farm.id}/productions`, values)
-      .then(response => {
-        newProductions = response.data;
-        console.log(newProductions);
-        // createLand.update({
-        // ...createLand.getData,
-        // "productions": newProductions,
-        // });
-        // UniqueID.update(newLand.installation_id);
-        // createControl.update({
-        //   ...createControl.getData(),
-        //   'boolProduction': true
-        // })
-        setSubmitting(false);
-        // navigation.goBack()
+      .then(async response => {
+        
+        await createLand.update({
+          ...jsonValue,
+          productions: response.data
+        })
+        
+        let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+        control.update({
+          ...JSONcontrol,
+          'boolProduction': true
+        })
+        
+        navigation.goBack()
       })
       .catch(err => {
         setSubmitting(false);
-        // setErrors({ message: err.message });
+        setErrors({ message: err.message });
       });
+      setSubmitting(false);
+      setSubmitting(false)
     },
   });
 
-  const [enableSystem, setEnableSystem] = useState(false);
-  const [leite_system, setLeitesystem] = useState([]);
-  const [corte_system, setCortesystem] = useState([]);
-  const [suino_system, setSuinosystem] = useState([]);
-  const [ave_system, setAvesystem] = useState([]);
-  const [agri_system, setAgrisystem] = useState([]);
-  const [agri_handling, setAgrihandling] = useState([]);
+ 
+  const bovi_leite_form = formik.values.bovi_leite.enabled? (
+  <View style={styles.activityBox}>
+    <Text style={styles.caption}>Qual manejo aplicado?</Text>
+    <Picker style={styles.picker}
+      selectedValue={formik.values.bovi_leite.handling}
+      onValueChange={(itemValue, itemIndex) => {
+        let bovi_leite = formik.values.bovi_leite;
+        formik.setFieldValue('bovi_leite', {
+          ...bovi_leite,
+          handling: itemValue
+        })
+      }}
+    >
+      <Picker.Item value={9999} label={"Selecione um manejo"} />
+      <Picker.Item value={"a pasto"} label={"A pasto"} />
+      <Picker.Item value={"confinado"} label={"Confinado"} />
+      <Picker.Item value={"semiconfinado"} label={"Semiconfinado"} />
+    </Picker>
+    <Text style={styles.caption}>
+      Qual a área disponível para o sistema?
+    </Text>
+    <TextInput name='leite_num_area'
+      onChangeText={number => {
+        let bovi_leite = formik.values.bovi_leite;
+        formik.setFieldValue('bovi_leite', {
+          ...bovi_leite,
+          num_area: number
+        })
+      }}
+      placeholder="Hectares (ha)"
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+    <Text style={styles.caption}>
+      Quantas cabeças de bovino?
+    </Text>
+    <TextInput  
+      name='leite_num_animals'
+      onChangeText={number => {
+        let bovi_leite = formik.values.bovi_leite;
+        formik.setFieldValue('bovi_leite', {
+          ...bovi_leite,
+          num_animals: number
+        })
+      }}
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+  </View>) : (<></>)
 
+  const bovi_corte_form = formik.values.bovi_corte.enabled? (
+  <View style={styles.activityBox}>
+    <Text style={styles.caption}>Qual manejo aplicado?</Text>
+    <Picker style={styles.picker}
+      selectedValue={formik.values.bovi_corte.handling}
+      onValueChange={(itemValue, itemIndex) => {
+        let bovi_corte = formik.values.bovi_corte;
+        formik.setFieldValue('bovi_corte', {
+          ...bovi_corte,
+          handling: itemValue
+        })
+      }}
+    >
+    <Picker.Item value={9999} label={"Selecione um manejo"} />
+    <Picker.Item value={"a pasto"} label={"A pasto"} />
+    <Picker.Item value={"confinado"} label={"Confinado"} />
+    <Picker.Item value={"semiconfinado"} label={"Semiconfinado"} />
+    </Picker>
+    <Text style={styles.caption}>
+      Qual a área disponível para o sistema?
+    </Text>
+    <TextInput name='corte_num_area'
+      onChangeText={number => {
+        let bovi_corte = formik.values.bovi_corte;
+        formik.setFieldValue('bovi_corte', {
+          ...bovi_corte,
+          num_area: number
+        })
+      }}
+      placeholder="Hectares (ha)"
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+    <Text style={styles.caption}>
+      Quantas cabeças de bovino?
+    </Text>
+    <TextInput  
+      name='corte_num_animals'
+      onChangeText={number => {
+        let bovi_corte = formik.values.bovi_corte;
+        formik.setFieldValue('bovi_corte', {
+          ...bovi_corte,
+          num_animals: number
+        })
+      }}
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+  </View>) : (<></>)
 
+  const suinocultura_form = formik.values.suinocultura.enabled? (
+  <View style={styles.activityBox}>
+    <Text style={styles.caption}>Qual manejo aplicado?</Text>
+    <Picker style={styles.picker} 
+      selectedValue={formik.values.suinocultura.handling}
+      onValueChange={(itemValue, itemIndex) => {
+        let suinocultura = formik.values.suinocultura;
+        formik.setFieldValue('suinocultura', {
+          ...suinocultura,
+          handling: itemValue
+        })
+      }}
+    >
+    <Picker.Item value={9999} label={"Selecione um manejo"} />
+    <Picker.Item value={"ciclo completo"} label={"Ciclo completo"} />
+    <Picker.Item value={"criacao de leitoes"} label={"Criação de leitões"} />
+    <Picker.Item value={"terminacao"} label={"Terminação"} />
+   </Picker>
+    <Text style={styles.caption}>
+      Qual a área disponível para o sistema?
+    </Text>
+    <TextInput name='suinocultura_num_area'
+      onChangeText={number => {
+        let suinocultura = formik.values.suinocultura;
+        formik.setFieldValue('suinocultura', {
+          ...suinocultura,
+          num_area: number
+        })
+      }}
+      placeholder="Hectares (ha)"
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+    <Text style={styles.caption}>
+      Quantas cabeças de suíno?
+    </Text>
+    <TextInput  
+      name='suinocultura_num_animals'
+      onChangeText={number => {
+        let suinocultura = formik.values.suinocultura;
+        formik.setFieldValue('suinocultura', {
+          ...suinocultura,
+          num_animals: number
+        })
+      }}
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+    </View>) : (<></>)
   
-  const list = [true]
-  
-  let items_leite_system = leite_system.map( (system) => {
-    return <Picker.Item
-                key={system.id} value={system.id} label={system.name} />
-  });
-  let items_corte_system = corte_system.map( (system) => {
-    return <Picker.Item
-                key={system.id} value={system.id} label={system.name} />
-  });
-  let items_suino_system = suino_system.map( (system) => {
-    return <Picker.Item
-                key={system.id} value={system.id} label={system.name} />
-  });
-  let items_ave_system = ave_system.map( (system) => {
-    return <Picker.Item
-                key={system.id} value={system.id} label={system.name} />
-  });
-  let items_agri_system = agri_system.map( (system) => {
-    return <Picker.Item
-                key={system.id} value={system.id} label={system.name} />
-  });
-  let items_agri_handling = agri_handling.map( (system) => {
-    return <Picker.Item
-                key={system.id} value={system.id} label={system.name} />
-  });
-  
-  const bovi_leite_form = list.map(() => { 
+  const avicultura_form = formik.values.avicultura.enabled? (
+  <View style={styles.activityBox}>
+      <Text style={styles.caption}>Qual manejo aplicado?</Text>
+      <Picker style={styles.picker}
+        selectedValue={formik.values.avicultura.handling}
+        onValueChange={(itemValue, itemIndex) => {
+          let avicultura = formik.values.avicultura;
+          formik.setFieldValue('avicultura', {
+            ...avicultura,
+            handling: itemValue
+          })
+        }}
+      >
+      <Picker.Item value={9999} label={"Selecione um manejo"} />
+      <Picker.Item value={"corte"} label={"Corte"} />
+      <Picker.Item value={"incubatorio"} label={"Incubatório"} />
+      <Picker.Item value={"postura"} label={"Postura"} />
+      </Picker>
+      <Text style={styles.caption}>
+        Qual a área disponível para o sistema?
+      </Text>
+      <TextInput name='avicultura_num_area'
+        onChangeText={number => {
+          let avicultura = formik.values.avicultura;
+          formik.setFieldValue('avicultura', {
+            ...avicultura,
+            num_area: number
+          })
+        }}
+        placeholder="Hectares (ha)"
+        style={styles.NumberInputStyle}
+        keyboardType={'numeric'}
+        returnKeyType={ 'done' }
+      />
+      <Text style={styles.caption}>
+        Quantas cabeças de aves?
+      </Text>
+      <TextInput  
+        name='avicultura_num_animals'
+        onChangeText={number => {
+          let avicultura = formik.values.avicultura;
+          formik.setFieldValue('avicultura', {
+            ...avicultura,
+            num_animals: number
+          })
+        }}
+        style={styles.NumberInputStyle}
+        keyboardType={'numeric'}
+        returnKeyType={ 'done' }
+      />
+    </View>) : (<></>)
+      
+  const agricultura_form = formik.values.agricultura.enabled? (
+  <View style={styles.activityBox}>
+    <Text style={styles.caption}>Qual cultura praticada?</Text>
+    <Picker style={styles.picker}
+      selectedValue={formik.values.agricultura.cultivation}
+      onValueChange={(itemValue, itemIndex) => {
+        let agricultura = formik.values.agricultura;
+        formik.setFieldValue('agricultura', {
+          ...agricultura,
+          cultivation: itemValue
+        })
+      }}
+    >
+      <Picker.Item value={9999} label={"Selecione um tipo de cultura"} />
+      <Picker.Item value={"Anual"} label={"Anual"} />
+      <Picker.Item value={"cana de acucar"} label={"Cana de açúcar"} />
+      <Picker.Item value={"cafeicultura"} label={"Cafeicultura"} />
+      <Picker.Item value={"fruticultura"} label={"Fruticultura"} />
+      <Picker.Item value={"horticultura"} label={"Horticultura"} />
+      <Picker.Item value={"oleicultura"} label={"Oleicultura"} />
+      <Picker.Item value={"permanente"} label={"Permanente"} />
+      
+    </Picker>
+    
+    <Text style={styles.caption}>Qual manejo praticado?</Text> 
+    <Picker style={styles.picker}
+      selectedValue={formik.values.agricultura.handling}
+      onValueChange={(itemValue, itemIndex) => {
+        let agricultura = formik.values.agricultura;
+        formik.setFieldValue('agricultura', {
+          ...agricultura,
+          handling: itemValue
+        })
+      }}
+    >
+      <Picker.Item value={9999} label={"Selecione um manejo"} />
+      <Picker.Item value={"com irrigacao"} label={"Com Irrigação"} />
+      <Picker.Item value={"com queima"} label={"Com Queima"} />
+      <Picker.Item value={"sem irrigacao"} label={"Sem Irrigação"} />
+      
+    </Picker>
+    <Text style={styles.caption}>
+      Qual a área disponível para o sistema?
+    </Text>
+    <TextInput name='agricultura_num_area'
+      onChangeText={number => {
+        let agricultura = formik.values.agricultura;
+        formik.setFieldValue('agricultura', {
+          ...agricultura,
+          num_area: number
+        })
+      }}
+      placeholder="Hectares (ha)"
+      style={styles.NumberInputStyle}
+      keyboardType={'numeric'}
+      returnKeyType={ 'done' }
+    />
+  </View>) : (<></>)
+    
 
-    if(formik.values.bovi_leite.enabled){ 
-      return (
-        <View style={styles.boxList}>
-         
-          <Text style={styles.title}>BOVINOCULTURA DE LEITE</Text>
-            <Text style={styles.caption}>
-                Qual sistema?
-            </Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={formik.values.bovi_leite.system_id}
-              onValueChange={(itemValue, itemIndex) => {
-                let bovi_leite = formik.values.bovi_leite;
-                formik.setFieldValue('bovi_leite', {
-                  ...bovi_leite,
-                  system_id: itemValue
-                })
-              }}
-            >
-                {items_leite_system}
-            </Picker>
-
-            <Text style={styles.caption}>
-              Qual a área disponível para o sistema?
-            </Text>
-            <TextInput  
-              name='size'
-              onChangeText={number => {
-                let bovi_leite = formik.values.bovi_leite;
-                formik.setFieldValue('bovi_leite', {
-                  ...bovi_leite,
-                  area_size: number
-                })
-              }}
-              placeholder="Hectares (ha)"
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-
-            <Text style={styles.caption}>
-              Quantas cabeças de bovino?
-            </Text>
-            <TextInput  
-              name='head_animals'
-              onChangeText={number => {
-                let bovi_leite = formik.values.bovi_leite;
-                formik.setFieldValue('bovi_leite', {
-                  ...bovi_leite,
-                  area_size: number
-                })
-              }}
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-        </View>
-      )
-    } else {
-      return (<></>)
-    };
-  });
-
-  const bovi_corte_form = list.map(() => { 
-    if(formik.values.bovi_corte.enabled){ 
-      return (
-        <View style={styles.boxList}>
-         
-          <Text style={styles.title}>BOVINOCULTURA DE CORTE</Text>
-            <Text style={styles.caption}>
-                Qual sistema?
-            </Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={formik.values.bovi_corte.system_id}
-              onValueChange={(itemValue, itemIndex) => {
-                let bovi_corte = formik.values.bovi_corte;
-                formik.setFieldValue('bovi_corte', {
-                  ...bovi_corte,
-                  system_id: itemValue
-                })
-              }}
-            >
-                {items_corte_system}
-            </Picker>
-            <Text style={styles.caption}>
-              Qual a área disponível para o sistema?
-            </Text>
-            <TextInput  
-              name='size'
-              onChangeText={number => {
-                let bovi_corte = formik.values.bovi_corte;
-                formik.setFieldValue('bovi_corte', {
-                  ...bovi_corte,
-                  area_size: number
-                })
-              }}
-              placeholder="Hectares (ha)"
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-            <Text style={styles.caption}>
-              Quantas cabeças de bovino?
-            </Text>
-            <TextInput  
-              name='head_animals'
-              onChangeText={number => {
-                let bovi_corte = formik.values.bovi_corte;
-                formik.setFieldValue('bovi_corte', {
-                  ...bovi_corte,
-                  head_animals: number
-                })
-              }}
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-        </View>
-      )
-    } else {
-      return (<></>)
-    };
-  });
-  
-  const suinocultura_form = list.map(() => { 
-    if(formik.values.suinocultura.enabled){ 
-      return (
-        <View style={styles.boxList}>
-         
-          <Text style={styles.title}>SUINOCULTURA</Text>
-          <Text style={styles.caption}>
-                Qual sistema?
-              { formik.errors.city_id && 
-                <Text style={styles.err}>
-                  {formik.errors.city_id}
-                </Text> 
-              }
-            </Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={formik.values.suinocultura.system_id}
-              onValueChange={(itemValue, itemIndex) => {
-                let suinocultura = formik.values.suinocultura;
-                formik.setFieldValue('suinocultura', {
-                  ...suinocultura,
-                  system_id: itemValue
-                })
-              }}
-            >
-                {items_suino_system}
-            </Picker>
-            <Text style={styles.caption}>
-              Qual a área disponível para o sistema?
-              
-              { formik.errors.hectare && 
-                <Text style={styles.err}>
-                  {formik.errors.hectare}
-                </Text> }
-            </Text>
-            <TextInput  
-              name='size'
-              onChangeText={number => {
-                formik.setFieldValue('hectare', number)
-              }}
-              placeholder="Hectares (ha)"
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-            <Text style={styles.caption}>
-              Quantas cabeças de suíno?
-              
-              { formik.errors.hectare && 
-                <Text style={styles.err}>
-                  {formik.errors.hectare}
-                </Text> }
-            </Text>
-            <TextInput  
-              name='size'
-              onChangeText={number => {
-                formik.setFieldValue('hectare', number)
-              }}
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-        </View>
-      )
-    } else {
-      return (<></>)
-    };
-  });
-
-  const avicultura_form = list.map(() => { 
-    if(formik.values.avicultura.enabled){ 
-      return (
-        <View style={styles.boxList}>
-         
-          <Text style={styles.title}>AVICULTURA</Text>
-            <Text style={styles.caption}>
-                Qual sistema?
-            </Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={formik.values.avicultura.system_id}
-              onValueChange={(itemValue, itemIndex) => {
-                let avicultura = formik.values.avicultura;
-                formik.setFieldValue('avicultura', {
-                  ...avicultura,
-                  system_id: itemValue
-                })
-              }}
-            >
-                {items_ave_system}
-            </Picker>
-            <Text style={styles.caption}>
-              Qual a área disponível para o sistema?
-            </Text>
-            <TextInput  
-              name='size'
-              onChangeText={number => {
-                let avicultura = formik.values.avicultura;
-                formik.setFieldValue('avicultura', {
-                  ...avicultura,
-                  area_size: number
-                })
-              }}
-              placeholder="Hectares (ha)"
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-            <Text style={styles.caption}>
-              Quantas cabeças de aves?
-              
-              { formik.errors.hectare && 
-                <Text style={styles.err}>
-                  {formik.errors.hectare}
-                </Text> }
-            </Text>
-            <TextInput  
-              name='head_animals'
-              onChangeText={number => {
-                let avicultura = formik.values.avicultura;
-                formik.setFieldValue('avicultura', {
-                  ...avicultura,
-                  head_animals: number
-                })
-              }}
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-        </View>
-      )
-    } else {
-      return (<></>)
-    };
-  });
-
-  const agricultura_form = list.map(() => { 
-    if(formik.values.agricultura.enabled){ 
-      return (
-        <View style={styles.boxList}>
-         
-          <Text style={styles.title}>AGRICULTURA</Text>
-            <Text style={styles.caption}>
-                Qual tipo de sistema?
-            </Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={formik.values.agricultura.system_id}
-              onValueChange={async (itemValue, itemIndex) => {
-                let agricultura = formik.values.agricultura;
-                formik.setFieldValue('agricultura', {
-                  ...agricultura,
-                  system_id: itemValue
-                })
-                const { data } = await api
-                .get(`production/systems/${agricultura.system_id}/handling`);
-
-                data.unshift({'id':9999, 'name': 'Selecione um tipo de manuseio'});
-                setAgrihandling(data)
-              }}
-            >
-                {items_agri_system}
-            </Picker>           
-            
-            <Text style={styles.caption}>
-                Qual tipo de manuseio?
-            </Text>
-            <Picker
-              style={styles.picker}
-              selectedValue={formik.values.agricultura.system_id}
-              onValueChange={(itemValue, itemIndex) => {
-                let agricultura = formik.values.agricultura;
-                formik.setFieldValue('agricultura', {
-                  ...agricultura,
-                  handling_id: itemValue
-                })
-              }}
-            >
-                {items_agri_handling}
-            </Picker>
-            <Text style={styles.caption}>
-              Qual a área disponível para o sistema?
-            </Text>
-            <TextInput  
-              name='size'
-              onChangeText={number => {
-                let agricultura = formik.values.agricultura;
-                formik.setFieldValue('agricultura', {
-                  ...agricultura,
-                  area_size: itemValue
-                })
-              }}
-              placeholder="Hectares (ha)"
-              style={styles.NumberInputStyle}
-              keyboardType={'numeric'}
-            />
-        </View>
-      )
-    } else {
-      return (<></>)
-    };
-  });
-  
   return (<View style={styles.container}>
       <Text style={styles.caption}>
         Quais sistemas de produção de sua propriedade?
@@ -472,117 +401,99 @@ export default function Form(props) {
       </Text>
       <View style={styles.boxList}>
         <View style={styles.produtionItem}>
-          <Text>
+          <Text style={styles.activityTitle}>
             Bovinocultura de leite
           </Text>
           <Switch 
             style={{ marginTop: -25} }
             onValueChange = {async (text) => {
               let bovi_leite = formik.values.bovi_leite;
+              
               formik.setFieldValue('bovi_leite', {
                 ...bovi_leite,
                 enabled: text
               })
-              const { data } = await api
-                .get(`production/activities/${bovi_leite.activity_id}/system`);
-
-              data.unshift({'id':9999, 'name': 'Selecione um tipo de sistema'});
-              setLeitesystem(data);
             }}
             value = {formik.values.bovi_leite.enabled}
           />
         </View>
+        { bovi_leite_form }
+        
         <View style={styles.produtionItem}>
-          <Text>
+          <Text style={styles.activityTitle}>
             Bovinocultura de corte
           </Text>
           <Switch 
             style={{ marginTop: -25} }
             onValueChange = {async (text) => {
               let bovi_corte = formik.values.bovi_corte;
+              
               formik.setFieldValue('bovi_corte', {
                 ...bovi_corte,
                 enabled: text
               })
-              const { data } = await api
-                .get(`production/activities/${bovi_corte.activity_id}/system`);
-
-              data.unshift({'id':9999, 'name': 'Selecione um tipo de sistema'});
-              setCortesystem(data);
             }}
             value = {formik.values.bovi_corte.enabled}
           />
         </View>
+        { bovi_corte_form }
         <View style={styles.produtionItem}>
-          <Text>
+          <Text style={styles.activityTitle}>
             Suinocultura
           </Text>
           <Switch 
             style={{ marginTop: -25} }
             onValueChange = {async (text) => {
               let suinocultura = formik.values.suinocultura;
+              
               formik.setFieldValue('suinocultura', {
                 ...suinocultura,
                 enabled: text
               })
-              const { data } = await api
-                .get(`production/activities/${suinocultura.activity_id}/system`);
-
-              data.unshift({'id':9999, 'name': 'Selecione um tipo de sistema'});
-              setSuinosystem(data);
             }}
             value = {formik.values.suinocultura.enabled}
           />
         </View>
+        { suinocultura_form }
         <View style={styles.produtionItem}>
-          <Text>
+          <Text style={styles.activityTitle}>
             Avicultura
           </Text>
           <Switch 
             style={{ marginTop: -25} }
             onValueChange = {async (text) => {
               let avicultura = formik.values.avicultura;
+              
               formik.setFieldValue('avicultura', {
                 ...avicultura,
                 enabled: text
               })
-              const { data } = await api
-                .get(`production/activities/${avicultura.activity_id}/system`);
-
-              data.unshift({'id':9999, 'name': 'Selecione um tipo de sistema'});
-              setAvesystem(data);
             }}
             value = {formik.values.avicultura.enabled}
           />
         </View>
+        { avicultura_form }
         <View style={styles.produtionItem}>
-          <Text>
+          <Text style={styles.activityTitle}>
             Agricultura
           </Text>
           <Switch 
             style={{ marginTop: -25} }
             onValueChange = {async (text) => {
               let agricultura = formik.values.agricultura;
+              
               formik.setFieldValue('agricultura', {
                 ...agricultura,
                 enabled: text
               })
-              const { data } = await api
-                .get(`production/activities/${agricultura.activity_id}/system`);
-
-              data.unshift({'id':9999, 'name': 'Selecione um tipo de sistema'});
-              setAgrisystem(data);
             }}
             value = {formik.values.agricultura.enabled}
           />
         </View>
+        { agricultura_form }
       </View>
+    
       
-      { bovi_leite_form }
-      { bovi_corte_form }
-      { suinocultura_form }
-      { avicultura_form }
-      { agricultura_form }
       
 
       <TouchableOpacity

@@ -4,7 +4,7 @@ function createUUID() {
   
   async function getData(){
     try{ 
-      let jsonValue = await AsyncStorage.getItem('UniqueIDLand');
+      let jsonValue = await AsyncStorage.getItem('UniqueIDFarm');
       return jsonValue != null ? JSON.parse(jsonValue): null;
     } catch(err) {
       console.warn(err)
@@ -14,7 +14,7 @@ function createUUID() {
   async function update(data){
     try{ 
 
-      await AsyncStorage.setItem('UniqueIDLand', JSON.stringify(data));
+      await AsyncStorage.setItem('UniqueIDFarm', JSON.stringify(data));
       return true;
       
     } catch(err) {

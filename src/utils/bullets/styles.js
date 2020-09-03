@@ -7,6 +7,15 @@ export default StyleSheet.create({
         paddingHorizontal: 24,
         paddingTop: Constants.statusBarHeight + 20,
     },
+    box : {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        marginBottom: 6,
+        borderBottomColor:'#00753E',
+        paddingBottom:4
+    },
     header : {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -46,6 +55,11 @@ export default StyleSheet.create({
         color: '#131313',
         fontWeight:'bold'
     },
+    productionTitle: {
+        fontSize: 15,
+        color: '#00753E',
+        fontWeight:'bold',
+    },
     stepListEmpty: {
         marginTop: 8,
     },
@@ -80,7 +94,11 @@ export default StyleSheet.create({
         marginTop: 4,
         fontSize: 15,
         marginBottom: 10,
-        color: '#737380'
+        color: '#737380',
+        fontWeight: 'normal'
+    },
+    production: {
+        marginBottom: 20
     },
     fowardButtonEmpty: {
 

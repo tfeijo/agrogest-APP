@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import api from '../../services/api';
 import styles from './styles';
 
 
@@ -84,10 +85,96 @@ function Legislation(props) {
             </View>
 }
 
-function Production(props) { 
+function Production(props) {
+    let navigation = useNavigation()
+    const productions= props.data.productions.map( (production) => {
+
+        return <View style={styles.production} key={production.id}>
+            <View style={styles.box}>
+                <Text style={styles.productionTitle}>{production.activity}</Text>
+                <Feather name='trash-2' size={20} color='#AD0900' onPress={() => {
+                    Alert.alert('',
+                        `Deseja remover a produção ${production.activity}?`,
+                        [
+                            {text: 'Remover', onPress: async () => {
+                                
+                                await api.delete(`productions/${production.id}`)
+                                let prods = props.data.productions.filter((prod) => {
+                                    return prod.id!=production.id;
+                                })
+                                
+                                let farm = JSON.parse(await AsyncStorage.getItem('land'))
+                                await AsyncStorage.setItem('land', JSON.stringify({
+                                    ...farm,
+                                    productions: prods
+                                }))
+                                
+                                if (prods.length == 0){
+                                    await AsyncStorage.setItem('control',JSON.stringify({
+                                        boolCaracterization : true,
+                                        boolProduction : false,
+                                        boolLegislation :  false,
+                                        boolWaterResource :  false,
+                                        boolSoilVegetation : false,
+                                        boolWasteManagement :  false,
+                                    }))
+                                }
+                                navigation.navigate('Production')
+
+                            }},
+                            {text: 'Cancelar', onPress: () => {}},
+                        ],
+                        {}
+                    )
+                }} />
+                </View>
+            {production.activity == 'Agricultura' &&
+            <Text
+            key={`${production.id}_${production.cultivation}`}
+            style={styles.stepProperty} >
+                Tipo de cultivo: 
+                <Text style={styles.stepValue}> {production.cultivation}</Text>
+            </Text>
+            }
+            <Text 
+            key={`${production.id}_${production.handling}`}
+            style={styles.stepProperty} >
+                Tipo de manejo: 
+                <Text style={styles.stepValue}> {production.handling}</Text>
+            </Text>
+            {production.activity != 'Agricultura' &&
+            <Text
+            key={`${production.id}_${production.num_animals}`}
+            style={styles.stepProperty} >
+                Número de animais: 
+                <Text style={styles.stepValue}> {production.num_animals}</Text>
+            </Text>
+            }
+            <Text
+            key={`${production.id}_${production.num_area}`}
+            style={styles.stepProperty} >
+                Área do sistema: 
+                <Text style={styles.stepValue}> {production.num_area}</Text>
+            </Text>
+            <Text
+            key={`${production.id}Size${production.size}`}
+            style={styles.stepProperty} >
+                Porte da produção: 
+                <Text style={styles.stepValue}> {production.size}</Text>
+            </Text>
+            <Text
+            key={`${production.id}Factor${production.factor}`}
+            style={styles.stepProperty} >Potencial poluidor:
+                <Text style={styles.stepValue}> {production.factor}</Text>
+            </Text>
+            
+        </View>
+        
+    });
+    
+
     return  <View style={styles.step}>
-                <Text style={styles.stepProperty}>Production: </Text>
-                <Text style={styles.stepValue}>Produção</Text>
+                {productions}
                 <FowardButton page={props.page}/>
             </View>
 }
@@ -142,14 +229,17 @@ function BulletEmpty(props){
 }
 
 function FowardButton(props) {
-    
+    let texto = 'Corrigir o preenchimento deste passo'
     let navigation = useNavigation(); 
+    if (props.page == 'Production'){
+        texto = 'Inserir novos sistemas de produção'
+    }
+    return <TouchableOpacity
     
-    return  <TouchableOpacity
-            style={styles.fowardButton}
-            onPress={() => navigation.navigate(props.page)}
-            >
-                <Text style={styles.fowardButtonText}>Corrigir o preenchimento deste passo</Text>
-                <Feather name='arrow-right' size={16} color='#00753E' />
-            </TouchableOpacity>
+    style={styles.fowardButton}
+    onPress={() => navigation.navigate(props.page)}
+    >
+        <Text style={styles.fowardButtonText}>{texto}</Text>
+        <Feather name='arrow-right' size={16} color='#00753E' />
+    </TouchableOpacity>
 }

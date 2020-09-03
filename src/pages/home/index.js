@@ -4,6 +4,7 @@ import {
     Text, 
     ScrollView, 
     StatusBar,
+    AsyncStorage
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
@@ -11,7 +12,6 @@ import React, { useState, useEffect } from 'react';
 
 import createControl from './../../utils/createControl';
 import BulletFull  from '../../utils/bullets';
-import createLand from './../../utils/createLand';
 import logoImg from '../../assets/logo.png';
 import styles from './styles';
 
@@ -29,30 +29,41 @@ export default function Home() {
         // await AsyncStorage.removeItem('control')
         // await AsyncStorage.removeItem('land')
         // await AsyncStorage.removeItem('UniqueIDLand')
-        
-        setControl(await createControl.getData());
-        setLand(await createLand.getData());
-                
+
+        async function getControl(){
+            try{ 
+              let jsonValue = await AsyncStorage.getItem('control');
+              
+              return jsonValue != null ? JSON.parse(jsonValue): {
+                boolCaracterization : false,
+                boolProduction : false,
+                boolLegislation :  false,
+                boolWaterResource :  false,
+                boolSoilVegetation : false,
+                boolWasteManagement :  false,
+              } 
+            } catch(err) {
+              console.warn(err)
+            }
+        }
+
+        setControl(await getControl())
+        setLand(JSON.parse(await AsyncStorage.getItem('land')));
+    }
+
+    async function fetchData() {
+        setLoading(true)
+        await getInfo();
+        setLoading(false)
     }
 
     useEffect(() => {
-        async function fetchData() {
-            setLoading(true)
-            await getInfo();
-            setLoading(false)
-
-        }
         if (isFocused && !isLoading){
             fetchData()
         }
     }, [isFocused])
     
     useEffect(() => {
-        async function fetchData() {
-            setLoading(true)
-            await getInfo();
-            setLoading(false)
-        }
         fetchData()
     }, [])
 
@@ -100,6 +111,7 @@ export default function Home() {
                         number={2}
                         description='Caracterização do sistema de produção'
                         stepBefore={control.boolCaracterization}
+                        data={land}
                         currentStep={control.boolProduction}
                         page="Production"/>
                     
