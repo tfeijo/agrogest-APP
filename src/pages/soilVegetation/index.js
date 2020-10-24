@@ -3,25 +3,61 @@ import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { useFormik } from 'formik';
+import { useNavigation } from '@react-navigation/native';
+import createControl from '../../utils/createControl';
 import styles from './styles';
 import Header from '../../utils/header';
 
 export default function Legislation() {
+    const navigation = useNavigation()
+    const control = createControl
     const formik = useFormik({
         initialValues: {
-            minhocasInsetos: false,
-            producaoDiversificada: false,
-            areaCompactada: false,
-            erosao: false,
-            plantioDireto: false,
-            cultivoMinimo: false,
-            queimaControlada: false,
-            analiseSolo: false,
-            manVegEncosta: false,
-
+            hasEarthwormInsects: false,
+            hasDiversifiedProduction: false,
+            hasCompactedArea: false,
+            hasErosion: false,
+            hasNoTill: false,
+            hasMinimumCultivation: false,
+            hasControlledBurning: false,
+            hasSoilAnalysisCorrection: false,
+            hasPresenceMaintenanceVegetation: false,
+            hasNaturalRegeneration: false,
+            hasRegenerationWithHandling: false,
+            hasRegenerationWithPlanting: false,
+            hasAgroforestrySystems: false,
+            hasIntegralVegetation: false,
+            hasRotatedHandling: false,
+            hasConsortiumHandling   : false,
         },
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
+            setSubmitting(true);
+            alert(JSON.stringify(formik.values))
+            // await api.post('productions', {
+            //     productions,
+            //     farm_id: jsonValue.id,
+            //   })
+            //   .then(async response => {
+                
+            //     await createLand.update({
+            //       ...jsonValue,
+            //       productions: response.data
+            //     })
+                
+                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+                control.update({
+                  ...JSONcontrol,
+                  'boolSoilVegetation': true
+                })
+                
+            //     navigation.goBack()
+            //   })
+            //   .catch(err => {
+            //     setSubmitting(false);
+            //     setErrors({ message: err.message });
+            //   });
+            navigation.goBack();
             setSubmitting(false);
         },
       });
@@ -34,211 +70,233 @@ export default function Legislation() {
         </Text>
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
-        <View style={styles.flexView}>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasEarthwormInsects', !formik.values.hasEarthwormInsects)
+        }}>
             <Text style={styles.caption}>
             Observa presença de animais como minhoca e/ou insetos no solo?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('minhocasInsetos', text)
+                formik.setFieldValue('hasEarthwormInsects', text)
             }}
-            value = {formik.values.minhocasInsetos}
+            value = {formik.values.hasEarthwormInsects}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasDiversifiedProduction', !formik.values.hasDiversifiedProduction)
+        }}>
             <Text style={styles.caption}>
             A produção diversificada?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('producaoDiversificada', text)
+                formik.setFieldValue('hasDiversifiedProduction', text)
             }}
-            value = {formik.values.producaoDiversificada}
+            value = {formik.values.hasDiversifiedProduction}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasCompactedArea', !formik.values.hasCompactedArea)
+        }}>
             <Text style={styles.caption}>
             Presença de áreas compactadas?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('areaCompactada', text)
+                formik.setFieldValue('hasCompactedArea', text)
             }}
-            value = {formik.values.areaCompactada}
+            value = {formik.values.hasCompactedArea}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasErosion', !formik.values.hasErosion)
+        }}>
             <Text style={styles.caption}>
             Presença de erosão?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('erosao', text)
+                formik.setFieldValue('hasErosion', text)
             }}
-            value = {formik.values.erosao}
+            value = {formik.values.hasErosion}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasSoilAnalysisCorrection', !formik.values.hasSoilAnalysisCorrection)
+        }}>
             <Text style={styles.caption}>
             Realiza análise de solo e correção com orientação técnica?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('analiseSolo', text)
+                formik.setFieldValue('hasSoilAnalysisCorrection', text)
             }}
-            value = {formik.values.analiseSolo}
+            value = {formik.values.hasSoilAnalysisCorrection}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasPresenceMaintenanceVegetation', !formik.values.hasPresenceMaintenanceVegetation)
+        }}>
             <Text style={styles.caption}>
             Presença e manutenção da vegetação em encostas e fundos de vale?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('manVegEncosta', text)
+                formik.setFieldValue('hasPresenceMaintenanceVegetation', text)
             }}
-            value = {formik.values.manVegEncosta}
+            value = {formik.values.hasPresenceMaintenanceVegetation}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasIntegralVegetation', !formik.values.hasIntegralVegetation)
+        }}>
             <Text style={styles.caption}>
             Possui vegetação íntegra na margem dos rios?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('vegmargemRio', text)
+                formik.setFieldValue('hasIntegralVegetation', text)
             }}
-            value = {formik.values.vegmargemRio}
+            value = {formik.values.hasIntegralVegetation}
             />
-        </View>
+        </TouchableOpacity>
         <View style={styles.containerOption}>
         <Text style={styles.title}>
             Escolha a prática de manejo das culturas: 
         </Text>
-        <View style={styles.flexViewOption}>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasNoTill', !formik.values.hasNoTill)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('plantioDireto', text)
+                formik.setFieldValue('hasNoTill', text)
             }}
-            value = {formik.values.plantioDireto}
+            value = {formik.values.hasNoTill}
             />
             <Text style={styles.option}>
             Plantio direto
             </Text>
-        </View>
-        <View style={styles.flexViewOption}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasMinimumCultivation', !formik.values.hasMinimumCultivation)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('cultivoMinimo', text)
+                formik.setFieldValue('hasMinimumCultivation', text)
             }}
-            value = {formik.values.cultivoMinimo}
+            value = {formik.values.hasMinimumCultivation}
             />
             <Text style={styles.option}>
             Cultivo mínimo
             </Text>
-        </View>
-        <View style={styles.flexViewOption}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasControlledBurning', !formik.values.hasControlledBurning)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('queimaControlada', text)
+                formik.setFieldValue('hasControlledBurning', text)
             }}
-            value = {formik.values.queimaControlada}
+            value = {formik.values.hasControlledBurning}
             />
             <Text style={styles.option}>
             Queima controlada
             </Text>
-        </View>
+        </TouchableOpacity>
         </View>
         <View style={styles.containerOption}>
         <Text style={styles.title}>
             Escolha a área de renegeração, se houver: 
         </Text>
-        <View style={styles.flexViewOption}>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasNaturalRegeneration', !formik.values.hasNaturalRegeneration)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('areaRegNatural', text)
+                formik.setFieldValue('hasNaturalRegeneration', text)
             }}
-            value = {formik.values.areaRegNatural}
+            value = {formik.values.hasNaturalRegeneration}
             />
             <Text style={styles.option}>
             Natural
             </Text>
-        </View>
-        <View style={styles.flexViewOption}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasRegenerationWithHandling', !formik.values.hasRegenerationWithHandling)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('areaRegManejo', text)
+                formik.setFieldValue('hasRegenerationWithHandling', text)
             }}
-            value = {formik.values.areaRegManejo}
+            value = {formik.values.hasRegenerationWithHandling}
             />
             <Text style={styles.option}>
             Com manejo
             </Text>
-        </View>
-        <View style={styles.flexViewOption}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasRegenerationWithPlanting', !formik.values.hasRegenerationWithPlanting)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('areaRegPlantio', text)
+                formik.setFieldValue('hasRegenerationWithPlanting', text)
             }}
-            value = {formik.values.areaRegPlantio}
+            value = {formik.values.hasRegenerationWithPlanting}
             />
             <Text style={styles.option}>
             Com plantio
             </Text>
-        </View>
-        <View style={styles.flexViewOption}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasAgroforestrySystems', !formik.values.hasAgroforestrySystems)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('areaRegAgro', text)
+                formik.setFieldValue('hasAgroforestrySystems', text)
             }}
-            value = {formik.values.areaRegAgro}
+            value = {formik.values.hasAgroforestrySystems}
             />
             <Text style={styles.option}>
             Com sistemas agroflorestais
             </Text>
-        </View>
+        </TouchableOpacity>
         </View>
 
         <View style={styles.containerOption}>
         <Text style={styles.title}>
             O manejo da pastagem é: 
         </Text>
-        <View style={styles.flexViewOption}>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasRotatedHandling', !formik.values.hasRotatedHandling)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('manejoRotacionado', text)
+                formik.setFieldValue('hasRotatedHandling', text)
             }}
-            value = {formik.values.manejoRotacionado}
+            value = {formik.values.hasRotatedHandling}
             />
             <Text style={styles.option}>
             Rotacionado
             </Text>
-        </View>
-        <View style={styles.flexViewOption}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('hasConsortiumHandling', !formik.values.hasConsortiumHandling)
+        }}>
             <CheckBox 
             onValueChange = {text => {
-                formik.setFieldValue('manejoConsorciado', text)
+                formik.setFieldValue('hasConsortiumHandling', text)
             }}
-            value = {formik.values.manejoConsorciado}
+            value = {formik.values.hasConsortiumHandling}
             />
             <Text style={styles.option}>
             Consorciado
             </Text>
-        </View>
+        </TouchableOpacity>
         </View>
         <TouchableOpacity
         style={styles.Button}
-        onPress={async () => {
-            await AsyncStorage.setItem('control',JSON.stringify({
-                boolCaracterization : true,
-                boolProduction : true,
-                boolLegislation :  true,
-                boolWaterResource :  true,
-                boolSoilVegetation : true,
-                boolWasteManagement :  false,
-            }))
-        }
-        }
+        onPress={formik.handleSubmit}
         >
         {
           formik.isSubmitting ? 

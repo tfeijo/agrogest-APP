@@ -2,18 +2,48 @@ import React from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
 import { useFormik } from 'formik';
+import { useNavigation } from '@react-navigation/native';
+import createControl from '../../utils/createControl';
 import styles from './styles';
 import Header from '../../utils/header';
 
 export default function Legislation() {
+    const navigation = useNavigation()
+    const control = createControl
     const formik = useFormik({
         initialValues: {
-          nascenteProtegida: false,
-          esgotoDomestico: false,
-          aguaTratada: false
+            hasSourceProtectedWaterMine: false,
+            hasDomesticSewageTreatment: false,
+            hasWaterConsuptionTreatment: false,
         },
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
+            setSubmitting(true);
+            alert(JSON.stringify(formik.values))
+            // await api.post('productions', {
+            //     productions,
+            //     farm_id: jsonValue.id,
+            //   })
+            //   .then(async response => {
+                
+            //     await createLand.update({
+            //       ...jsonValue,
+            //       productions: response.data
+            //     })
+                
+                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+                control.update({
+                  ...JSONcontrol,
+                  'boolSoilVegetation': true
+                })
+                
+            //     navigation.goBack()
+            //   })
+            //   .catch(err => {
+            //     setSubmitting(false);
+            //     setErrors({ message: err.message });
+            //   });
+            navigation.goBack();
             setSubmitting(false);
         },
       });
@@ -26,52 +56,48 @@ export default function Legislation() {
         </Text>
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
-        <View style={styles.flexView}>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasSourceProtectedWaterMine', !formik.values.hasSourceProtectedWaterMine)
+        }}>
             <Text style={styles.caption}>
-            Sua propriedade possui nascente ou mina de água protegida?
+                Sua propriedade possui nascente ou mina de água protegida?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('nascenteProtegida', text)
+                formik.setFieldValue('hasSourceProtectedWaterMine', text)
             }}
-            value = {formik.values.nascenteProtegida}
+            value = {formik.values.hasSourceProtectedWaterMine}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasDomesticSewageTreatment', !formik.values.hasDomesticSewageTreatment)
+        }}>
             <Text style={styles.caption}>
-            O esgoto doméstico das residências da propriedade é tratado?
+                O esgoto doméstico das residências da propriedade é tratado?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('esgotoDomestico', text)
+                formik.setFieldValue('hasDomesticSewageTreatment', text)
             }}
-            value = {formik.values.esgotoDomestico}
+            value = {formik.values.hasDomesticSewageTreatment}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasWaterConsuptionTreatment', !formik.values.hasWaterConsuptionTreatment)
+        }}>
             <Text style={styles.caption}>
-            A água de consumo humano/animal e para limpeza é tratada?
+                A água de consumo humano/animal e para limpeza é tratada?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('aguaTratada', text)
+                formik.setFieldValue('hasWaterConsuptionTreatment', text)
             }}
-            value = {formik.values.aguaTratada}
+            value = {formik.values.hasWaterConsuptionTreatment}
             />
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity
         style={styles.Button}
-        onPress={async () => {
-            await AsyncStorage.setItem('control',JSON.stringify({
-                boolCaracterization : true,
-                boolProduction : true,
-                boolLegislation :  true,
-                boolWaterResource :  true,
-                boolSoilVegetation : false,
-                boolWasteManagement :  false,
-            }))
-        }
-        }
+        onPress={formik.handleSubmit}
         >
         {
           formik.isSubmitting ? 

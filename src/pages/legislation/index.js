@@ -2,25 +2,55 @@ import React from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
 import { useFormik } from 'formik';
+import { useNavigation } from '@react-navigation/native';
+import createControl from '../../utils/createControl';
 import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 import Header from '../../utils/header';
 
 export default function Legislation() {
+    const navigation = useNavigation()
+    const control = createControl
     const formik = useFormik({
         initialValues: {
-          licensing: false,
-          car: false,
-          reservaLegal: false,
-          appCursoReservatorio: false,
-          appNascente: false,
-          appEncosta: false,
-          appMorro: false,
-          pra: false,
-          outorga: false
+            hasEnvironmentalLicencing: false,
+            hasCAR : false,
+            hasNativeVegetationLegalReserve: false,
+            hasAppAroundWaterCoursesWaterReservoirs: false,
+            hasAppAroundSpringsWaterEyes: false,
+            hasAppHillside: false,
+            hasAppHillTop: false,
+            hasEnvironmentalRegularizationPlan: false,
+            hasWaterGrant: false,
         },
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
+            setSubmitting(true);
+            alert(JSON.stringify(formik.values))
+            // await api.post('productions', {
+            //     productions,
+            //     farm_id: jsonValue.id,
+            //   })
+            //   .then(async response => {
+                
+            //     await createLand.update({
+            //       ...jsonValue,
+            //       productions: response.data
+            //     })
+                
+                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+                control.update({
+                  ...JSONcontrol,
+                  'boolWaterResource': true
+                })
+                
+            //     navigation.goBack()
+            //   })
+            //   .catch(err => {
+            //     setSubmitting(false);
+            //     setErrors({ message: err.message });
+            //   });
+            navigation.goBack();
             setSubmitting(false);
         },
       });
@@ -33,119 +63,146 @@ export default function Legislation() {
         </Text>
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
-        <View style={styles.flexView}>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasEnvironmentalLicencing', !formik.values.hasEnvironmentalLicencing)
+            formik.setFieldValue('hasCAR', false)
+            formik.setFieldValue('hasNativeVegetationLegalReserve', false)
+            formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', false)
+            formik.setFieldValue('hasAppAroundSpringsWaterEyes', false)
+            formik.setFieldValue('hasAppHillside', false)
+            formik.setFieldValue('hasAppHillTop', false)
+            formik.setFieldValue('hasEnvironmentalRegularizationPlan', false)
+            formik.setFieldValue('hasWaterGrant', false)
+        }}>
             <Text style={styles.caption}>
-            Possui licenciamento ambiental?
+                Possui licenciamento ambiental?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('licensing', text)
-                formik.setFieldValue('car', false)
-                formik.setFieldValue('reservaLegal', false)
-                formik.setFieldValue('appCursoReservatorio', false)
-                formik.setFieldValue('appNascente', false)
-                formik.setFieldValue('appEncosta', false)
-                formik.setFieldValue('appMorro', false)
-                formik.setFieldValue('pra', false)
-                formik.setFieldValue('outorga', false)
+                formik.setFieldValue('hasEnvironmentalLicencing', text)
+                formik.setFieldValue('hasCAR', false)
+                formik.setFieldValue('hasNativeVegetationLegalReserve', false)
+                formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', false)
+                formik.setFieldValue('hasAppAroundSpringsWaterEyes', false)
+                formik.setFieldValue('hasAppHillside', false)
+                formik.setFieldValue('hasAppHillTop', false)
+                formik.setFieldValue('hasEnvironmentalRegularizationPlan', false)
+                formik.setFieldValue('hasWaterGrant', false)
 
             }}
-            value = {formik.values.licensing}
+            value = {formik.values.hasEnvironmentalLicencing}
             />
-        </View>
-        {!formik.values.licensing  &&
+        </TouchableOpacity>
+        {!formik.values.hasEnvironmentalLicencing  &&
         <>
-        <View style={styles.flexView}>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasCAR', !formik.values.hasCAR)
+        }}>
             <Text style={styles.caption}>
-            Possui cadastro ambiental rural - CAR?
+                Possui cadastro ambiental rural - CAR?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('car', text)
+                formik.setFieldValue('hasCAR', text)
             }}
-            value = {formik.values.car}
+            value = {formik.values.hasCAR}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasNativeVegetationLegalReserve', !formik.values.hasNativeVegetationLegalReserve)
+        }}>
             <Text style={styles.caption}>
-            Possui área com cobertura de vegetação nativa que atende percentual de Reserva Legal?
+                Possui área com cobertura de vegetação nativa que atende percentual de Reserva Legal?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('reservaLegal', text)
+                formik.setFieldValue('hasNativeVegetationLegalReserve', text)
             }}
-            value = {formik.values.reservaLegal}
+            value = {formik.values.hasNativeVegetationLegalReserve}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', !formik.values.hasAppAroundWaterCoursesWaterReservoirs)
+        }}>
             <Text style={styles.caption}>
-            Possui área de APP em áreas em torno de cursos d'água e reservatórios de água?
+                Possui área de APP em áreas em torno de cursos d'água e reservatórios de água?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('appCursoReservatorio', text)
+                formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', text)
             }}
-            value = {formik.values.appCursoReservatorio}
+            value = {formik.values.hasAppAroundWaterCoursesWaterReservoirs}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasAppAroundSpringsWaterEyes', !formik.values.hasAppAroundSpringsWaterEyes)
+        }}>
             <Text style={styles.caption}>
-            Possui área de APP em áreas em torno de nascentes e de olhos d'água?
+                Possui área de APP em áreas em torno de nascentes e de olhos d'água?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('appNascente', text)
+                formik.setFieldValue('hasAppAroundSpringsWaterEyes', text)
             }}
-            value = {formik.values.appNascente}
+            value = {formik.values.hasAppAroundSpringsWaterEyes}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasAppHillside', !formik.values.hasAppHillside)
+        }}>     
             <Text style={styles.caption}>
-            Possui área de APP em áreas de encosta?
+                Possui área de APP em áreas de encosta?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('appEncosta', text)
+                formik.setFieldValue('hasAppHillside', text)
             }}
-            value = {formik.values.appEncosta}
+            value = {formik.values.hasAppHillside}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasAppHillTop', !formik.values.hasAppHillTop)
+        }}>
             <Text style={styles.caption}>
-            Possui área de APP em áreas de topo de morro?
+                Possui área de APP em áreas de topo de morro?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('appMorro', text)
+                formik.setFieldValue('hasAppHillTop', text)
             }}
-            value = {formik.values.appMorro}
+            value = {formik.values.hasAppHillTop}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasEnvironmentalRegularizationPlan', !formik.values.hasEnvironmentalRegularizationPlan)
+        }}>
             <Text style={styles.caption}>
-            Possui Plano de Regularização Ambiental?
+                Possui Plano de Regularização Ambiental?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('pra', text)
+                formik.setFieldValue('hasEnvironmentalRegularizationPlan', text)
             }}
-            value = {formik.values.pra}
+            value = {formik.values.hasEnvironmentalRegularizationPlan}
             />
-        </View>
-        <View style={styles.flexView}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flexView} onPress={async () => {
+            formik.setFieldValue('hasWaterGrant', !formik.values.hasWaterGrant)
+        }}>
             <Text style={styles.caption}>
-            Possui outorga de uso da água?
+                Possui outorga de uso da água?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('outorga', text)
+                formik.setFieldValue('hasWaterGrant', text)
             }}
-            value = {formik.values.outorga}
+            value = {formik.values.hasWaterGrant}
             />
-        </View>
+        </TouchableOpacity>
         </>
         }
-        {formik.values.licensing  && <View style={styles.congratulation}>
+        {formik.values.hasEnvironmentalLicencing  && <View style={styles.congratulation}>
             <Feather name='activity' size={35} color='#00753E' />
             <Text>
                 Parabéns! Se sua propridade já possui licenciamento ambiental, ela se encontra em conformidade com a legislação ambiental.
@@ -154,19 +211,7 @@ export default function Legislation() {
         }
         <TouchableOpacity
         style={styles.Button}
-        onPress={async () => {
-            await AsyncStorage.setItem('control',JSON.stringify({
-                boolCaracterization : true,
-                boolProduction : true,
-                boolLegislation :  true,
-                boolWaterResource :  false,
-                boolSoilVegetation : false,
-                boolWasteManagement :  false,
-            }))
-    
-            alert("asdf")   
-        }
-        }
+        onPress={formik.handleSubmit}
         >
         {
           formik.isSubmitting ? 

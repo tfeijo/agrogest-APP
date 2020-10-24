@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, Switch, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import CheckBox from '@react-native-community/checkbox';
 import { useFormik } from 'formik';
+import { useNavigation } from '@react-navigation/native';
 import createControl from '../../utils/createControl';
 import styles from './styles';
 import Header from '../../utils/header';
