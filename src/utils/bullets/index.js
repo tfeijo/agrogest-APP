@@ -24,7 +24,6 @@ function BulletTitle(props){
             </View>
 }
 
-
 function BulletContainer(props) { 
     if (!props.currentStep) {
         return <BulletEmpty page={props.page} stepBefore={props.stepBefore}/>;
@@ -203,11 +202,11 @@ function WasteManagment(props) {
             </View>
 }
 
+
 function BulletEmpty(props){
     let navigation = useNavigation(); 
-
+    
     if(props.stepBefore) 
-        
         return <View style={styles.stepListEmpty}>
                     <View style={styles.stepEmpty}>
                         <TouchableOpacity

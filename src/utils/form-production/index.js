@@ -70,7 +70,6 @@ export default function Form(props) {
 
     },
     onSubmit: async (values, { setSubmitting, setErrors}) => {
-      // alert(JSON.stringify(formik.values))
 
       let productions = []
       setSubmitting(true);
@@ -117,7 +116,6 @@ export default function Form(props) {
         setErrors({ message: err.message });
       });
       setSubmitting(false);
-      setSubmitting(false)
     },
   });
 

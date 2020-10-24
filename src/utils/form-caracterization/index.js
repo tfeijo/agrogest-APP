@@ -16,7 +16,6 @@ import * as Yup from 'yup';
 import api from '../../services/api';
 import styles from './styles';
 import createLand from '../createLand';
-import createControl from '../createControl';
 import UniqueID from '../createUniqueIDFarm';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -182,7 +181,7 @@ export default function Form( props ) {
         keyboardType={'numeric'}
         returnKeyType={ 'done' }
         />
-      <View style={styles.flexView}>
+      {/* <View style={styles.flexView}>
         <Text style={styles.caption}>
           A propriedade rural já é licenciada?
         </Text>
@@ -192,7 +191,7 @@ export default function Form( props ) {
           }}
           value = {formik.values.licensing}
           />
-      </View>
+      </View> */}
       <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}

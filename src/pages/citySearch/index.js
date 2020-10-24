@@ -75,8 +75,10 @@ export default class App extends React.Component {
         </View>
       );
     }
-    return (
+    return (<>
+      <StatusBar backgroundColor="#00753E" barStyle='light-content' />
       <View style={styles.viewStyle}>
+        
         <SearchBar
           round
           searchIcon={{ size: 24 }}
@@ -111,6 +113,7 @@ export default class App extends React.Component {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
+      </>
     );
   }
 }
