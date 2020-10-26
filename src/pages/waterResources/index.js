@@ -4,10 +4,11 @@ AsyncStorage} from 'react-native';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import createControl from '../../utils/createControl';
+import createLand from '../../utils/createLand';
 import styles from './styles';
 import Header from '../../utils/header';
 
-export default function Legislation() {
+export default function WaterResource() {
     const navigation = useNavigation()
     const control = createControl
     const formik = useFormik({
@@ -19,32 +20,34 @@ export default function Legislation() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            alert(JSON.stringify(formik.values))
-            // await api.post('productions', {
-            //     productions,
-            //     farm_id: jsonValue.id,
-            //   })
-            //   .then(async response => {
-                
-            //     await createLand.update({
-            //       ...jsonValue,
-            //       productions: response.data
-            //     })
-                
-                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
-                control.update({
-                  ...JSONcontrol,
-                  'boolSoilVegetation': true
+            
+            let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+            let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+            
+            let attributes = jsonValue.attributes
+            for (var key in formik.values)  {
+                attributes[key] = formik.values[key]
+            }
+            
+            try {
+                await createLand.update({
+                    ...jsonValue,
+                    attributes
+                })
+    
+                await control.update({
+                ...JSONcontrol,
+                'boolWaterResource': true
                 })
                 
-            //     navigation.goBack()
-            //   })
-            //   .catch(err => {
-            //     setSubmitting(false);
-            //     setErrors({ message: err.message });
-            //   });
-            navigation.goBack();
-            setSubmitting(false);
+                setSubmitting(false);
+                navigation.goBack();
+            } catch (error) {
+                alert('Falha no armazenamento, tente mais uma vez.')
+                setSubmitting(false);
+                navigation.goBack();
+            }
+            
         },
       });
 

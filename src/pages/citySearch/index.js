@@ -6,11 +6,12 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  StatusBar
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import styles from "./styles";
-export default class App extends React.Component {
+export default class CitySearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isLoading: true, search: '' };

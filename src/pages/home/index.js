@@ -1,16 +1,16 @@
 import { 
     View, 
     Image, 
+    Alert,
     Text, 
     ScrollView, 
     StatusBar,
-    AsyncStorage
+    AsyncStorage,
+    ActivityIndicator,
+    TouchableOpacity
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-
-
-import createControl from './../../utils/createControl';
 import BulletFull  from '../../utils/bullets';
 import logoImg from '../../assets/logo.png';
 import styles from './styles';
@@ -119,6 +119,7 @@ export default function Home() {
                         number={3}
                         description='Legislação Ambiental'
                         stepBefore={control.boolProduction}
+                        data={land}
                         currentStep={control.boolLegislation}
                         page="Legislation"/>
                     
@@ -126,6 +127,7 @@ export default function Home() {
                         number={4}
                         description='Recursos Hídricos'
                         stepBefore={control.boolLegislation}
+                        data={land}
                         currentStep={control.boolWaterResource}
                         page="WaterResources"/>
                     
@@ -133,6 +135,7 @@ export default function Home() {
                         number={5}
                         description='Solo e vegetação'
                         stepBefore={control.boolWaterResource}
+                        data={land}
                         currentStep={control.boolSoilVegetation}
                         page="SoilVegetation"/>
                     
@@ -140,8 +143,26 @@ export default function Home() {
                         number={6}
                         description='Gestão de resíduos'
                         stepBefore={control.boolSoilVegetation}
+                        data={land}
                         currentStep={control.boolWasteManagement}
+                        productions={control.productions}
                         page="WasteManagement"/>
+                    
+                    <TouchableOpacity
+                        style={styles.Button}
+                        onPress={()=>{
+                            
+                            Alert.alert(
+                                "Comunicado",
+                                "Também estamos ansiosos, este recurso estará disponível em breve..",
+                            )
+                            
+                        }}
+                        disabled={false}
+                        >
+                        <Text style={styles.ButtonText}>Processar recomendações</Text>
+                    
+                    </TouchableOpacity>
                 </ScrollView>
             </View>
         </>

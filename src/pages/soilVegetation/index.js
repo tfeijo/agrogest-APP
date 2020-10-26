@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import {CheckBox} from "native-base";
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import createControl from '../../utils/createControl';
+import createLand from '../../utils/createLand';
+
 import styles from './styles';
 import Header from '../../utils/header';
 
-export default function Legislation() {
+export default function SoilVegetation() {
     const navigation = useNavigation()
     const control = createControl
     const formik = useFormik({
@@ -17,48 +19,49 @@ export default function Legislation() {
             hasDiversifiedProduction: false,
             hasCompactedArea: false,
             hasErosion: false,
+            hasSoilAnalysisCorrection: false,
+            hasPresenceMaintenanceVegetation: false,
+            hasIntegralVegetation: false,
             hasNoTill: false,
             hasMinimumCultivation: false,
             hasControlledBurning: false,
-            hasSoilAnalysisCorrection: false,
-            hasPresenceMaintenanceVegetation: false,
             hasNaturalRegeneration: false,
             hasRegenerationWithHandling: false,
             hasRegenerationWithPlanting: false,
             hasAgroforestrySystems: false,
-            hasIntegralVegetation: false,
             hasRotatedHandling: false,
             hasConsortiumHandling   : false,
         },
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            alert(JSON.stringify(formik.values))
-            // await api.post('productions', {
-            //     productions,
-            //     farm_id: jsonValue.id,
-            //   })
-            //   .then(async response => {
+            
+            let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+            let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+            
+            let attributes = jsonValue.attributes
+            for (var key in formik.values)  {
+                attributes[key] = formik.values[key]
+            }
+            
+            try {
+                await createLand.update({
+                    ...jsonValue,
+                    attributes
+                })
                 
-            //     await createLand.update({
-            //       ...jsonValue,
-            //       productions: response.data
-            //     })
-                
-                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
                 control.update({
                   ...JSONcontrol,
                   'boolSoilVegetation': true
                 })
                 
-            //     navigation.goBack()
-            //   })
-            //   .catch(err => {
-            //     setSubmitting(false);
-            //     setErrors({ message: err.message });
-            //   });
-            navigation.goBack();
-            setSubmitting(false);
+                setSubmitting(false);
+                navigation.goBack();
+            } catch (error) {
+                alert('Falha no armazenamento, tente mais uma vez.')
+                setSubmitting(false);
+                navigation.goBack();
+            }
         },
       });
 
@@ -169,10 +172,11 @@ export default function Legislation() {
             formik.setFieldValue('hasNoTill', !formik.values.hasNoTill)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasNoTill', text)
+            onPress = {() => {
+                formik.setFieldValue('hasNoTill', !formik.values.hasNoTill)
             }}
-            value = {formik.values.hasNoTill}
+            color="#A3A3A3"
+            checked = {formik.values.hasNoTill}
             />
             <Text style={styles.option}>
             Plantio direto
@@ -182,10 +186,11 @@ export default function Legislation() {
             formik.setFieldValue('hasMinimumCultivation', !formik.values.hasMinimumCultivation)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasMinimumCultivation', text)
+            onPress = {() => {
+                formik.setFieldValue('hasMinimumCultivation', !formik.values.hasMinimumCultivation)
             }}
-            value = {formik.values.hasMinimumCultivation}
+            color="#A3A3A3"
+            checked = {formik.values.hasMinimumCultivation}
             />
             <Text style={styles.option}>
             Cultivo mínimo
@@ -195,10 +200,11 @@ export default function Legislation() {
             formik.setFieldValue('hasControlledBurning', !formik.values.hasControlledBurning)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasControlledBurning', text)
+            onPress = {() => {
+                formik.setFieldValue('hasControlledBurning', !formik.values.hasControlledBurning)
             }}
-            value = {formik.values.hasControlledBurning}
+            color="#A3A3A3"
+            checked = {formik.values.hasControlledBurning}
             />
             <Text style={styles.option}>
             Queima controlada
@@ -213,10 +219,11 @@ export default function Legislation() {
             formik.setFieldValue('hasNaturalRegeneration', !formik.values.hasNaturalRegeneration)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasNaturalRegeneration', text)
+            onPress = {() => {
+                formik.setFieldValue('hasNaturalRegeneration', !formik.values.hasNaturalRegeneration)
             }}
-            value = {formik.values.hasNaturalRegeneration}
+            color="#A3A3A3"
+            checked = {formik.values.hasNaturalRegeneration}
             />
             <Text style={styles.option}>
             Natural
@@ -226,10 +233,11 @@ export default function Legislation() {
             formik.setFieldValue('hasRegenerationWithHandling', !formik.values.hasRegenerationWithHandling)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasRegenerationWithHandling', text)
+            onPress = {() => {
+                formik.setFieldValue('hasRegenerationWithHandling', !formik.values.hasRegenerationWithHandling)
             }}
-            value = {formik.values.hasRegenerationWithHandling}
+            color="#A3A3A3"
+            checked = {formik.values.hasRegenerationWithHandling}
             />
             <Text style={styles.option}>
             Com manejo
@@ -239,10 +247,11 @@ export default function Legislation() {
             formik.setFieldValue('hasRegenerationWithPlanting', !formik.values.hasRegenerationWithPlanting)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasRegenerationWithPlanting', text)
+            onPress = {() => {
+                formik.setFieldValue('hasRegenerationWithPlanting', !formik.values.hasRegenerationWithPlanting)
             }}
-            value = {formik.values.hasRegenerationWithPlanting}
+            color="#A3A3A3"
+            checked = {formik.values.hasRegenerationWithPlanting}
             />
             <Text style={styles.option}>
             Com plantio
@@ -252,10 +261,11 @@ export default function Legislation() {
             formik.setFieldValue('hasAgroforestrySystems', !formik.values.hasAgroforestrySystems)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasAgroforestrySystems', text)
+            onPress = {() => {
+                formik.setFieldValue('hasAgroforestrySystems', !formik.values.hasAgroforestrySystems)
             }}
-            value = {formik.values.hasAgroforestrySystems}
+            color="#A3A3A3"
+            checked = {formik.values.hasAgroforestrySystems}
             />
             <Text style={styles.option}>
             Com sistemas agroflorestais
@@ -271,10 +281,11 @@ export default function Legislation() {
             formik.setFieldValue('hasRotatedHandling', !formik.values.hasRotatedHandling)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasRotatedHandling', text)
+            onPress = {() => {
+                formik.setFieldValue('hasRotatedHandling', !formik.values.hasRotatedHandling)
             }}
-            value = {formik.values.hasRotatedHandling}
+            color="#A3A3A3"
+            checked = {formik.values.hasRotatedHandling}
             />
             <Text style={styles.option}>
             Rotacionado
@@ -284,10 +295,11 @@ export default function Legislation() {
             formik.setFieldValue('hasConsortiumHandling', !formik.values.hasConsortiumHandling)
         }}>
             <CheckBox 
-            onValueChange = {text => {
-                formik.setFieldValue('hasConsortiumHandling', text)
+            onPress = {()=>{
+                formik.setFieldValue('hasConsortiumHandling', !formik.values.hasConsortiumHandling)
             }}
-            value = {formik.values.hasConsortiumHandling}
+            color="#A3A3A3"
+            checked = {formik.values.hasConsortiumHandling}
             />
             <Text style={styles.option}>
             Consorciado

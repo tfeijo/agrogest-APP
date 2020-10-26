@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, Switch, TouchableOpacity, ActivityIndicator,
-AsyncStorage} from 'react-native';
-
-import CheckBox from '@react-native-community/checkbox';
+AsyncStorage, Image, StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import {CheckBox} from "native-base";
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
+import createLand from '../../utils/createLand';
 import createControl from '../../utils/createControl';
 import styles from './styles';
 import Header from '../../utils/header';
 
-export default function Legislation() {
+export default function WasteManagement() {
     const navigation = useNavigation()
     const control = createControl
+    const [isLoading,setLoading] = useState(true);
+
     const formik = useFormik({
         initialValues: {
             hasResidueComposting : false,
@@ -29,42 +32,112 @@ export default function Legislation() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            alert(JSON.stringify(formik.values))
-            // await api.post('productions', {
-            //     productions,
-            //     farm_id: jsonValue.id,
-            //   })
-            //   .then(async response => {
-                
-            //     await createLand.update({
-            //       ...jsonValue,
-            //       productions: response.data
-            //     })
-                
-                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+            
+            let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+            let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+            
+            let attributes = jsonValue.attributes
+            
+            for (var key in formik.values)  {
+                attributes[key] = formik.values[key]
+            }
+            
+            try {
+                await createLand.update({
+                    ...jsonValue,
+                    attributes
+                })
                 control.update({
                   ...JSONcontrol,
                   'boolWasteManagement': true
                 })
                 
-            //     navigation.goBack()
-            //   })
-            //   .catch(err => {
-            //     setSubmitting(false);
-            //     setErrors({ message: err.message });
-            //   });
-            navigation.goBack()
-            setSubmitting(false);
+                setSubmitting(false);
+                navigation.goBack();
+            } catch (error) {
+                alert('Falha no armazenamento, tente mais uma vez.')
+                setSubmitting(false);
+                navigation.goBack();
+            }
         },
       });
     
-      const [bovino] = useState(true);
-      const [suino] = useState(true);
-      const [avino] = useState(true);
-      const [agriculture] = useState(true);
-      const [pecuaria] = useState(avino || bovino || suino);
+    const [data, setData] = useState({})
+    const [suino ,setSuino] = useState(false)
+    const [bovino ,setBovino] = useState(false)
+    const [avino ,setAvino] = useState(false)
+    const [agricultura ,setAgricultura] = useState(false)
+    const [pecuaria,setPecuaria] = useState(false)
     
-    return <View style={styles.container} >
+    const isFocused = useIsFocused();
+
+    async function getInfo(){
+
+        async function getControl(){
+            try{ 
+              let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
+              
+              setBovino(
+                  jsonValue.productions.bovi_leite || 
+                  jsonValue.productions.bovi_corte
+                )
+            setAvino(jsonValue.productions.avicultura)
+            setSuino(jsonValue.productions.suinocultura)
+              setAgricultura(jsonValue.productions.agricultura)
+              setPecuaria(
+                jsonValue.productions.bovi_corte ||
+                jsonValue.productions.bovi_leite || 
+                jsonValue.productions.avicultura || 
+                jsonValue.productions.suinocultura
+              )
+
+              return jsonValue.productions != null && jsonValue.productions 
+            } catch(err) {
+              console.warn(err)
+            }
+        }
+
+        setData(await getControl())
+
+
+    }
+
+    async function fetchData() {
+        setLoading(true)
+        await getInfo();
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        if (isFocused && !isLoading){
+            fetchData()
+        }
+    }, [isFocused])
+    
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+      
+    return isLoading === true ?
+    <>
+        <StatusBar backgroundColor="#00753E" barStyle='light-content' />
+        <View style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#000',
+        }}>
+            <Image
+            style={{width: 300, height: 200}}
+            source={{uri: 'https://media.giphy.com/media/VseXvvxwowwCc/giphy.gif'}} />
+            <Text style={{color:'#fff'}}>Buscando dados...</Text>
+        </View>
+    </>
+    :
+    <>
+    <StatusBar backgroundColor="#00753E" barStyle='light-content' />
+    <View style={styles.container} >
 
         <Header />
         <Text style={styles.tipsTitle}>
@@ -108,7 +181,7 @@ export default function Legislation() {
         }
         
         
-        {formik.values.hasResidueComposting && pecuaria? 
+        {formik.values.hasResidueComposting? 
          bovino? 
          <View style={styles.containerOption}>
             <Text style={styles.title}>
@@ -118,10 +191,11 @@ export default function Legislation() {
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
                 formik.setFieldValue('hasBovineCattle', !formik.values.hasBovineCattle)}}>
                 <CheckBox 
-                onValueChange = {text => {
-                    formik.setFieldValue('hasBovineCattle', text)
+                onPress = {text => {
+                    formik.setFieldValue('hasBovineCattle', !formik.values.hasBovineCattle)
                 }}
-                value = {formik.values.hasBovineCattle}
+                color="#A3A3A3"
+                checked = {formik.values.hasBovineCattle}
                 />
                 <Text style={styles.option}>
                 Biodigestor
@@ -130,10 +204,11 @@ export default function Legislation() {
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
                 formik.setFieldValue('hasBovineDung', !formik.values.hasBovineDung)}}>
                 <CheckBox 
-                onValueChange = {text => {
-                    formik.setFieldValue('hasBovineDung', text)
+                onPress = {text => {
+                    formik.setFieldValue('hasBovineDung', !formik.values.hasBovineDung)
                 }}
-                value = {formik.values.hasBovineDung}
+                color="#A3A3A3"
+                checked = {formik.values.hasBovineDung}
                 />
                 <Text style={styles.option}>
                 Esterqueira
@@ -142,10 +217,11 @@ export default function Legislation() {
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
                 formik.setFieldValue('hasBovineFertigation', !formik.values.hasBovineFertigation)}}>
                 <CheckBox 
-                onValueChange = {text => {
-                    formik.setFieldValue('hasBovineFertigation', text)
+                onPress = {text => {
+                    formik.setFieldValue('hasBovineFertigation', !formik.values.hasBovineFertigation)
                 }}
-                value = {formik.values.hasBovineFertigation}
+                color="#A3A3A3"
+                checked = {formik.values.hasBovineFertigation}
                 />
                 <Text style={styles.option}>
                 Fertirrigação
@@ -155,8 +231,8 @@ export default function Legislation() {
         :<></>:<></> 
         }
 
-        {formik.values.hasResidueComposting && pecuaria? 
-         suino? 
+        {formik.values.hasResidueComposting&&
+         suino&&
          <>
         <View style={styles.containerOption}>
             <Text style={styles.title}>
@@ -166,10 +242,11 @@ export default function Legislation() {
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
                 formik.setFieldValue('hasSwineCattle', !formik.values.hasSwineCattle)}}>
                 <CheckBox 
-                onValueChange = {text => {
-                    formik.setFieldValue('hasSwineCattle', text)
+                onPress = {() => {
+                    formik.setFieldValue('hasSwineCattle', !formik.values.hasSwineCattle)    
                 }}
-                value = {formik.values.hasSwineCattle}
+                color="#A3A3A3"
+                checked = {formik.values.hasSwineCattle}
                 />
                 <Text style={styles.option}>
                 Biodigestor
@@ -178,10 +255,11 @@ export default function Legislation() {
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
                 formik.setFieldValue('hasSwineDung', !formik.values.hasSwineDung)}}>
                 <CheckBox 
-                onValueChange = {text => {
-                    formik.setFieldValue('hasSwineDung', text)
-                }}
-                value = {formik.values.hasSwineDung}
+                onPress = {() => {
+                    formik.setFieldValue('hasSwineDung', !formik.values.hasSwineDung)}
+                }
+                color="#A3A3A3"
+                checked = {formik.values.hasSwineDung}
                 />
                 <Text style={styles.option}>
                 Esterqueira
@@ -190,10 +268,11 @@ export default function Legislation() {
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
                 formik.setFieldValue('hasSwineFertigation', !formik.values.hasSwineFertigation)}}>
                 <CheckBox 
-                onValueChange = {text => {
-                    formik.setFieldValue('hasSwineFertigation', text)
-                }}
-                value = {formik.values.hasSwineFertigation}
+                onPress = {()=> {
+                    formik.setFieldValue('hasSwineFertigation', !formik.values.hasSwineFertigation)}
+                }
+                color="#A3A3A3"
+                checked = {formik.values.hasSwineFertigation}
                 />
                 <Text style={styles.option}>
                 Fertirrigação
@@ -213,12 +292,11 @@ export default function Legislation() {
             value = {formik.values.hasWaterControlProgram}
             />
         </TouchableOpacity>
-        </>
-        :<></>:<></> 
+        </> 
         }
 
-        {formik.values.hasResidueComposting && pecuaria? 
-         avino? 
+        {formik.values.hasResidueComposting&&
+         avino&&
          <TouchableOpacity style={styles.flexView} onPress={async () => {
             formik.setFieldValue('hasAviaryWastinAgriculture', !formik.values.hasAviaryWastinAgriculture)
         }}>
@@ -230,13 +308,20 @@ export default function Legislation() {
                 formik.setFieldValue('hasAviaryWastinAgriculture', text)
             }}
             value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.hasAviaryWastinAgriculture}
             />
         </TouchableOpacity>
-        :<></>:<></> 
         }
         
-        {formik.values.hasResidueComposting && pecuaria? 
-         agriculture?
+        {formik.values.hasResidueComposting &&
+         agricultura&&
         <TouchableOpacity style={styles.flexView} onPress={async () => {
             formik.setFieldValue('hasReuseAgriculturalResidue', !formik.values.hasReuseAgriculturalResidue)
         }}>
@@ -250,7 +335,6 @@ export default function Legislation() {
             value = {formik.values.hasReuseAgriculturalResidue}
             />
         </TouchableOpacity>
-         :<></>:<></> 
         }
         <TouchableOpacity style={styles.flexView} onPress={async () => {
             formik.setFieldValue('hasDeadCompostAnimals', !formik.values.hasDeadCompostAnimals)
@@ -280,5 +364,6 @@ export default function Legislation() {
        
         </TouchableOpacity>
         </ScrollView>
-    </View>;
+    </View>
+    </>;
 }

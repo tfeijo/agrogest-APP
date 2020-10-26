@@ -35,4 +35,19 @@ export default StyleSheet.create({
     stepList: {
         marginTop: 8
     },
+    Button: {
+        marginTop: 50,
+        height: 60,
+        backgroundColor:'#00753E',
+        borderRadius: 32,
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems: 'center',
+        marginBottom: 60
+    
+      },
+      ButtonText: {
+        color:'#fff',
+        fontSize:20
+      },
 }); 

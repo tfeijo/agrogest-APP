@@ -3,17 +3,18 @@ import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
-import createControl from '../../utils/createControl';
 import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 import Header from '../../utils/header';
+import createControl from '../../utils/createControl';
+import createLand from '../../utils/createLand';
 
 export default function Legislation() {
     const navigation = useNavigation()
     const control = createControl
     const formik = useFormik({
         initialValues: {
-            hasEnvironmentalLicencing: false,
+            hasEnvironmentalLicensing: false,
             hasCAR : false,
             hasNativeVegetationLegalReserve: false,
             hasAppAroundWaterCoursesWaterReservoirs: false,
@@ -26,32 +27,32 @@ export default function Legislation() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            alert(JSON.stringify(formik.values))
-            // await api.post('productions', {
-            //     productions,
-            //     farm_id: jsonValue.id,
-            //   })
-            //   .then(async response => {
-                
-            //     await createLand.update({
-            //       ...jsonValue,
-            //       productions: response.data
-            //     })
-                
-                let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
-                control.update({
-                  ...JSONcontrol,
-                  'boolWaterResource': true
+            let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+            let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+            let attributes = jsonValue.attributes!=null?jsonValue.attributes:{}
+            
+            for (var key in values)  {
+                attributes[key] = values[key]                
+            }
+            
+            try {
+                await createLand.update({
+                    ...jsonValue,
+                    attributes
+                })
+    
+                await control.update({
+                    ...JSONcontrol,
+                    'boolLegislation': true
                 })
                 
-            //     navigation.goBack()
-            //   })
-            //   .catch(err => {
-            //     setSubmitting(false);
-            //     setErrors({ message: err.message });
-            //   });
-            navigation.goBack();
-            setSubmitting(false);
+                setSubmitting(false);
+                navigation.goBack();
+            } catch (error) {
+                alert('Falha no armazenamento, tente mais uma vez.')
+                setSubmitting(false);
+                navigation.goBack();
+            }
         },
       });
 
@@ -64,36 +65,36 @@ export default function Legislation() {
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasEnvironmentalLicencing', !formik.values.hasEnvironmentalLicencing)
-            formik.setFieldValue('hasCAR', false)
-            formik.setFieldValue('hasNativeVegetationLegalReserve', false)
-            formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', false)
-            formik.setFieldValue('hasAppAroundSpringsWaterEyes', false)
-            formik.setFieldValue('hasAppHillside', false)
-            formik.setFieldValue('hasAppHillTop', false)
-            formik.setFieldValue('hasEnvironmentalRegularizationPlan', false)
-            formik.setFieldValue('hasWaterGrant', false)
+            formik.setFieldValue('hasEnvironmentalLicensing', !formik.values.hasEnvironmentalLicensing)
+            formik.setFieldValue('hasCAR', true)
+            formik.setFieldValue('hasNativeVegetationLegalReserve', true)
+            formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', true)
+            formik.setFieldValue('hasAppAroundSpringsWaterEyes', true)
+            formik.setFieldValue('hasAppHillside', true)
+            formik.setFieldValue('hasAppHillTop', true)
+            formik.setFieldValue('hasEnvironmentalRegularizationPlan', true)
+            formik.setFieldValue('hasWaterGrant', true)
         }}>
             <Text style={styles.caption}>
                 Possui licenciamento ambiental?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasEnvironmentalLicencing', text)
-                formik.setFieldValue('hasCAR', false)
-                formik.setFieldValue('hasNativeVegetationLegalReserve', false)
-                formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', false)
-                formik.setFieldValue('hasAppAroundSpringsWaterEyes', false)
-                formik.setFieldValue('hasAppHillside', false)
-                formik.setFieldValue('hasAppHillTop', false)
-                formik.setFieldValue('hasEnvironmentalRegularizationPlan', false)
-                formik.setFieldValue('hasWaterGrant', false)
+                formik.setFieldValue('hasEnvironmentalLicensing', text)
+                formik.setFieldValue('hasCAR', true)
+                formik.setFieldValue('hasNativeVegetationLegalReserve', true)
+                formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', true)
+                formik.setFieldValue('hasAppAroundSpringsWaterEyes', true)
+                formik.setFieldValue('hasAppHillside', true)
+                formik.setFieldValue('hasAppHillTop', true)
+                formik.setFieldValue('hasEnvironmentalRegularizationPlan', true)
+                formik.setFieldValue('hasWaterGrant', true)
 
             }}
-            value = {formik.values.hasEnvironmentalLicencing}
+            value = {formik.values.hasEnvironmentalLicensing}
             />
         </TouchableOpacity>
-        {!formik.values.hasEnvironmentalLicencing  &&
+        {!formik.values.hasEnvironmentalLicensing  &&
         <>
         <TouchableOpacity style={styles.flexView} onPress={async () => {
             formik.setFieldValue('hasCAR', !formik.values.hasCAR)
@@ -125,7 +126,7 @@ export default function Legislation() {
             formik.setFieldValue('hasAppAroundWaterCoursesWaterReservoirs', !formik.values.hasAppAroundWaterCoursesWaterReservoirs)
         }}>
             <Text style={styles.caption}>
-                Possui área de APP em áreas em torno de cursos d'água e reservatórios de água?
+                Possui Área de Preservação Permanente (APP) em torno de cursos e reservatórios de água??
             </Text>
             <Switch 
             onValueChange = {text => {
@@ -202,7 +203,7 @@ export default function Legislation() {
         </TouchableOpacity>
         </>
         }
-        {formik.values.hasEnvironmentalLicencing  && <View style={styles.congratulation}>
+        {formik.values.hasEnvironmentalLicensing  && <View style={styles.congratulation}>
             <Feather name='activity' size={35} color='#00753E' />
             <Text>
                 Parabéns! Se sua propridade já possui licenciamento ambiental, ela se encontra em conformidade com a legislação ambiental.

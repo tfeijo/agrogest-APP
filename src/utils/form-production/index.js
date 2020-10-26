@@ -72,23 +72,46 @@ export default function Form(props) {
     onSubmit: async (values, { setSubmitting, setErrors}) => {
 
       let productions = []
+      let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+      let productionControl = JSONcontrol.productions
+      
       setSubmitting(true);
 
       
       if (values.bovi_corte.enabled) {
         productions.push(values.bovi_corte)
+        productionControl = {
+          ...productionControl,
+          bovi_corte: true
+        }
       }
       if (values.bovi_leite.enabled) {
         productions.push(values.bovi_leite)
+        productionControl = {
+          ...productionControl,
+          bovi_leite: true
+        }
       }
       if (values.avicultura.enabled) {
         productions.push(values.avicultura)
+        productionControl = {
+          ...productionControl,
+          avicultura: true
+        }
       }
       if (values.suinocultura.enabled) {
         productions.push(values.suinocultura)
+        productionControl = {
+          ...productionControl,
+          suinocultura: true
+        }
       }
       if (values.agricultura.enabled) {
         productions.push(values.agricultura)
+        productionControl = {
+          ...productionControl,
+          agricultura: true
+        }
       }
       let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
 
@@ -103,12 +126,13 @@ export default function Form(props) {
           productions: response.data
         })
         
-        let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
+
         control.update({
           ...JSONcontrol,
-          'boolProduction': true
+          'boolProduction': true,
+          'boolWasteManagement': false,
+          productions: productionControl
         })
-        
         navigation.goBack()
       })
       .catch(err => {
@@ -500,7 +524,9 @@ export default function Form(props) {
         >
         { 
           formik.isSubmitting ? 
+          <><Text style={styles.ButtonText}>Salvando...</Text>
           <ActivityIndicator color='#fff' size= 'large' />
+          </>
           :
           <Text style={styles.ButtonText}>Salvar</Text>
         }

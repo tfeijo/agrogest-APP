@@ -30,6 +30,7 @@ export default StyleSheet.create({
 option: {
   fontSize: 15,
   color: '#131313',
+  marginLeft: 20
 },
 containerOption : {
     paddingBottom: 15,

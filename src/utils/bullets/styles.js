@@ -81,9 +81,11 @@ export default StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#FFF',
         marginBottom: 16
+
     },
     biomes: {
-        color: '#737380'
+        color: '#737380',
+        marginBottom: 6
     },
     stepProperty: {
         fontSize: 14,
@@ -91,9 +93,9 @@ export default StyleSheet.create({
         fontWeight: 'bold'
     },
     stepValue: {
-        marginTop: 4,
+        maxWidth:"90%",
         fontSize: 15,
-        marginBottom: 10,
+        marginBottom: 6,
         color: '#737380',
         fontWeight: 'normal'
     },
@@ -115,4 +117,7 @@ export default StyleSheet.create({
     fowardButtonText: {
         color: '#00753E',
     },
+    feather: {
+        marginRight: 10
+    }
 }); 

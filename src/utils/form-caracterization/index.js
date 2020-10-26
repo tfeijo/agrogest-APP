@@ -68,6 +68,13 @@ export default function Form( props ) {
           boolWaterResource :  false,
           boolSoilVegetation : false,
           boolWasteManagement :  false,
+          productions: {
+            bovi_leite: false,
+            bovi_corte: false,
+            avicultura:false,
+            suinocultura:false,
+            agricultura: false
+          }
         }))
         navigator.goBack()
       })
@@ -160,9 +167,14 @@ export default function Form( props ) {
         </Text> 
       }
       </Text>
+      <TouchableOpacity onPress={()=>{
+        formik.values.state_id != 9999?
+        loadCities(formik.values.state_id):null}
+      }>
       <View style={ styles.cityView}>
         <Text style={styles.city}>{city.name}</Text>
       </View>
+      </TouchableOpacity>
       <Text style={styles.caption}>
         Tamanho da propriedade (ha):
         
@@ -171,6 +183,7 @@ export default function Form( props ) {
             {formik.errors.hectare}
           </Text> }
       </Text>
+      
       <TextInput  
         name='size'
         onChangeText={number => {
