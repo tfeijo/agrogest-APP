@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import FowardButton from './fowardButton';
 import BulletEmpty from './bulletEmpty';
@@ -9,6 +10,8 @@ import styles from './styles';
 
 export default function Production(props) {
   const [prods, setProds] = useState(props.data.productions)
+  const navigation = useNavigation()
+
   const productions = prods.map((production) => {
     return <View style={styles.production} key={production.id}>
       <View style={styles.box}>
@@ -52,11 +55,12 @@ export default function Production(props) {
                     })
                     
                     let control = JSON.parse(await AsyncStorage.getItem('control'))
+                    let controlWasteManagement = control.boolWasteManagement
                     let farm = JSON.parse(await AsyncStorage.getItem('land'))
                     
                     await AsyncStorage.setItem('control',JSON.stringify({
                       ...control,
-                      boolWasteManagement :  false,
+                      boolWasteManagement : newActivityList.length != 0,
                       boolProduction : newActivityList.length != 0,
                       productions : productionsControl
                     }))
@@ -67,7 +71,22 @@ export default function Production(props) {
                     }))
 
                     setProds(newActivityList)
+
+                    if (newActivityList.length != 0 && controlWasteManagement) {
+                      Alert.alert('Tudo ocorreu bem! :)',
+                        `Você será redirecionado para preencher novamente o passo 6 por conta dessa alteração, relativo a Gestão de resíduos.`,
+                        [
+                          {text: 'ok', onPress: () => navigation.navigate('WasteManagement')},
+                        ], {})
+                    }
                     
+                    if (newActivityList.length == 0) {
+                      Alert.alert('Sua propriedade precisa ter uma produção ;)',
+                        `Você será redirecionado para inserir uma nova produção.`,
+                        [
+                          {text: 'ok', onPress: () => navigation.navigate('Production')},
+                        ], {})
+                    }
                   })
 
                 }},

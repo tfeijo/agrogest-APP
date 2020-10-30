@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import createLand from '../../utils/createLand';
 import createControl from '../../utils/createControl';
+import Loading from '../../utils/loading';
 import styles from './styles';
 import Header from '../../utils/header';
 
@@ -76,7 +77,7 @@ export default function WasteManagement() {
         async function getControl(){
             try{ 
                 let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
-                alert(JSON.stringify(jsonValue.productions))
+                
                 setBovino(
                     jsonValue.productions.bovi_leite || 
                     jsonValue.productions.bovi_corte
@@ -90,7 +91,6 @@ export default function WasteManagement() {
                     jsonValue.productions.avicultura || 
                     jsonValue.productions.suinocultura
                 )
-
               return jsonValue.productions != null && jsonValue.productions 
             } catch(err) {
               console.warn(err)
@@ -116,26 +116,11 @@ export default function WasteManagement() {
     }, [])
 
       
-    return isLoading === true ?
-    <>
-        <StatusBar backgroundColor="#00753E" barStyle='light-content' />
-        <View style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#000',
-        }}>
-            <Image
-            style={{width: 300, height: 200}}
-            source={{uri: 'https://media.giphy.com/media/VseXvvxwowwCc/giphy.gif'}} />
-            <Text style={{color:'#fff'}}>Buscando dados...</Text>
-        </View>
-    </>
+    return isLoading === true ? <Loading />
     :
     <>
     <StatusBar backgroundColor="#00753E" barStyle='light-content' />
     <View style={styles.container} >
-
         <Header />
         <Text style={styles.tipsTitle}>
           Selecione abaixo as características de sua propriedade em relação a gestão de resíduo

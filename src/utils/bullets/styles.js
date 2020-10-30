@@ -45,14 +45,19 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#00753E',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        height: 30,
+        padding: 10
     },
     stepTitleText: {
         fontSize: 15,
-        color: '#131313'
+        color: '#fff'
     },
     stepTitleTextBold: {
         fontSize: 15,
-        color: '#131313',
+        color: '#fff',
         fontWeight:'bold'
     },
     productionTitle: {
@@ -60,14 +65,15 @@ export default StyleSheet.create({
         color: '#00753E',
         fontWeight:'bold',
     },
-    stepListEmpty: {
-        marginTop: 8,
-    },
     stepEmpty: {
         padding: 24,
-        borderRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
         backgroundColor: '#FFF',
-        marginBottom: 16
+        borderWidth: 1,
+        borderColor: '#00753E',
+        marginBottom: 16,
+        marginTop: -1
     },
     stepEmptyText: {
         fontSize: 20,
@@ -78,10 +84,13 @@ export default StyleSheet.create({
     },
     step: {
         padding: 24,
-        borderRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
         backgroundColor: '#FFF',
-        marginBottom: 16
-
+        borderWidth: 1,
+        borderColor: '#00753E',
+        marginBottom: 16,
+        marginTop: -1
     },
     biomes: {
         color: '#737380',

@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 
 export default function AnswerList(props){
   return  <>
-      <Text style={styles.stepTitleTextBold}>
+      <Text style={{...styles.stepTitleTextBold, color: '#131313'}}>
           {props.title}
       </Text>
       {props.items.map(function(object){

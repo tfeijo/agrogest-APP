@@ -1,49 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import { View, AsyncStorage } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import styles from './styles';
 import AnswerItem from './answersItem';
 import AnswerList from './answersList';
 import FowardButton from './fowardButton';
+import Loading from '../loading';
 
 export default function WasteManagement(props) {
+  
+  const isFocused = useIsFocused();
   const [suino ,setSuino] = useState()
   const [bovino ,setBovino] = useState()
   const [avino ,setAvino] = useState()
   const [agricultura ,setAgricultura] = useState()
   const [pecuaria,setPecuaria] = useState()
+  const [isLoading,setLoading] = useState(true);
 
-    async function getControl(){
-        try{ 
-            let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
-            
-            setBovino(
-                jsonValue.productions.bovi_leite || 
-                jsonValue.productions.bovi_corte
-            )
-            setAvino(jsonValue.productions.avicultura)
-            setSuino(jsonValue.productions.suinocultura)
-            setAgricultura(jsonValue.productions.agricultura)
-            setPecuaria(
-                jsonValue.productions.bovi_corte ||
-                jsonValue.productions.bovi_leite || 
-                jsonValue.productions.avicultura || 
-                jsonValue.productions.suinocultura
-            )
-
-            return jsonValue.productions != null && jsonValue.productions 
-        } catch(err) {
-            console.warn(err)
-        }
+  async function getData(){
+    try{ 
+        let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
+        
+        setBovino(
+            jsonValue.productions.bovi_leite || 
+            jsonValue.productions.bovi_corte
+        )
+        setAvino(jsonValue.productions.avicultura)
+        setSuino(jsonValue.productions.suinocultura)
+        setAgricultura(jsonValue.productions.agricultura)
+        setPecuaria(
+            jsonValue.productions.bovi_corte ||
+            jsonValue.productions.bovi_leite || 
+            jsonValue.productions.avicultura || 
+            jsonValue.productions.suinocultura
+        )
+        return jsonValue.productions != null && jsonValue.productions 
+    } catch(err) {
+        console.warn(err)
     }
+  }
+  
+  async function fetchData() {
+    setLoading(true)
+    await getData();
+    setLoading(false)
+  }
 
-    async function fetchData() {
-        await getControl();
-    }
-
-    useEffect(() => {
+  useEffect(() => {
+    if (isFocused && !isLoading){
         fetchData()
-    }, [])
-    return  <View style={styles.step}>
+    }
+  }, [isFocused])
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+      
+    return isLoading === true ? <Loading />
+    :
+    <View style={styles.step}>
       {pecuaria? // pecuaria
               <>
 

@@ -107,10 +107,7 @@ export default function Home() {
         fetchData()
     }, [])
 
-    return isLoading === true ?
-        <>
-            <Loading />
-        </>
+    return isLoading === true ? <Loading />
     :
         <>
             <StatusBar backgroundColor="#00753E" barStyle='light-content' />
