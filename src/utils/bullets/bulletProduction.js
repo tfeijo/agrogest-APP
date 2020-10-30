@@ -60,7 +60,7 @@ export default function Production(props) {
                     
                     await AsyncStorage.setItem('control',JSON.stringify({
                       ...control,
-                      boolWasteManagement : newActivityList.length != 0,
+                      boolWasteManagement : false ,
                       boolProduction : newActivityList.length != 0,
                       productions : productionsControl
                     }))
@@ -72,14 +72,6 @@ export default function Production(props) {
 
                     setProds(newActivityList)
 
-                    if (newActivityList.length != 0 && controlWasteManagement) {
-                      Alert.alert('Tudo ocorreu bem! :)',
-                        `Você será redirecionado para preencher novamente o passo 6 por conta dessa alteração, relativo a Gestão de resíduos.`,
-                        [
-                          {text: 'ok', onPress: () => navigation.navigate('WasteManagement')},
-                        ], {})
-                    }
-                    
                     if (newActivityList.length == 0) {
                       Alert.alert('Sua propriedade precisa ter uma produção ;)',
                         `Você será redirecionado para inserir uma nova produção.`,

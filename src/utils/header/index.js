@@ -10,13 +10,13 @@ export default function Header() {
 
   return <View style={styles.header}>
       <Image source={logoImg} />
-      <TouchableOpacity
+      {/* <TouchableOpacity
                   style={styles.fowardButtonEmpty}
                   onPress={async () => {
-                      navigator.goBack()
+                    navigator.goBack()
                   }}
       >
       <Feather name='arrow-left' size={35} color='#00753E' />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
   </View>
 }

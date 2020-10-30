@@ -9,8 +9,7 @@ export default function AnswerList(props){
           {props.title}
       </Text>
       {props.items.map(function(object){
-          return <>
-          <View id={object.item} key={object.item} style={{
+          return <View id={object.item} key={object.text} style={{
               ...styles.box, 
               justifyContent: "flex-start",
               borderBottomWidth:0,
@@ -24,7 +23,6 @@ export default function AnswerList(props){
                   {object.text}
               </Text>
           </View>
-          </>
       })}
   </>
 }

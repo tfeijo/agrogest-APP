@@ -63,7 +63,7 @@ export default function SoilVegetation(props) {
               {
                   item: props.data.attributes.hasRegenerationWithHandling,
                   text:"Com manejo"
-              },
+              }, 
               {
                   item: props.data.attributes.hasRegenerationWithPlanting,
                   text:"Com plantio"

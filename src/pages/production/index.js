@@ -2,7 +2,7 @@ import React from 'react';
 import { 
     View,
     Text,
-    ScrollView,
+    ScrollView
 } from 'react-native';
 import Header from '../../utils/header';
 import Form from  './../../utils/form-production';

@@ -18,7 +18,12 @@ export default StyleSheet.create({
     headerTextBold: {
         fontWeight:'bold'
     },
-
+    trashFarm: {
+        width: "100%",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        marginBottom: 4
+    },
     title: {
         fontSize: 30,
         marginBottom: 0,

@@ -22,7 +22,7 @@ export default function Caracterization() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Image source={logoImg} />
-                <TouchableOpacity
+                {/* <TouchableOpacity
                             style={styles.fowardButtonEmpty}
                             onPress={async () => {
                                 await AsyncStorage.removeItem('city')
@@ -30,7 +30,7 @@ export default function Caracterization() {
                             }}
                 >
                     <Feather name='arrow-left' size={35} color='#00753E' />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <Text style={styles.title}>Caracterização da propriedade</Text>
             <ScrollView style={styles.stepList}

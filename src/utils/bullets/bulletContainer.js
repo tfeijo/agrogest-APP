@@ -15,20 +15,40 @@ export default function BulletContainer(props) {
 
   switch (props.page) {
       case 'Caracterization':
-          return <Caracterization page={props.page} data={props.data}/>
+          return <Caracterization 
+            page={props.page}
+            data={props.data}
+            control={props.control}
+            />
       case 'Production':
-          return <Production page={props.page} data={props.data}/>
+          return <Production 
+            page={props.page}
+            data={props.data}
+            control={props.control}
+            />
       case 'Legislation':
-          return <Legislation page={props.page} data={props.data}/>
+          return <Legislation 
+            page={props.page}
+            data={props.data}
+            control={props.control}
+            />
       case 'WasteManagement':
-          return <WasteManagement page={props.page} data={props.data} productions={props.productions}/>
+          return <WasteManagement
+            page={props.page}
+            data={props.data}
+            control={props.control}
+            />
       case 'WaterResources':
-          return <WaterResource page={props.page} data={props.data} />
+          return <WaterResource
+            page={props.page}
+            data={props.data}
+            control={props.control}
+            />
       case 'SoilVegetation':
           return <SoilVegetation 
-              page={props.page}
-              data={props.data}
-              productions={props.productions}
+            page={props.page}
+            data={props.data}
+            control={props.control}
           />
   }
 }

@@ -3,9 +3,9 @@ import {
   View, 
   TextInput, 
   TouchableOpacity,
-  Switch,
   ActivityIndicator,
-  AsyncStorage
+  AsyncStorage,
+  BackHandler
 } from 'react-native';
 import { Picker } from 'react-native-picker-dropdown';
 import React, { useState, useEffect } from 'react';
@@ -52,7 +52,7 @@ export default function Form( props ) {
       .then(response => {
         values.installation_id = response
       })
-
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
       setSubmitting(true);
       await AsyncStorage.removeItem('city')
       await api.post('farms', values)
@@ -76,11 +76,15 @@ export default function Form( props ) {
             agricultura: false
           }
         }))
+        backHandler.remove()
         navigator.goBack()
       })
       .catch(err => {
-        setSubmitting(false);
+        alert('Pedimos desculpas, mas não conseguimos adicionar sua propriedade:( Pedimos que tenta mais uma vez.')
+        backHandler.remove()
         setErrors({ message: err.message });
+        setSubmitting(false);
+        navigator.goBack()
       });
       setSubmitting(false);
 

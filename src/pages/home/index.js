@@ -6,11 +6,12 @@ import {
     ScrollView, 
     StatusBar,
     AsyncStorage,
-    ActivityIndicator,
     TouchableOpacity
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import BulletFull  from '../../utils/bullets';
 import Loading  from '../../utils/loading';
 import logoImg from '../../assets/logo.png';
@@ -18,19 +19,35 @@ import styles from './styles';
 
 
 export default function Home() {
-
+    
+    const navigation = useNavigation()
     const [isLoading,setLoading] = useState(true);
     const [control,setControl] = useState();
     const [land,setLand] = useState();
-    
+        
 
     const isFocused = useIsFocused();
-
+    
+    async function deleteData(){
+        {
+            Alert.alert('',
+            `Deseja remover esta propriedade?`,
+            [
+                {text: 'Remover', onPress: async () => {            
+                    await AsyncStorage.removeItem('control')
+                    await AsyncStorage.removeItem('land')
+                    await AsyncStorage.removeItem('UniqueIDLand')
+                    await fetchData()
+                }},
+                {text: 'Cancelar', onPress: () => {}},
+            ],
+            {}
+            )
+        }
+    }
     async function getInfo(){
-        // await AsyncStorage.removeItem('control')
-        // await AsyncStorage.removeItem('land')
-        // await AsyncStorage.removeItem('UniqueIDLand')
-
+        // await deleteData()
+        
         async function getControl(){
             try{ 
               let jsonValue = await AsyncStorage.getItem('control');
@@ -125,19 +142,33 @@ export default function Home() {
                 <Text style={styles.description}>Siga os passos abaixo</Text>
                 
                 <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
+                    {control.boolCaracterization &&
+                        <TouchableOpacity onPress={() => deleteData()}>
+                        <View style={styles.trashFarm}>
+                            <Text>Remover esta propriedade?
+                        <Feather name='trash-2' size={20} color='#AD0900' onPress={() => deleteData() }
+                        />
+                        </Text>
+                        </View>
+                        </TouchableOpacity>
+                    }
                       <BulletFull
                         number={1}
                         description='Caracterização da propriedade'
                         stepBefore={true}
                         data={land}
+                        control={control}
                         currentStep={control.boolCaracterization}
-                        page="Caracterization"/>
-
+                        page="Caracterization"
+                    />
+                
+                    
                      <BulletFull 
                         number={2}
                         description='Caracterização do sistema de produção'
                         stepBefore={control.boolCaracterization}
                         data={land}
+                        control={control}
                         currentStep={control.boolProduction}
                         page="Production"/>
                     
@@ -146,6 +177,7 @@ export default function Home() {
                         description='Legislação Ambiental'
                         stepBefore={control.boolProduction}
                         data={land}
+                        control={control}
                         currentStep={control.boolLegislation}
                         page="Legislation"/>
                     
@@ -154,6 +186,7 @@ export default function Home() {
                         description='Recursos Hídricos'
                         stepBefore={control.boolLegislation}
                         data={land}
+                        control={control}
                         currentStep={control.boolWaterResource}
                         page="WaterResources"/>
                     
@@ -162,6 +195,7 @@ export default function Home() {
                         description='Solo e vegetação'
                         stepBefore={control.boolWaterResource}
                         data={land}
+                        control={control}
                         currentStep={control.boolSoilVegetation}
                         page="SoilVegetation"/>
                     
@@ -170,19 +204,45 @@ export default function Home() {
                         description='Gestão de resíduos'
                         stepBefore={control.boolSoilVegetation}
                         data={land}
+                        control={control}
                         currentStep={control.boolWasteManagement}
-                        productions={control.productions}
                         page="WasteManagement"/>
                     
                     <TouchableOpacity
                         style={styles.Button}
-                        onPress={()=>{
+                        onPress={async ()=>{
                             
-                            Alert.alert(
-                                "Comunicado",
-                                "Também estamos ansiosos, este recurso estará disponível em breve..",
+                            let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
+                            if (jsonValue == null) jsonValue = {boolWasteManagement: false}
+                            let allStepsTrue = (
+                                jsonValue.boolCaracterization &&
+                                jsonValue.boolProduction &&
+                                jsonValue.boolLegislation &&
+                                jsonValue.boolWaterResource &&
+                                jsonValue.boolSoilVegetation &&
+                                jsonValue.boolWasteManagement
                             )
-                            
+                            let ChangedWasteManagemment = (
+                                jsonValue.boolWasteManagement !=
+                                control.boolWasteManagement
+                            )
+
+                            if (ChangedWasteManagemment) {
+                                Alert.alert('Você excluiu uma produção, não é!? :)',
+                                `Você será redirecionado para preencher o passo de Gestão de resíduos novamente.`,
+                                    [
+                                        {text: 'ok', onPress: () => navigation.navigate('WasteManagement')},
+                                    ], {})
+                            } else if (allStepsTrue) {
+                                Alert.alert("",
+                                    "Também estamos ansiosos, este recurso estará disponível em breve...",
+                                ) 
+                            } else {
+                                Alert.alert("",
+                                    "Você precisa preencher todos os passos acima...",
+                                ) 
+                                
+                            }
                         }}
                         disabled={false}
                         >

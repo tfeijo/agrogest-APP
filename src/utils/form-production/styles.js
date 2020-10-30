@@ -20,9 +20,8 @@ export default StyleSheet.create({
     },
     err: {
         fontSize: 16,
-        lineHeight: 24,
         color: '#f00',
-        marginBottom: 32,
+        marginTop: -15,
         fontWeight: 'normal'
     },
     pickerItem : {
@@ -91,7 +90,7 @@ export default StyleSheet.create({
         marginBottom: 15,
     },
     activityBox: {
-        marginBottom:50,
+        marginBottom:20,
         paddingTop:10,
         borderColor: "#00753E",
         borderTopWidth: 3,
