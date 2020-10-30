@@ -75,31 +75,28 @@ export default function WasteManagement() {
 
         async function getControl(){
             try{ 
-              let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
-              
-              setBovino(
-                  jsonValue.productions.bovi_leite || 
-                  jsonValue.productions.bovi_corte
+                let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
+                alert(JSON.stringify(jsonValue.productions))
+                setBovino(
+                    jsonValue.productions.bovi_leite || 
+                    jsonValue.productions.bovi_corte
                 )
-            setAvino(jsonValue.productions.avicultura)
-            setSuino(jsonValue.productions.suinocultura)
-              setAgricultura(jsonValue.productions.agricultura)
-              setPecuaria(
-                jsonValue.productions.bovi_corte ||
-                jsonValue.productions.bovi_leite || 
-                jsonValue.productions.avicultura || 
-                jsonValue.productions.suinocultura
-              )
+                setAvino(jsonValue.productions.avicultura)
+                setSuino(jsonValue.productions.suinocultura)
+                setAgricultura(jsonValue.productions.agricultura)
+                setPecuaria(
+                    jsonValue.productions.bovi_corte ||
+                    jsonValue.productions.bovi_leite || 
+                    jsonValue.productions.avicultura || 
+                    jsonValue.productions.suinocultura
+                )
 
               return jsonValue.productions != null && jsonValue.productions 
             } catch(err) {
               console.warn(err)
             }
         }
-
         setData(await getControl())
-
-
     }
 
     async function fetchData() {

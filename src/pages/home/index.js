@@ -12,6 +12,7 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import BulletFull  from '../../utils/bullets';
+import Loading  from '../../utils/loading';
 import logoImg from '../../assets/logo.png';
 import styles from './styles';
 
@@ -41,14 +42,53 @@ export default function Home() {
                 boolWaterResource :  false,
                 boolSoilVegetation : false,
                 boolWasteManagement :  false,
+                productions: {
+                    suinocultura : false,
+                    bovi_leite : false,
+                    bovi_corte : false,
+                    agricultura : false,
+                    avicultura : false,
+                }
               } 
+            } catch(err) {
+              console.warn(err)
+            }
+        }
+        async function getLand(){
+            try{ 
+              let jsonValue = await AsyncStorage.getItem('land');
+              
+              
+              return jsonValue != null ? JSON.parse(jsonValue): {
+                "id": null,
+                "installation_id": null,
+                "hectare": null,
+                "licensing": null,
+                "city": {
+                  "biomes":[],
+                  "state": {}
+                },
+                "size": null,
+                "productions": {},
+                "attributes" : {
+                    hasEnvironmentalLicensing: false,
+                    hasCAR : false,
+                    hasNativeVegetationLegalReserve: false,
+                    hasAppAroundWaterCoursesWaterReservoirs: false,
+                    hasAppAroundSpringsWaterEyes: false,
+                    hasAppHillside: false,
+                    hasAppHillTop: false,
+                    hasEnvironmentalRegularizationPlan: false,
+                    hasWaterGrant: false,
+                }
+              }
             } catch(err) {
               console.warn(err)
             }
         }
 
         setControl(await getControl())
-        setLand(JSON.parse(await AsyncStorage.getItem('land')));
+        setLand(await getLand());
     }
 
     async function fetchData() {
@@ -69,18 +109,7 @@ export default function Home() {
 
     return isLoading === true ?
         <>
-            <StatusBar backgroundColor="#00753E" barStyle='light-content' />
-            <View style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#000',
-            }}>
-                <Image
-                style={{width: 300, height: 200}}
-                source={{uri: 'https://media.giphy.com/media/VseXvvxwowwCc/giphy.gif'}} />
-                <Text style={{color:'#fff'}}>Buscando dados...</Text>
-            </View>
+            <Loading />
         </>
     :
         <>

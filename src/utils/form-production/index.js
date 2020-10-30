@@ -120,19 +120,18 @@ export default function Form(props) {
         farm_id: jsonValue.id,
       })
       .then(async response => {
-        
         await createLand.update({
           ...jsonValue,
           productions: response.data
         })
-        
 
-        control.update({
+        await control.update({
           ...JSONcontrol,
           'boolProduction': true,
           'boolWasteManagement': false,
           productions: productionControl
         })
+
         navigation.goBack()
       })
       .catch(err => {
