@@ -13,9 +13,9 @@ export default function WaterResource() {
     const control = createControl
     const formik = useFormik({
         initialValues: {
-            hasSourceProtectedWaterMine: false,
-            hasDomesticSewageTreatment: false,
-            hasWaterConsuptionTreatment: false,
+            SourceProtectedWaterMine: false,
+            DomesticSewageTreatment: false,
+            WaterConsuptionTreatment: false,
         },
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
@@ -60,42 +60,42 @@ export default function WaterResource() {
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasSourceProtectedWaterMine', !formik.values.hasSourceProtectedWaterMine)
+            formik.setFieldValue('SourceProtectedWaterMine', !formik.values.SourceProtectedWaterMine)
         }}>
             <Text style={styles.caption}>
                 Sua propriedade possui nascente ou mina de água protegida?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasSourceProtectedWaterMine', text)
+                formik.setFieldValue('SourceProtectedWaterMine', text)
             }}
-            value = {formik.values.hasSourceProtectedWaterMine}
+            value = {formik.values.SourceProtectedWaterMine}
             />
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasDomesticSewageTreatment', !formik.values.hasDomesticSewageTreatment)
+            formik.setFieldValue('DomesticSewageTreatment', !formik.values.DomesticSewageTreatment)
         }}>
             <Text style={styles.caption}>
                 O esgoto doméstico das residências da propriedade é tratado?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasDomesticSewageTreatment', text)
+                formik.setFieldValue('DomesticSewageTreatment', text)
             }}
-            value = {formik.values.hasDomesticSewageTreatment}
+            value = {formik.values.DomesticSewageTreatment}
             />
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasWaterConsuptionTreatment', !formik.values.hasWaterConsuptionTreatment)
+            formik.setFieldValue('WaterConsuptionTreatment', !formik.values.WaterConsuptionTreatment)
         }}>
             <Text style={styles.caption}>
                 A água de consumo humano/animal e para limpeza é tratada?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasWaterConsuptionTreatment', text)
+                formik.setFieldValue('WaterConsuptionTreatment', text)
             }}
-            value = {formik.values.hasWaterConsuptionTreatment}
+            value = {formik.values.WaterConsuptionTreatment}
             />
         </TouchableOpacity>
         <TouchableOpacity

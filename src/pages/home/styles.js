@@ -7,6 +7,21 @@ export default StyleSheet.create({
         paddingHorizontal: 24,
         paddingTop: Constants.statusBarHeight + 20,
     },
+    produtionItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    boxList: {
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+    },
+    activityTitle: {
+        fontSize: 16,
+        fontWeight:'bold',
+        marginBottom: 10,
+        color:'#00753E',
+    },
     header : {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -41,7 +56,6 @@ export default StyleSheet.create({
         marginTop: 8
     },
     Button: {
-        marginTop: 50,
         height: 60,
         backgroundColor:'#00753E',
         borderRadius: 32,

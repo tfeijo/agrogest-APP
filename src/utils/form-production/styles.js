@@ -89,17 +89,17 @@ export default StyleSheet.create({
         marginTop: 15,
         marginBottom: 15,
     },
-    activityBox: {
-        marginBottom:20,
-        paddingTop:10,
-        borderColor: "#00753E",
-        borderTopWidth: 3,
-    },
     activityTitle: {
         fontSize: 16,
         fontWeight:'bold',
         marginBottom: 20,
         color:'#00753E',
 
-    }
+    },
+    activityBox: {
+        marginBottom:20,
+        paddingTop:10,
+        borderColor: "#00753E",
+        borderTopWidth: 3,
+    },
 });

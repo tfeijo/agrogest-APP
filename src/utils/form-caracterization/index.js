@@ -1,6 +1,7 @@
 import { 
   Text, 
   View, 
+  Alert,
   TextInput, 
   TouchableOpacity,
   ActivityIndicator,
@@ -25,7 +26,7 @@ export default function Form( props ) {
     initialValues: {
       state_id: 9999,
       city_id: 9999,
-      hectare: 1,
+      hectare: -1,
       licensing: false,
       installation_id: null,
     },
@@ -39,7 +40,6 @@ export default function Form( props ) {
         .lessThan(9999, 'Preencha a cidade.'),
         
       hectare: Yup.number()
-        .positive('O número deve ser positivo.')
         .required('Preencha o tamanho da propriedade.')
         .moreThan(0, 'O número deve ser maior que 0.')
     }),
@@ -52,6 +52,7 @@ export default function Form( props ) {
       .then(response => {
         values.installation_id = response
       })
+
       const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
       setSubmitting(true);
       await AsyncStorage.removeItem('city')
@@ -60,7 +61,7 @@ export default function Form( props ) {
         newLand = response.data;
         createLand.update(newLand);
         UniqueID.update(newLand.installation_id);
-
+        
         await AsyncStorage.setItem('control',JSON.stringify({
           boolCaracterization : true,
           boolProduction : false,
@@ -86,6 +87,7 @@ export default function Form( props ) {
         setSubmitting(false);
         navigator.goBack()
       });
+      
       setSubmitting(false);
 
     },

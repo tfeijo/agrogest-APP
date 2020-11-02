@@ -48,8 +48,7 @@ export default StyleSheet.create({
         backgroundColor: '#00753E',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        height: 30,
-        padding: 10
+        padding: 5,
     },
     stepTitleText: {
         fontSize: 15,

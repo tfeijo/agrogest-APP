@@ -585,9 +585,6 @@ export default function Form(props) {
          && <Text style={styles.err}>Verifique os dados abaixo</Text> }
         { agricultura_form }
       </View>
-    
-      
-      
 
       <TouchableOpacity
         style={styles.Button}

@@ -4,9 +4,11 @@ import {
     Alert,
     Text, 
     ScrollView, 
+    Switch,
     StatusBar,
     AsyncStorage,
-    TouchableOpacity
+    TouchableOpacity,
+    BackHandler
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
@@ -16,6 +18,7 @@ import BulletFull  from '../../utils/bullets';
 import Loading  from '../../utils/loading';
 import logoImg from '../../assets/logo.png';
 import styles from './styles';
+import api from '../../services/api';
 
 
 export default function Home() {
@@ -24,8 +27,8 @@ export default function Home() {
     const [isLoading,setLoading] = useState(true);
     const [control,setControl] = useState();
     const [land,setLand] = useState();
+    const [editFarm,setEdit] = useState(true);
         
-
     const isFocused = useIsFocused();
     
     async function deleteData(){
@@ -45,9 +48,10 @@ export default function Home() {
             )
         }
     }
+
     async function getInfo(){
         // await deleteData()
-        
+        await AsyncStorage.removeItem('city')
         async function getControl(){
             try{ 
               let jsonValue = await AsyncStorage.getItem('control');
@@ -106,6 +110,8 @@ export default function Home() {
 
         setControl(await getControl())
         setLand(await getLand());
+        setEdit(false);
+        
     }
 
     async function fetchData() {
@@ -123,10 +129,13 @@ export default function Home() {
     useEffect(() => {
         fetchData()
     }, [])
+    
+
+    
+    
 
     return isLoading === true ? <Loading />
-    :
-        <>
+    :   <>
             <StatusBar backgroundColor="#00753E" barStyle='light-content' />
 
             <View style={styles.container}>
@@ -141,74 +150,97 @@ export default function Home() {
                 <Text style={styles.title}>Bem-vindo!</Text>
                 <Text style={styles.description}>Siga os passos abaixo</Text>
                 
-                <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
-                    {control.boolCaracterization &&
+                 <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
+                    {(editFarm || !control.boolWasteManagement) && <>
                         <TouchableOpacity onPress={() => deleteData()}>
-                        <View style={styles.trashFarm}>
-                            <Text>Remover esta propriedade?
-                        <Feather name='trash-2' size={20} color='#AD0900' onPress={() => deleteData() }
-                        />
-                        </Text>
-                        </View>
+                            <View style={styles.trashFarm}>
+                                <Text>Remover esta propriedade?
+                                    <Feather name='trash-2' size={20} color='#AD0900' onPress={() => deleteData() }
+                                    />
+                                </Text>
+                            </View>
                         </TouchableOpacity>
-                    }
-                      <BulletFull
-                        number={1}
-                        description='Caracterização da propriedade'
-                        stepBefore={true}
-                        data={land}
-                        control={control}
-                        currentStep={control.boolCaracterization}
-                        page="Caracterization"
-                    />
-                
                     
-                     <BulletFull 
-                        number={2}
-                        description='Caracterização do sistema de produção'
-                        stepBefore={control.boolCaracterization}
-                        data={land}
-                        control={control}
-                        currentStep={control.boolProduction}
-                        page="Production"/>
-                    
-                    <BulletFull
-                        number={3}
-                        description='Legislação Ambiental'
-                        stepBefore={control.boolProduction}
-                        data={land}
-                        control={control}
-                        currentStep={control.boolLegislation}
-                        page="Legislation"/>
-                    
-                    <BulletFull
-                        number={4}
-                        description='Recursos Hídricos'
-                        stepBefore={control.boolLegislation}
-                        data={land}
-                        control={control}
-                        currentStep={control.boolWaterResource}
-                        page="WaterResources"/>
-                    
-                    <BulletFull
-                        number={5}
-                        description='Solo e vegetação'
-                        stepBefore={control.boolWaterResource}
-                        data={land}
-                        control={control}
-                        currentStep={control.boolSoilVegetation}
-                        page="SoilVegetation"/>
-                    
-                    <BulletFull
-                        number={6}
-                        description='Gestão de resíduos'
-                        stepBefore={control.boolSoilVegetation}
-                        data={land}
-                        control={control}
+                        <BulletFull
+                            number={1}
+                            description='Caracterização da propriedade'
+                            stepBefore={true}
+                            data={land}
+                            control={control}
+                            currentStep={control.boolCaracterization}
+                            page="Caracterization"/>
+
+                        
+                        <BulletFull 
+                            number={2}
+                            description='Caracterização do sistema de produção'
+                            stepBefore={control.boolCaracterization}
+                            data={land}
+                            control={control}
+                            currentStep={control.boolProduction}
+                            page="Production"/>
+                        
+                        <BulletFull
+                            number={3}
+                            description='Legislação Ambiental'
+                            stepBefore={control.boolProduction}
+                            data={land}
+                            control={control}
+                            currentStep={control.boolLegislation}
+                            page="Legislation"/>
+                        
+                        <BulletFull
+                            number={4}
+                            description='Recursos Hídricos'
+                            stepBefore={control.boolLegislation}
+                            data={land}
+                            control={control}
+                            currentStep={control.boolWaterResource}
+                            page="WaterResources"/>
+                        
+                        <BulletFull
+                            number={5}
+                            description='Solo e vegetação'
+                            stepBefore={control.boolWaterResource}
+                            data={land}
+                            control={control}
+                            currentStep={control.boolSoilVegetation}
+                            page="SoilVegetation"/>
+                        
+                        <BulletFull
+                            number={6}
+                            description='Gestão de resíduos'
+                            stepBefore={control.boolSoilVegetation}
+                            data={land}
+                            control={control}
+                            currentStep={control.boolWasteManagement}
+                            page="WasteManagement"/>
+                    </>}
+    
+                    {control.boolWasteManagement && <>
+                        <View style={styles.boxList}>
+                            <View style={styles.produtionItem}>
+                                <Text style={styles.activityTitle}>
+                                    Exibir passos anteriores
+                                </Text>
+                                <Switch 
+                                    style={{ marginTop: -25} }
+                                    onValueChange = {async (text) => {
+                                        setEdit(!editFarm)
+                                    }}
+                                    value = {editFarm}
+                                />
+                            </View>
+                        </View>
+                        <BulletFull
+                        number={7}
+                        description='Documentos técnicos recomendados'
                         currentStep={control.boolWasteManagement}
-                        page="WasteManagement"/>
-                    
-                    <TouchableOpacity
+                        data={land}
+                        control={control}
+                        page="Documents"/>
+                
+                        <TouchableOpacity
                         style={styles.Button}
                         onPress={async ()=>{
                             
@@ -228,17 +260,24 @@ export default function Home() {
                             )
 
                             if (ChangedWasteManagemment) {
-                                Alert.alert('Você excluiu uma produção, não é!? :)',
-                                `Você será redirecionado para preencher o passo de Gestão de resíduos novamente.`,
+                                alert('Você excluiu uma produção, não é!? :) Você será redirecionado para preencher o passo de Gestão de resíduos novamente.',
                                     [
                                         {text: 'ok', onPress: () => navigation.navigate('WasteManagement')},
                                     ], {})
                             } else if (allStepsTrue) {
-                                Alert.alert("",
-                                    "Também estamos ansiosos, este recurso estará disponível em breve...",
-                                ) 
+                                const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+                                land.attributes[farm_id] = land.farm_id
+                                await api.post('attributes', land.attributes)
+                                .then(async response => {
+                                    backHandler.remove()
+                                })
+                                .catch(err => {
+                                    alert('Pedimos desculpas, mas não conseguimos adicionar os atributos:( Pedimos que tenta mais uma vez.')
+                                    backHandler.remove()
+                                });
+
                             } else {
-                                Alert.alert("",
+                                alert(
                                     "Você precisa preencher todos os passos acima...",
                                 ) 
                                 
@@ -246,9 +285,9 @@ export default function Home() {
                         }}
                         disabled={false}
                         >
-                        <Text style={styles.ButtonText}>Processar recomendações</Text>
-                    
-                    </TouchableOpacity>
+                            <Text style={styles.ButtonText}>Processar recomendações</Text>
+                        </TouchableOpacity>
+                    </>}
                 </ScrollView>
             </View>
         </>

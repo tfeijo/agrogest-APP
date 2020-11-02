@@ -18,17 +18,17 @@ export default function WasteManagement() {
 
     const formik = useFormik({
         initialValues: {
-            hasResidueComposting : false,
-            hasBovineCattle : false,
-            hasBovineDung : false,
-            hasBovineFertigation : false,
-            hasSwineCattle : false,
-            hasSwineDung : false,
-            hasSwineFertigation : false,
-            hasWaterControlProgram : false,
-            hasAviaryWastinAgriculture : false,
-            hasReuseAgriculturalResidue : false,
-            hasDeadCompostAnimals : false,
+            ResidueComposting : false,
+            BovineCattle : false,
+            BovineDung : false,
+            BovineFertigation : false,
+            SwineCattle : false,
+            SwineDung : false,
+            SwineFertigation : false,
+            WaterControlProgram : false,
+            AviaryWastinAgriculture : false,
+            ReuseAgriculturalResidue : false,
+            DeadCompostAnimals : false,
         },
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
@@ -129,41 +129,41 @@ export default function WasteManagement() {
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
         { pecuaria &&
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasResidueComposting', !formik.values.hasResidueComposting)
-            formik.setFieldValue('hasBovineCattle', false)
-            formik.setFieldValue('hasBovineDung', false)
-            formik.setFieldValue('hasBovineFertigation', false)
-            formik.setFieldValue('hasSwineCattle', false)
-            formik.setFieldValue('hasSwineDung', false)
-            formik.setFieldValue('hasSwineFertigation', false)
-            formik.setFieldValue('hasWaterControlProgram', false)
-            formik.setFieldValue('hasAviaryWastinAgriculture', false)
-            formik.setFieldValue('hasReuseAgriculturalResidue', false)
+            formik.setFieldValue('ResidueComposting', !formik.values.ResidueComposting)
+            formik.setFieldValue('BovineCattle', false)
+            formik.setFieldValue('BovineDung', false)
+            formik.setFieldValue('BovineFertigation', false)
+            formik.setFieldValue('SwineCattle', false)
+            formik.setFieldValue('SwineDung', false)
+            formik.setFieldValue('SwineFertigation', false)
+            formik.setFieldValue('WaterControlProgram', false)
+            formik.setFieldValue('AviaryWastinAgriculture', false)
+            formik.setFieldValue('ReuseAgriculturalResidue', false)
         }}>
             <Text style={styles.caption}>
             Os resíduos dos animais são destinados à Esterqueira/Compostagem ou Biodigestor?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasResidueComposting', text)
-                formik.setFieldValue('hasBovineCattle', false)
-                formik.setFieldValue('hasBovineDung', false)
-                formik.setFieldValue('hasBovineFertigation', false)
-                formik.setFieldValue('hasSwineCattle', false)
-                formik.setFieldValue('hasSwineDung', false)
-                formik.setFieldValue('hasSwineFertigation', false)
-                formik.setFieldValue('hasWaterControlProgram', false)
-                formik.setFieldValue('hasAviaryWastinAgriculture', false)
-                formik.setFieldValue('hasReuseAgriculturalResidue', false)
+                formik.setFieldValue('ResidueComposting', text)
+                formik.setFieldValue('BovineCattle', false)
+                formik.setFieldValue('BovineDung', false)
+                formik.setFieldValue('BovineFertigation', false)
+                formik.setFieldValue('SwineCattle', false)
+                formik.setFieldValue('SwineDung', false)
+                formik.setFieldValue('SwineFertigation', false)
+                formik.setFieldValue('WaterControlProgram', false)
+                formik.setFieldValue('AviaryWastinAgriculture', false)
+                formik.setFieldValue('ReuseAgriculturalResidue', false)
             }}
-            value = {formik.values.hasResidueComposting}
+            value = {formik.values.ResidueComposting}
             />
         </TouchableOpacity>
         
         }
         
         
-        {formik.values.hasResidueComposting? 
+        {formik.values.ResidueComposting? 
          bovino? 
          <View style={styles.containerOption}>
             <Text style={styles.title}>
@@ -171,39 +171,39 @@ export default function WasteManagement() {
             </Text>
 
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
-                formik.setFieldValue('hasBovineCattle', !formik.values.hasBovineCattle)}}>
+                formik.setFieldValue('BovineCattle', !formik.values.BovineCattle)}}>
                 <CheckBox 
                 onPress = {text => {
-                    formik.setFieldValue('hasBovineCattle', !formik.values.hasBovineCattle)
+                    formik.setFieldValue('BovineCattle', !formik.values.BovineCattle)
                 }}
                 color="#A3A3A3"
-                checked = {formik.values.hasBovineCattle}
+                checked = {formik.values.BovineCattle}
                 />
                 <Text style={styles.option}>
                 Biodigestor
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
-                formik.setFieldValue('hasBovineDung', !formik.values.hasBovineDung)}}>
+                formik.setFieldValue('BovineDung', !formik.values.BovineDung)}}>
                 <CheckBox 
                 onPress = {text => {
-                    formik.setFieldValue('hasBovineDung', !formik.values.hasBovineDung)
+                    formik.setFieldValue('BovineDung', !formik.values.BovineDung)
                 }}
                 color="#A3A3A3"
-                checked = {formik.values.hasBovineDung}
+                checked = {formik.values.BovineDung}
                 />
                 <Text style={styles.option}>
                 Esterqueira
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
-                formik.setFieldValue('hasBovineFertigation', !formik.values.hasBovineFertigation)}}>
+                formik.setFieldValue('BovineFertigation', !formik.values.BovineFertigation)}}>
                 <CheckBox 
                 onPress = {text => {
-                    formik.setFieldValue('hasBovineFertigation', !formik.values.hasBovineFertigation)
+                    formik.setFieldValue('BovineFertigation', !formik.values.BovineFertigation)
                 }}
                 color="#A3A3A3"
-                checked = {formik.values.hasBovineFertigation}
+                checked = {formik.values.BovineFertigation}
                 />
                 <Text style={styles.option}>
                 Fertirrigação
@@ -213,7 +213,7 @@ export default function WasteManagement() {
         :<></>:<></> 
         }
 
-        {formik.values.hasResidueComposting&&
+        {formik.values.ResidueComposting&&
          suino&&
          <>
         <View style={styles.containerOption}>
@@ -222,39 +222,39 @@ export default function WasteManagement() {
             </Text>
 
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
-                formik.setFieldValue('hasSwineCattle', !formik.values.hasSwineCattle)}}>
+                formik.setFieldValue('SwineCattle', !formik.values.SwineCattle)}}>
                 <CheckBox 
                 onPress = {() => {
-                    formik.setFieldValue('hasSwineCattle', !formik.values.hasSwineCattle)    
+                    formik.setFieldValue('SwineCattle', !formik.values.SwineCattle)    
                 }}
                 color="#A3A3A3"
-                checked = {formik.values.hasSwineCattle}
+                checked = {formik.values.SwineCattle}
                 />
                 <Text style={styles.option}>
                 Biodigestor
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
-                formik.setFieldValue('hasSwineDung', !formik.values.hasSwineDung)}}>
+                formik.setFieldValue('SwineDung', !formik.values.SwineDung)}}>
                 <CheckBox 
                 onPress = {() => {
-                    formik.setFieldValue('hasSwineDung', !formik.values.hasSwineDung)}
+                    formik.setFieldValue('SwineDung', !formik.values.SwineDung)}
                 }
                 color="#A3A3A3"
-                checked = {formik.values.hasSwineDung}
+                checked = {formik.values.SwineDung}
                 />
                 <Text style={styles.option}>
                 Esterqueira
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={()=>{
-                formik.setFieldValue('hasSwineFertigation', !formik.values.hasSwineFertigation)}}>
+                formik.setFieldValue('SwineFertigation', !formik.values.SwineFertigation)}}>
                 <CheckBox 
                 onPress = {()=> {
-                    formik.setFieldValue('hasSwineFertigation', !formik.values.hasSwineFertigation)}
+                    formik.setFieldValue('SwineFertigation', !formik.values.SwineFertigation)}
                 }
                 color="#A3A3A3"
-                checked = {formik.values.hasSwineFertigation}
+                checked = {formik.values.SwineFertigation}
                 />
                 <Text style={styles.option}>
                 Fertirrigação
@@ -262,73 +262,73 @@ export default function WasteManagement() {
             </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasWaterControlProgram', !formik.values.hasWaterControlProgram)
+            formik.setFieldValue('WaterControlProgram', !formik.values.WaterControlProgram)
         }}>
             <Text style={styles.caption}>
             A produção de suíno tem programa de controle de consumo de água?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasWaterControlProgram', text)
+                formik.setFieldValue('WaterControlProgram', text)
             }}
-            value = {formik.values.hasWaterControlProgram}
+            value = {formik.values.WaterControlProgram}
             />
         </TouchableOpacity>
         </> 
         }
 
-        {formik.values.hasResidueComposting&&
+        {formik.values.ResidueComposting&&
          avino&&
          <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasAviaryWastinAgriculture', !formik.values.hasAviaryWastinAgriculture)
+            formik.setFieldValue('AviaryWastinAgriculture', !formik.values.AviaryWastinAgriculture)
         }}>
             <Text style={styles.caption}>
             O resíduo de cama de aviário é aplicado na agricultura?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasAviaryWastinAgriculture', text)
+                formik.setFieldValue('AviaryWastinAgriculture', text)
             }}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
-            value = {formik.values.hasAviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
+            value = {formik.values.AviaryWastinAgriculture}
             />
         </TouchableOpacity>
         }
         
-        {formik.values.hasResidueComposting &&
+        {formik.values.ResidueComposting &&
          agricultura&&
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasReuseAgriculturalResidue', !formik.values.hasReuseAgriculturalResidue)
+            formik.setFieldValue('ReuseAgriculturalResidue', !formik.values.ReuseAgriculturalResidue)
         }}>
             <Text style={styles.caption}>
             O resíduo da produção agrícola é utilizado na propriedade?
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasReuseAgriculturalResidue', text)
+                formik.setFieldValue('ReuseAgriculturalResidue', text)
             }}
-            value = {formik.values.hasReuseAgriculturalResidue}
+            value = {formik.values.ReuseAgriculturalResidue}
             />
         </TouchableOpacity>
         }
         <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('hasDeadCompostAnimals', !formik.values.hasDeadCompostAnimals)
+            formik.setFieldValue('DeadCompostAnimals', !formik.values.DeadCompostAnimals)
         }}>
             <Text style={styles.caption}>
             O destino dos animais mortos é a compostagem? 
             </Text>
             <Switch 
             onValueChange = {text => {
-                formik.setFieldValue('hasDeadCompostAnimals', text)
+                formik.setFieldValue('DeadCompostAnimals', text)
             }}
-            value = {formik.values.hasDeadCompostAnimals}
+            value = {formik.values.DeadCompostAnimals}
             />
         </TouchableOpacity>
 

@@ -27,7 +27,7 @@ export default function WasteManagement(props) {
               <>
 
               <AnswerItem 
-                  item={props.data.attributes.hasResidueComposting}
+                  item={props.data.attributes.ResidueComposting}
                   text={"Resíduo dos animais destinados à esterqueira/compostagem/biodigestor"}
               />
               {bovino? //Bovino
@@ -35,15 +35,15 @@ export default function WasteManagement(props) {
                   title={"Tratamento de resíduos da bovinocultura:"}
                   items={[
                       {
-                          item:props.data.attributes.hasBovineCattle,
+                          item:props.data.attributes.BovineCattle,
                           text:"Biodigestor"
                       },
                       {
-                          item:props.data.attributes.hasBovineDung,
+                          item:props.data.attributes.BovineDung,
                           text:"Esterqueira"
                       },
                       {
-                          item:props.data.attributes.hasBovineFertigation,
+                          item:props.data.attributes.BovineFertigation,
                           text:"Fertirrigação"
                       },
                   ]}
@@ -55,21 +55,21 @@ export default function WasteManagement(props) {
                       title={"Tratamento de resíduos da suinocultura:"}
                       items={[
                           {
-                              item:props.data.attributes.hasSwineCattle,
+                              item:props.data.attributes.SwineCattle,
                               text:"Biodigestor"
                           },
                           {
-                              item:props.data.attributes.hasSwineDung,
+                              item:props.data.attributes.SwineDung,
                               text:"Esterqueira"
                           },
                           {
-                              item:props.data.attributes.hasSwineFertigation,
+                              item:props.data.attributes.SwineFertigation,
                               text:"Fertirrigação"
                           },
                       ]}
                   />
                   <AnswerItem 
-                  item={props.data.attributes.hasWaterControlProgram}
+                  item={props.data.attributes.WaterControlProgram}
                   text={"Programa de controle de água na suinocultura"}
                   />
               </>:<></>
@@ -77,14 +77,14 @@ export default function WasteManagement(props) {
               {avino? //Ave
     
                   <AnswerItem 
-                      item={props.data.attributes.hasAviaryWastinAgriculture}
+                      item={props.data.attributes.AviaryWastinAgriculture}
                       text={"Resíduo da cama de aviário aplicado na agricultura"}
                   />
                   :<></>
               }
               {agricultura? //Agricultura
                   <AnswerItem 
-                      item={props.data.attributes.hasReuseAgriculturalResidue}
+                      item={props.data.attributes.ReuseAgriculturalResidue}
                       text={"Resíduos agrícolas utilizados na propriedade"}
                   />:<></>
               }
@@ -93,7 +93,7 @@ export default function WasteManagement(props) {
                : <></>
       }
       <AnswerItem 
-          item={props.data.attributes.hasDeadCompostAnimals}
+          item={props.data.attributes.DeadCompostAnimals}
           text={"Animais mortos destinados a compostagem"}
       />
       <FowardButton page={props.page}/>
