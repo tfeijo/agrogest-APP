@@ -46,7 +46,8 @@ export default function WasteManagement() {
             try {
                 await createLand.update({
                     ...jsonValue,
-                    attributes
+                    attributes,
+                    documents: []
                 })
                 control.update({
                   ...JSONcontrol,

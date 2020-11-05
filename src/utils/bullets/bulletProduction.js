@@ -12,8 +12,8 @@ export default function Production(props) {
   const [prods, setProds] = useState(props.data.productions)
   const navigation = useNavigation()
 
-  const productions = prods.map((production) => {
-    return <View style={styles.production} key={production.id}>
+  const productions = prods.map((production, index) => {
+    return <View style={styles.production} key={index}>
       <View style={styles.box}>
         <Text style={styles.productionTitle}>{production.activity}</Text>
         <Feather name='trash-2' size={20} color='#AD0900' onPress={() => {

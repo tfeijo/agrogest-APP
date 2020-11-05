@@ -152,14 +152,14 @@ export default function Home() {
                 
                  <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
                     {(editFarm || !control.boolWasteManagement) && <>
-                        <TouchableOpacity onPress={() => deleteData()}>
+                        {control.boolCaracterization && <TouchableOpacity onPress={() => deleteData()}>
                             <View style={styles.trashFarm}>
                                 <Text>Remover esta propriedade?
                                     <Feather name='trash-2' size={20} color='#AD0900' onPress={() => deleteData() }
                                     />
                                 </Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                     
                         <BulletFull
                             number={1}
@@ -266,14 +266,21 @@ export default function Home() {
                                     ], {})
                             } else if (allStepsTrue) {
                                 const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
-                                land.attributes[farm_id] = land.farm_id
+                                land.attributes["farm_id"] = land.id
                                 await api.post('attributes', land.attributes)
                                 .then(async response => {
+                                    let jsonFarm = JSON.parse(await AsyncStorage.getItem('land'));
+                                    jsonFarm["documents"] = response.data
+                                    
+                                    await AsyncStorage.setItem('land', JSON.stringify(jsonFarm))
+                                    setLand(jsonFarm);
+                                    await fetchData()
                                     backHandler.remove()
+                                    
                                 })
                                 .catch(err => {
-                                    alert('Pedimos desculpas, mas não conseguimos adicionar os atributos:( Pedimos que tenta mais uma vez.')
                                     backHandler.remove()
+                                    alert('Pedimos desculpas, mas não conseguimos adicionar os atributos:( Pedimos que tenta mais uma vez.')
                                 });
 
                             } else {

@@ -15,7 +15,6 @@ import BlankScreen from '../src/pages/blankScreen';
 
 const AppStack = createStackNavigator();
 
-
 export default function Routes() {
     return (
         <NavigationContainer>

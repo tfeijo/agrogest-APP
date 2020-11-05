@@ -16,6 +16,34 @@ export default StyleSheet.create({
         borderBottomColor:'#00753E',
         paddingBottom:4
     },
+    documentBox :{
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        borderBottomWidth: 1,
+        borderColor:'#00753E',
+        marginBottom:12,
+        paddingBottom:12
+    },
+    documentBoxTitle :{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: "100%"
+        
+    },
+    documentTitle: {
+        marginLeft: 10,
+        marginTop: 4,
+        fontWeight: 'bold'
+    },
+    documentItens: {
+        marginLeft: 20
+    },
+    documentURL :{
+        fontSize:16,
+        marginBottom: 4,
+        color: "#00753E"
+    },
     header : {
         flexDirection: 'row',
         justifyContent: 'space-between',
