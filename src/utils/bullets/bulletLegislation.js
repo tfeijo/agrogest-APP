@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import AnswerItem from './answersItem';
+import AnswerList from './answersList';
 import FowardButton from './fowardButton';
 import styles from './styles';
 
@@ -20,22 +21,28 @@ export default function Legislation(props) {
         item={props.data.attributes.NativeVegetationLegalReserve}
         text="Área com cobertura de vegetação nativa que atende percentual de reserva legal"
       />
-      <AnswerItem
-        item={props.data.attributes.AppAroundWaterCoursesWaterReservoirs}
-        text="Área de Preservação Permanente (APP) em torno de cursos e reservatórios de água"
+      <AnswerList
+          title="Área de Preservação Permanente-APP em conformidade com o Código Florestal: "
+          items={[
+              {
+                  item: props.data.attributes.AppAroundWaterCoursesWaterReservoirs,
+                  text:"Em torno dos cursos e reservatórios de água"
+              },
+              {
+                  item: props.data.attributes.AppAroundSpringsWaterEyes,
+                  text:"Em nascentes e olhos d'água"
+              },
+              {
+                  item: props.data.attributes.AppHillside,
+                  text:"Em encostas"
+              },
+              {
+                  item: props.data.attributes.AppHillTop,
+                  text:"Topo de morro"
+              },
+          ]}
       />
-      <AnswerItem
-        item={props.data.attributes.AppAroundSpringsWaterEyes}
-        text="APP em torno de nascentes e de olhos de água"
-      />
-      <AnswerItem
-        item={props.data.attributes.AppHillside}
-        text="APP em encosta"
-      />
-      <AnswerItem
-        item={props.data.attributes.AppHillTop}
-        text="APP em topo de morro"
-      />
+
       <AnswerItem
         item={props.data.attributes.EnvironmentalRegularizationPlan}
         text="Plano de regularização Ambiental"

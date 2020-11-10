@@ -173,7 +173,7 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <View style={styles.containerOption}>
         <Text style={styles.title}>
-            Escolha a prática de manejo das culturas: 
+            Qual a prática de manejo utilizada, se houver:
         </Text>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('NoTill', !formik.values.NoTill)
@@ -220,7 +220,7 @@ export default function SoilVegetation() {
         </View>
         <View style={styles.containerOption}>
         <Text style={styles.title}>
-            Escolha a área de renegeração, se houver: 
+            Qual tipo de manejo é realizado na recuperação de áreas, se houver: 
         </Text>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('NaturalRegeneration', !formik.values.NaturalRegeneration)
@@ -236,7 +236,7 @@ export default function SoilVegetation() {
             checked = {formik.values.NaturalRegeneration}
             />
             <Text style={styles.option}>
-            Natural
+            Regeneração natural sem manejo
             </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
@@ -252,7 +252,7 @@ export default function SoilVegetation() {
             checked = {formik.values.RegenerationWithHandling}
             />
             <Text style={styles.option}>
-            Com manejo
+            Regeneração natural com manejo
             </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
@@ -268,7 +268,7 @@ export default function SoilVegetation() {
             checked = {formik.values.RegenerationWithPlanting}
             />
             <Text style={styles.option}>
-            Com plantio
+            Plantio total na área
             </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
@@ -284,7 +284,7 @@ export default function SoilVegetation() {
             checked = {formik.values.AgroforestrySystems}
             />
             <Text style={styles.option}>
-            Com sistemas agroflorestais
+            Sistemas agroflorestais
             </Text>
         </TouchableOpacity>
         </View>

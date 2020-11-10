@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
+import {CheckBox} from "native-base";
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import createControl from '../../utils/createControl';
@@ -10,6 +11,15 @@ import Header from '../../utils/header';
 
 export default function WaterResource() {
     const navigation = useNavigation()
+    const [r1,setR1] = useState(false)
+    const [r2,setR2] = useState(false)
+    const [r3,setR3] = useState(false)
+    const [r4,setR4] = useState(false)
+    const [r5,setR5] = useState(false)
+    const [r6,setR6] = useState(false)
+    const [r7,setR7] = useState(false)
+    const [r8,setR8] = useState(false)
+
     const control = createControl
     const formik = useFormik({
         initialValues: {
@@ -59,6 +69,7 @@ export default function WaterResource() {
         </Text>
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
+            
         <TouchableOpacity style={styles.flexView} onPress={async () => {
             formik.setFieldValue('SourceProtectedWaterMine', !formik.values.SourceProtectedWaterMine)
         }}>
@@ -72,32 +83,199 @@ export default function WaterResource() {
             value = {formik.values.SourceProtectedWaterMine}
             />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('DomesticSewageTreatment', !formik.values.DomesticSewageTreatment)
-        }}>
-            <Text style={styles.caption}>
-                O esgoto doméstico das residências da propriedade é tratado?
+        
+        <View style={styles.containerOption}>
+
+            <Text style={{ margin: 8, fontWeight: 'bold'}}>
+            Destinação do esgoto doméstico:
             </Text>
-            <Switch 
-            onValueChange = {text => {
-                formik.setFieldValue('DomesticSewageTreatment', text)
-            }}
-            value = {formik.values.DomesticSewageTreatment}
-            />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('WaterConsuptionTreatment', !formik.values.WaterConsuptionTreatment)
-        }}>
-            <Text style={styles.caption}>
-                A água de consumo humano/animal e para limpeza é tratada?
+
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                formik.setFieldValue('DomesticSewageTreatment', 
+                    !r1 || r2 || r3
+                )       
+                setR1(!r1)
+                setR4(false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('DomesticSewageTreatment', 
+                        !r1 || r2 || r3
+                    )
+                    setR1(!r1)
+                    setR4(false)
+
+                }}
+                color="#A3A3A3"
+                checked = {r1}
+                />
+                <Text style={styles.option}>
+                Fossa biodigestora
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                formik.setFieldValue('DomesticSewageTreatment', 
+                    r1 || !r2 || r3
+                )
+                setR2(!r2)
+                setR4(false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('DomesticSewageTreatment', 
+                        r1 || !r2 || r3
+                    )
+                    setR2(!r2)
+                    setR4(false)
+                }}
+                color="#A3A3A3"
+                checked = {r2}
+                />
+                <Text style={styles.option}>
+                Fossa negra/infiltração
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                formik.setFieldValue('DomesticSewageTreatment', 
+                    r1 || r2 || !r3
+                )
+                setR3(!r3)
+                setR4(false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('DomesticSewageTreatment', 
+                        r1 || r2 || !r3
+                    )
+                    setR3(!r3)
+                    setR4(false)
+                }}
+                color="#A3A3A3"
+                checked = {r3}
+                />
+                <Text style={styles.option}>
+                Outra
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                setR4(!r4)
+                setR1(false)
+                setR2(false)
+                setR3(false)
+                formik.setFieldValue('DomesticSewageTreatment', false)    
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    setR4(!r4)
+                    setR1(false)
+                    setR2(false)
+                    setR3(false)
+                    formik.setFieldValue('DomesticSewageTreatment', false)
+                }}
+                color="#A3A3A3"
+                checked = {r4}
+                />
+                <Text style={styles.option}>
+                Nenhum
+                </Text>
+            </TouchableOpacity>        
+        </View>
+        <View style={styles.containerOption}>
+
+            <Text style={{ margin: 8, fontWeight: 'bold'}}>
+            Tratamento da água de consumo humano e animal:
             </Text>
-            <Switch 
-            onValueChange = {text => {
-                formik.setFieldValue('WaterConsuptionTreatment', text)
-            }}
-            value = {formik.values.WaterConsuptionTreatment}
-            />
-        </TouchableOpacity>
+
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                formik.setFieldValue('WaterConsuptionTreatment', 
+                    !r5 || r6 || r7
+                )       
+                setR5(!r5)
+                setR8(false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('WaterConsuptionTreatment', 
+                    !r5 || r6 || r7
+                )       
+                setR5(!r5)
+                setR8(false)
+
+                }}
+                color="#A3A3A3"
+                checked = {r5}
+                />
+                <Text style={styles.option}>
+                Filtração
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                formik.setFieldValue('WaterConsuptionTreatment', 
+                    r5 || !r6 || r7
+                )
+                setR6(!r6)
+                setR8(false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('WaterConsuptionTreatment', 
+                    r5 || !r6 || r7
+                    )
+                    setR6(!r6)
+                    setR8(false)
+                }}
+                color="#A3A3A3"
+                checked = {r6}
+                />
+                <Text style={styles.option}>
+                Cloração
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                formik.setFieldValue('WaterConsuptionTreatment', 
+                    r5 || r6 || !r7
+                )
+                setR7(!r7)
+                setR8(false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('WaterConsuptionTreatment', 
+                    r5 || r6 || !r7
+                    )
+                    setR7(!r7)
+                    setR8(false)
+                }}
+                color="#A3A3A3"
+                checked = {r7}
+                />
+                <Text style={styles.option}>
+                Outros
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+                setR8(!r8)
+                setR5(false)
+                setR6(false)
+                setR7(false)
+                formik.setFieldValue('WaterConsuptionTreatment', false)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    setR8(!r8)
+                    setR5(false)
+                    setR6(false)
+                    setR7(false)
+                    formik.setFieldValue('WaterConsuptionTreatment', false)
+                }}
+                color="#A3A3A3"
+                checked = {r8}
+                />
+                <Text style={styles.option}>
+                Nenhum
+                </Text>
+            </TouchableOpacity>        
+        </View>
         <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}

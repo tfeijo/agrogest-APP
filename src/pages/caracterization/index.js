@@ -4,33 +4,17 @@ import {
     Image,
     Text,
     ScrollView,
-    TouchableOpacity,
-    AsyncStorage
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
-
 import Form from  './../../utils/form-caracterization';
 import logoImg from '../../assets/logo.png';
 import styles from './styles';
 
 export default function Caracterization() {
     
-    const navigator = useNavigation();
-
     return <>
         <View style={styles.container}>
             <View style={styles.header}>
                 <Image source={logoImg} />
-                {/* <TouchableOpacity
-                            style={styles.fowardButtonEmpty}
-                            onPress={async () => {
-                                await AsyncStorage.removeItem('city')
-                                navigator.goBack()
-                            }}
-                >
-                    <Feather name='arrow-left' size={35} color='#00753E' />
-                </TouchableOpacity> */}
             </View>
             <Text style={styles.title}>Caracterização da propriedade</Text>
             <ScrollView style={styles.stepList}

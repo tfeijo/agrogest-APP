@@ -29,20 +29,30 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: "100%"
-        
+    },
+    documentBoxUrl :{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    
     },
     documentTitle: {
-        marginLeft: 10,
-        marginTop: 4,
+        
+        marginTop: 10,
         fontWeight: 'bold'
     },
-    documentItens: {
-        marginLeft: 20
+    documentUrl: {
+        marginLeft: 10,
+        marginTop: 4,
+        
     },
-    documentURL :{
+    documentItens: {
+        marginLeft: 10
+    },
+    documentDescription :{
         fontSize:16,
         marginBottom: 4,
-        color: "#00753E"
+        color: "#00753E",
     },
     header : {
         flexDirection: 'row',

@@ -8,6 +8,7 @@ import {
     StatusBar,
     AsyncStorage,
     TouchableOpacity,
+    ActivityIndicator,
     BackHandler
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -24,6 +25,7 @@ import api from '../../services/api';
 export default function Home() {
     
     const navigation = useNavigation()
+    const [searchingDocs,setSearchingDocs] = useState(false);
     const [isLoading,setLoading] = useState(true);
     const [control,setControl] = useState();
     const [land,setLand] = useState();
@@ -233,12 +235,12 @@ export default function Home() {
                             </View>
                         </View>
                         <BulletFull
-                        number={7}
-                        description='Documentos técnicos recomendados'
-                        currentStep={control.boolWasteManagement}
-                        data={land}
-                        control={control}
-                        page="Documents"/>
+                            number={7}
+                            description='Documentos técnicos recomendados'
+                            currentStep={control.boolWasteManagement}
+                            data={land}
+                            control={control}
+                            page="Documents"/>
                 
                         <TouchableOpacity
                         style={styles.Button}
@@ -266,6 +268,7 @@ export default function Home() {
                                     ], {})
                             } else if (allStepsTrue) {
                                 const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+                                setSearchingDocs(true)
                                 land.attributes["farm_id"] = land.id
                                 await api.post('attributes', land.attributes)
                                 .then(async response => {
@@ -282,6 +285,7 @@ export default function Home() {
                                     backHandler.remove()
                                     alert('Pedimos desculpas, mas não conseguimos adicionar os atributos:( Pedimos que tenta mais uma vez.')
                                 });
+                                setSearchingDocs(false)
 
                             } else {
                                 alert(
@@ -292,7 +296,14 @@ export default function Home() {
                         }}
                         disabled={false}
                         >
-                            <Text style={styles.ButtonText}>Processar recomendações</Text>
+                            { 
+                                searchingDocs ? 
+                                <><Text style={styles.ButtonText}>Buscando...</Text>
+                                <ActivityIndicator color='#fff' size= 'large' />
+                                </>
+                                :
+                                <Text style={styles.ButtonText}>Buscar documentos</Text>
+                            }
                         </TouchableOpacity>
                     </>}
                 </ScrollView>

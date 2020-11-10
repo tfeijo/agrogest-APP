@@ -18,6 +18,25 @@ export default StyleSheet.create({
     color: '#131313',
     maxWidth: '80%'
   },
+  option: {
+    fontSize: 15,
+    color: '#131313',
+    marginLeft: 20
+  },
+  containerOption : {
+      paddingBottom: 15,
+      paddingTop: 10,
+      borderColor: '#A3A3A3',
+      borderBottomWidth: 1,
+  },
+  flexViewOption : {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingBottom: 5,
+    paddingTop: 5,
+    marginLeft: 15
+  },
   flexView : {
     flexDirection: 'row',
     justifyContent: 'space-between',

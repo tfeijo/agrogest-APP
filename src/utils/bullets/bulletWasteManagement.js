@@ -23,79 +23,75 @@ export default function WasteManagement(props) {
   )
 
     return <View style={styles.step}>
-      {pecuaria? // pecuaria
-              <>
-
-              <AnswerItem 
+        {pecuaria&& // pecuaria
+            <>
+                <AnswerItem 
                   item={props.data.attributes.ResidueComposting}
                   text={"Resíduo dos animais destinados à esterqueira/compostagem/biodigestor"}
-              />
-              {bovino? //Bovino
-                  <AnswerList
-                  title={"Tratamento de resíduos da bovinocultura:"}
-                  items={[
-                      {
-                          item:props.data.attributes.BovineCattle,
-                          text:"Biodigestor"
-                      },
-                      {
-                          item:props.data.attributes.BovineDung,
-                          text:"Esterqueira"
-                      },
-                      {
-                          item:props.data.attributes.BovineFertigation,
-                          text:"Fertirrigação"
-                      },
-                  ]}
-              />:<></>
-              }
-              {suino? //Suino
-                  <>
-                  <AnswerList
-                      title={"Tratamento de resíduos da suinocultura:"}
-                      items={[
-                          {
-                              item:props.data.attributes.SwineCattle,
-                              text:"Biodigestor"
-                          },
-                          {
-                              item:props.data.attributes.SwineDung,
-                              text:"Esterqueira"
-                          },
-                          {
-                              item:props.data.attributes.SwineFertigation,
-                              text:"Fertirrigação"
-                          },
-                      ]}
-                  />
-                  <AnswerItem 
-                  item={props.data.attributes.WaterControlProgram}
-                  text={"Programa de controle de água na suinocultura"}
-                  />
-              </>:<></>
-              }
-              {avino? //Ave
+                />
+                {bovino&& //Bovino
+                    <AnswerList
+                        title={"Tratamento de resíduos da bovinocultura:"}
+                        items={[
+                            {
+                                item:props.data.attributes.BovineCattle,
+                                text:"Biodigestor"
+                            },
+                            {
+                                item:props.data.attributes.BovineDung,
+                                text:"Esterqueira"
+                            },
+                            {
+                                item:props.data.attributes.BovineFertigation,
+                                text:"Fertirrigação"
+                            },
+                        ]}
+                    />
+                }
+                {suino&& //Suino
+                    <>
+                        <AnswerList
+                        title={"Tratamento de resíduos da suinocultura:"}
+                        items={[
+                            {
+                                item:props.data.attributes.SwineCattle,
+                                text:"Biodigestor"
+                            },
+                            {
+                                item:props.data.attributes.SwineDung,
+                                text:"Esterqueira"
+                            },
+                            {
+                                item:props.data.attributes.SwineFertigation,
+                                text:"Fertirrigação"
+                            },
+                        ]}
+                        />
+                        <AnswerItem 
+                            item={props.data.attributes.WaterControlProgram}
+                            text={"Programa de controle de água na suinocultura"}
+                        />
+                    </>
+                }
+                {avino&& //Ave
     
                   <AnswerItem 
                       item={props.data.attributes.AviaryWastinAgriculture}
                       text={"Resíduo da cama de aviário aplicado na agricultura"}
-                  />
-                  :<></>
-              }
-              {agricultura? //Agricultura
-                  <AnswerItem 
-                      item={props.data.attributes.ReuseAgriculturalResidue}
-                      text={"Resíduos agrícolas utilizados na propriedade"}
-                  />:<></>
-              }
-
-              </>
-               : <></>
-      }
-      <AnswerItem 
-          item={props.data.attributes.DeadCompostAnimals}
-          text={"Animais mortos destinados a compostagem"}
-      />
-      <FowardButton page={props.page}/>
-  </View>
+                  />  
+                }
+                <AnswerItem 
+                    item={props.data.attributes.DeadCompostAnimals}
+                    text={"Animais mortos destinados a compostagem"}
+                />
+            </>
+        }
+        {agricultura&& //Agricultura
+            <AnswerItem 
+                item={props.data.attributes.ReuseAgriculturalResidue}
+                text={"Resíduos agrícolas utilizados na propriedade"}
+            />
+        }
+    <FowardButton page={props.page}/>
+    </View>
 }

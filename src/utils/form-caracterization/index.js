@@ -1,7 +1,6 @@
 import { 
   Text, 
   View, 
-  Alert,
   TextInput, 
   TouchableOpacity,
   ActivityIndicator,
@@ -200,17 +199,7 @@ export default function Form( props ) {
         keyboardType={'numeric'}
         returnKeyType={ 'done' }
         />
-      {/* <View style={styles.flexView}>
-        <Text style={styles.caption}>
-          A propriedade rural já é licenciada?
-        </Text>
-        <Switch 
-          onValueChange = {text => {
-            formik.setFieldValue('licensing', text)
-          }}
-          value = {formik.values.licensing}
-          />
-      </View> */}
+
       <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}
