@@ -74,6 +74,7 @@ export default function SoilVegetation(props) {
               },
           ]}
       />
+      {props.control.productions.bovi_corte || props.control.productions.bovi_leite &&
       <AnswerList
           title="Manejo da pastagem: "
           items={[
@@ -87,7 +88,7 @@ export default function SoilVegetation(props) {
               },
           ]}
       />
-
+        }
       <FowardButton page={props.page}/>
     </View>
   )

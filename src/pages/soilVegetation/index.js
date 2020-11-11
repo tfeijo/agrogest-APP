@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity, ActivityIndicator,
 AsyncStorage} from 'react-native';
 import {CheckBox} from "native-base";
 import { useFormik } from 'formik';
+import Loading from '../../utils/loading';
 import { useNavigation } from '@react-navigation/native';
 import createControl from '../../utils/createControl';
 import createLand from '../../utils/createLand';
@@ -13,6 +14,37 @@ import Header from '../../utils/header';
 export default function SoilVegetation() {
     const navigation = useNavigation()
     const control = createControl
+    const [bovino ,setBovino] = useState(false)
+    const [isLoading,setLoading] = useState(true);
+
+    async function getInfo(){
+
+    
+        try{ 
+            let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
+            
+            setBovino(
+                jsonValue.productions.bovi_leite || 
+                jsonValue.productions.bovi_corte
+            )
+            return jsonValue.productions != null && jsonValue.productions 
+        } catch(err) {
+            console.warn(err)
+        }
+    }
+
+    async function fetchData() {
+        setLoading(true)
+        await getInfo();
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+   
+    
+
     const formik = useFormik({
         initialValues: {
             EarthwormInsects: false,
@@ -71,8 +103,9 @@ export default function SoilVegetation() {
         },
       });
 
-    
-    return <View style={styles.container} >
+      return isLoading === true ? <Loading />
+      :
+      <View style={styles.container} >
 
         <Header />
         <Text style={styles.tipsTitle}>
@@ -289,7 +322,7 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         </View>
 
-        <View style={styles.containerOption}>
+        {bovino&&<View style={styles.containerOption}>
         <Text style={styles.title}>
             O manejo da pastagem é: 
         </Text>
@@ -322,6 +355,8 @@ export default function SoilVegetation() {
             </Text>
         </TouchableOpacity>
         </View>
+        }
+        
         <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}
