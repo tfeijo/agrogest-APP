@@ -180,7 +180,7 @@ export default function Legislation() {
             checked = {formik.values.AppHillTop}
             />
             <Text style={styles.option}>
-            Em encostas
+            Em topo de morro
             </Text>
         </TouchableOpacity>
 

@@ -145,7 +145,8 @@ export default function Home() {
                 <View style={styles.header}>    
                     <Image source={logoImg} />
                     <Text style={styles.headerText}>
-                        Total de <Text style={styles.headerTextBold}>0 recomendações</Text>.
+                        Total de <Text style={styles.headerTextBold}>{
+                        land.documents? Object.keys(land.documents).length: 0} recomendações</Text>.
                     </Text>
                 </View>
 
