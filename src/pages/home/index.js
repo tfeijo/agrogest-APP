@@ -30,6 +30,7 @@ export default function Home() {
     const [control,setControl] = useState();
     const [land,setLand] = useState();
     const [editFarm,setEdit] = useState(true);
+    const [edited,setEdited] = useState();
         
     const isFocused = useIsFocused();
     
@@ -39,6 +40,7 @@ export default function Home() {
             `Deseja remover esta propriedade?`,
             [
                 {text: 'Remover', onPress: async () => {            
+                    await AsyncStorage.setItem('edited',JSON.stringify(true))
                     await AsyncStorage.removeItem('control')
                     await AsyncStorage.removeItem('land')
                     await AsyncStorage.removeItem('UniqueIDLand')
@@ -77,6 +79,10 @@ export default function Home() {
               console.warn(err)
             }
         }
+        async function getEdited(){
+            let jsonValue = await AsyncStorage.getItem('edited')
+            return jsonValue != null ? JSON.parse(jsonValue): false
+        }
         async function getLand(){
             try{ 
               let jsonValue = await AsyncStorage.getItem('land');
@@ -110,9 +116,10 @@ export default function Home() {
             }
         }
 
-        setControl(await getControl())
+        setEdited(await getEdited());
+        setControl(await getControl());
         setLand(await getLand());
-        setEdit(false);
+        setEdit(edited);
         
     }
 
@@ -149,10 +156,22 @@ export default function Home() {
                         land.documents? Object.keys(land.documents).length: 0} recomendações</Text>.
                     </Text>
                 </View>
-
-                <Text style={styles.title}>Bem-vindo!</Text>
-                <Text style={styles.description}>Siga os passos abaixo</Text>
                 
+                    {!control.boolCaracterization? 
+                    <>
+                        <Text style={styles.title}>Bem-vindo!</Text>
+                        <Text style={styles.description}>Siga os passos abaixo</Text>
+                        </>
+                        : editFarm ?
+                        <Text style={{
+                            ...styles.title,
+                            fontSize: 20
+                        }}>Siga os passos abaixo</Text>:
+                        <Text style={{
+                            margin: 15
+                        }}></Text>
+                        
+                    }
                  <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
                     {(editFarm || !control.boolWasteManagement) && <>
                         {control.boolCaracterization && <TouchableOpacity onPress={() => deleteData()}>
@@ -224,7 +243,7 @@ export default function Home() {
                         <View style={styles.boxList}>
                             <View style={styles.produtionItem}>
                                 <Text style={styles.activityTitle}>
-                                    Exibir passos anteriores
+                                    Alterar passos anteriores
                                 </Text>
                                 <Switch 
                                     style={{ marginTop: -25} }
@@ -242,12 +261,15 @@ export default function Home() {
                             data={land}
                             control={control}
                             page="Documents"/>
-                
+                        
+                        {(editFarm || land.documents.length == 0) && <>
                         <TouchableOpacity
                         style={styles.Button}
                         onPress={async ()=>{
                             
+                            await AsyncStorage.setItem('edited',JSON.stringify(false))
                             let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
+
                             if (jsonValue == null) jsonValue = {boolWasteManagement: false}
                             let allStepsTrue = (
                                 jsonValue.boolCaracterization &&
@@ -277,6 +299,11 @@ export default function Home() {
                                     jsonFarm["documents"] = response.data
                                     
                                     await AsyncStorage.setItem('land', JSON.stringify(jsonFarm))
+                                    async function setEdited(bool){
+                                        let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
+                                        return response
+                                    }   
+                                    let editedReturn = await setEdited(false)
                                     setLand(jsonFarm);
                                     await fetchData()
                                     backHandler.remove()
@@ -295,7 +322,7 @@ export default function Home() {
                                 
                             }
                         }}
-                        disabled={false}
+                        disabled={searchingDocs}
                         >
                             { 
                                 searchingDocs ? 
@@ -306,6 +333,7 @@ export default function Home() {
                                 <Text style={styles.ButtonText}>Buscar documentos</Text>
                             }
                         </TouchableOpacity>
+                        </>}
                     </>}
                 </ScrollView>
             </View>

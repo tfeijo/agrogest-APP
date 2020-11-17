@@ -49,7 +49,11 @@ export default function WasteManagement() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            
+            async function setEdited(bool){
+                let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
+                return true
+            }   
+            let editedReturn = await setEdited(false)
             let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
             let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
             
@@ -60,6 +64,7 @@ export default function WasteManagement() {
             }
             
             try {
+                
                 await createLand.update({
                     ...jsonValue,
                     attributes,
@@ -69,7 +74,6 @@ export default function WasteManagement() {
                   ...JSONcontrol,
                   'boolWasteManagement': true
                 })
-                
                 setSubmitting(false);
                 navigation.goBack();
             } catch (error) {
@@ -141,19 +145,6 @@ export default function WasteManagement() {
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
         { pecuaria &&
         <>
-        <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('DeadCompostAnimals', !formik.values.DeadCompostAnimals)
-        }}>
-            <Text style={styles.caption}>
-            O destino dos animais mortos é a compostagem? 
-            </Text>
-            <Switch 
-            onValueChange = {text => {
-                formik.setFieldValue('DeadCompostAnimals', text)
-            }}
-            value = {formik.values.DeadCompostAnimals}
-            />
-        </TouchableOpacity>
         <View style={styles.containerOption}>
 
             <Text style={{ margin: 8, fontWeight: 'bold'}}>
@@ -283,7 +274,8 @@ export default function WasteManagement() {
             <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
                 formik.setFieldValue('DomesticSewageTreatment', 
                     !r1 || r2 || r3 || r4
-                )       
+                )
+                formik.setFieldValue('DeadCompostAnimals', !formik.values.DeadCompostAnimals)
                 setR1(!r1)
                 setR10(false)
             }}>
@@ -292,6 +284,7 @@ export default function WasteManagement() {
                     formik.setFieldValue('DomesticSewageTreatment', 
                         !r1 || r2 || r3 || r4
                     )
+                    formik.setFieldValue('DeadCompostAnimals', !formik.values.DeadCompostAnimals)
                     setR1(!r1)
                     setR10(false)
 

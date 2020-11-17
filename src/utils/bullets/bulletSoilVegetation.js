@@ -28,14 +28,6 @@ export default function SoilVegetation(props) {
           item={props.data.attributes.SoilAnalysisCorrection}
           text="Realiza análise e manutenção de solo e correção com orientação técnica"
       />
-      <AnswerItem
-          item={props.data.attributes.PresenceMaintenanceVegetation}
-          text="Realiza análise e manutenção da vegetação em encostas e fundos de vale"
-      />
-      <AnswerItem
-          item={props.data.attributes.IntegralVegetation}
-          text="Vegetação integra na margem dos rios"
-      />
       <AnswerList
           title="Práticas de manejo das culturas: "
           items={[

@@ -22,7 +22,7 @@ export default function Production(props) {
               [
                 {text: 'Remover', onPress: async () => {            
                   
-                  await api.delete(`productions/${production.id}`)
+                  await api.delete(`farms/${props.data.id}/productions/${production.id}`)
                   .then(async () => {
                     let productionsControl = {
                       suinocultura : false,

@@ -16,7 +16,10 @@ export default function SoilVegetation() {
     const control = createControl
     const [bovino ,setBovino] = useState(false)
     const [isLoading,setLoading] = useState(true);
-
+    const [r1,setR1] = useState(false)
+    const [r2,setR2] = useState(false)
+    const [r3,setR3] = useState(false)
+    
     async function getInfo(){
 
     
@@ -52,8 +55,6 @@ export default function SoilVegetation() {
             CompactedArea: false,
             Erosion: false,
             SoilAnalysisCorrection: false,
-            PresenceMaintenanceVegetation: false,
-            IntegralVegetation: false,
             NoTill: false,
             MinimumCultivation: false,
             ControlledBurning: false,
@@ -68,7 +69,6 @@ export default function SoilVegetation() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            
             let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
             let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
             
@@ -92,7 +92,6 @@ export default function SoilVegetation() {
                   ...JSONcontrol,
                   'boolSoilVegetation': true
                 })
-                
                 setSubmitting(false);
                 navigation.goBack();
             } catch (error) {
@@ -130,7 +129,7 @@ export default function SoilVegetation() {
             formik.setFieldValue('DiversifiedProduction', !formik.values.DiversifiedProduction)
         }}>
             <Text style={styles.caption}>
-            A produção diversificada?
+            Realiza cultivo diversificado ou rotacionado?
             </Text>
             <Switch 
             onValueChange = {text => {
@@ -178,42 +177,19 @@ export default function SoilVegetation() {
             value = {formik.values.SoilAnalysisCorrection}
             />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('PresenceMaintenanceVegetation', !formik.values.PresenceMaintenanceVegetation)
-        }}>
-            <Text style={styles.caption}>
-            Presença e manutenção da vegetação em encostas e fundos de vale?
-            </Text>
-            <Switch 
-            onValueChange = {text => {
-                formik.setFieldValue('PresenceMaintenanceVegetation', text)
-            }}
-            value = {formik.values.PresenceMaintenanceVegetation}
-            />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.flexView} onPress={async () => {
-            formik.setFieldValue('IntegralVegetation', !formik.values.IntegralVegetation)
-        }}>
-            <Text style={styles.caption}>
-            Possui vegetação íntegra na margem dos rios?
-            </Text>
-            <Switch 
-            onValueChange = {text => {
-                formik.setFieldValue('IntegralVegetation', text)
-            }}
-            value = {formik.values.IntegralVegetation}
-            />
-        </TouchableOpacity>
+        
         <View style={styles.containerOption}>
         <Text style={styles.title}>
-            Qual a prática de manejo utilizada, se houver:
+            Qual a prática de manejo utilizada?
         </Text>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('NoTill', !formik.values.NoTill)
+            setR1(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('NoTill', !formik.values.NoTill)
+                setR1(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.NoTill}
@@ -224,10 +200,12 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('MinimumCultivation', !formik.values.MinimumCultivation)
+            setR1(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('MinimumCultivation', !formik.values.MinimumCultivation)
+                setR1(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.MinimumCultivation}
@@ -238,10 +216,12 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('ControlledBurning', !formik.values.ControlledBurning)
+            setR1(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('ControlledBurning', !formik.values.ControlledBurning)
+                setR1(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.ControlledBurning}
@@ -250,20 +230,39 @@ export default function SoilVegetation() {
             Queima controlada
             </Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('ControlledBurning', false)
+            formik.setFieldValue('MinimumCultivation', false)
+            formik.setFieldValue('NoTill', false)
+            setR1(true)
+        }}>
+            <CheckBox 
+            onPress = {() => {
+                formik.setFieldValue('ControlledBurning', false)
+                formik.setFieldValue('MinimumCultivation', false)
+                formik.setFieldValue('NoTill', false)
+                setR1(true)
+            }}
+            color="#A3A3A3"
+            checked = {r1}
+            />
+            <Text style={styles.option}>
+            Nenhum
+            </Text>
+        </TouchableOpacity>
         </View>
         <View style={styles.containerOption}>
         <Text style={styles.title}>
-            Qual tipo de manejo é realizado na recuperação de áreas, se houver: 
+            Qual tipo de manejo é realizado na recuperação de áreas?
         </Text>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('NaturalRegeneration', !formik.values.NaturalRegeneration)
-            
-        
+            setR2(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('NaturalRegeneration', !formik.values.NaturalRegeneration)
-                
+                setR2(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.NaturalRegeneration}
@@ -274,12 +273,12 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('RegenerationWithHandling', !formik.values.RegenerationWithHandling)
-            
+            setR2(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('RegenerationWithHandling', !formik.values.RegenerationWithHandling)
-                
+                setR2(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.RegenerationWithHandling}
@@ -290,12 +289,12 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('RegenerationWithPlanting', !formik.values.RegenerationWithPlanting)
-            
+            setR2(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('RegenerationWithPlanting', !formik.values.RegenerationWithPlanting)
-                
+                setR2(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.RegenerationWithPlanting}
@@ -306,12 +305,12 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('AgroforestrySystems', !formik.values.AgroforestrySystems)
-            
+            setR2(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('AgroforestrySystems', !formik.values.AgroforestrySystems)
-                
+                setR2(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.AgroforestrySystems}
@@ -320,18 +319,39 @@ export default function SoilVegetation() {
             Sistemas agroflorestais
             </Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('AgroforestrySystems', false)
+            formik.setFieldValue('RegenerationWithPlanting', false)
+            formik.setFieldValue('RegenerationWithHandling', false)
+            formik.setFieldValue('NaturalRegeneration', false)
+            setR2(true)
+        }}>
+            <CheckBox 
+            onPress = {() => {
+                formik.setFieldValue('AgroforestrySystems', false)
+                setR2(true)
+            }}
+            color="#A3A3A3"
+            checked = {r2}
+            />
+            <Text style={styles.option}>
+            Nenhum
+            </Text>
+        </TouchableOpacity>
         </View>
 
         {bovino&&<View style={styles.containerOption}>
         <Text style={styles.title}>
-            O manejo da pastagem é: 
+            Qual o tipo de manejo da pastagem?
         </Text>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('RotatedHandling', !formik.values.RotatedHandling)
+            setR3(false)
         }}>
             <CheckBox 
             onPress = {() => {
                 formik.setFieldValue('RotatedHandling', !formik.values.RotatedHandling)
+                setR3(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.RotatedHandling}
@@ -342,10 +362,12 @@ export default function SoilVegetation() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
             formik.setFieldValue('ConsortiumHandling', !formik.values.ConsortiumHandling)
+            setR3(false)
         }}>
             <CheckBox 
             onPress = {()=>{
                 formik.setFieldValue('ConsortiumHandling', !formik.values.ConsortiumHandling)
+                setR3(false)
             }}
             color="#A3A3A3"
             checked = {formik.values.ConsortiumHandling}
@@ -354,11 +376,30 @@ export default function SoilVegetation() {
             Consorciado
             </Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
+            formik.setFieldValue('ConsortiumHandling', false)
+            formik.setFieldValue('RotatedHandling', false)
+            setR3(true)
+        }}>
+            <CheckBox 
+            onPress = {()=>{
+                formik.setFieldValue('ConsortiumHandling', false)
+                formik.setFieldValue('RotatedHandling', false)
+                setR3(true)
+            }}
+            color="#A3A3A3"
+            checked = {r3}
+            />
+            <Text style={styles.option}>
+            Nenhum
+            </Text>
+        </TouchableOpacity>
         </View>
         }
         
         <TouchableOpacity
         style={styles.Button}
+        
         onPress={formik.handleSubmit}
         >
         {

@@ -28,9 +28,16 @@ export default function Legislation() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
+            async function setEdited(bool){
+                let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
+                return response
+            }   
+            let editedReturn = await setEdited(true)
             let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
             let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
             let attributes = jsonValue.attributes!=null?jsonValue.attributes:{}
+            
+
             
             for (var key in values)  {
                 attributes[key] = values[key]                
@@ -46,7 +53,6 @@ export default function Legislation() {
                     ...JSONcontrol,
                     'boolLegislation': true
                 })
-                
                 setSubmitting(false);
                 navigation.goBack();
             } catch (error) {
@@ -123,66 +129,73 @@ export default function Legislation() {
             value = {formik.values.NativeVegetationLegalReserve}
             />
         </TouchableOpacity>
+        
         <View style={styles.containerOption}>
-        <Text style={{ ...styles.title, fontWeight: "bold"}}>
-        Possui Área de Preservação Permanente-APP em conformidade com o Código Florestal: 
-        </Text>
-        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-            formik.setFieldValue('AppAroundWaterCoursesWaterReservoirs', !formik.values.AppAroundWaterCoursesWaterReservoirs)
-        }}>
-            <CheckBox 
-            onPress = {() => {
+            <Text style={{ ...styles.title, fontWeight: "bold"}}>
+            Possui Área de Preservação Permanente-APP em conformidade com o Código Florestal: 
+            </Text>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
                 formik.setFieldValue('AppAroundWaterCoursesWaterReservoirs', !formik.values.AppAroundWaterCoursesWaterReservoirs)
-            }}
-            color="#A3A3A3"
-            checked = {formik.values.AppAroundWaterCoursesWaterReservoirs}
-            />
-            <Text style={styles.option}>
-            Em torno dos cursos e reservatórios de água
-            </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-            formik.setFieldValue('AppAroundSpringsWaterEyes', !formik.values.AppAroundSpringsWaterEyes)
-        }}>
-            <CheckBox 
-            onPress = {() => {
+                formik.setFieldValue('IntegralVegetation', !formik.values.AppAroundWaterCoursesWaterReservoirs)
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('AppAroundWaterCoursesWaterReservoirs', !formik.values.AppAroundWaterCoursesWaterReservoirs)
+                    formik.setFieldValue('IntegralVegetation', !formik.values.AppAroundWaterCoursesWaterReservoirs)
+                }}
+                color="#A3A3A3"
+                checked = {formik.values.AppAroundWaterCoursesWaterReservoirs}
+                />
+                <Text style={styles.option}>
+                Em torno dos cursos hídricos e reservatórios de água
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
                 formik.setFieldValue('AppAroundSpringsWaterEyes', !formik.values.AppAroundSpringsWaterEyes)
-            }}
-            color="#A3A3A3"
-            checked = {formik.values.AppAroundSpringsWaterEyes}
-            />
-            <Text style={styles.option}>
-            Em nascentes e olhos d'água
-            </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-            formik.setFieldValue('AppHillside', !formik.values.AppHillside)
-        }}>
-            <CheckBox 
-            onPress = {() => {
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('AppAroundSpringsWaterEyes', !formik.values.AppAroundSpringsWaterEyes)
+                }}
+                color="#A3A3A3"
+                checked = {formik.values.AppAroundSpringsWaterEyes}
+                />
+                <Text style={styles.option}>
+                Em nascentes e olhos d'água
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
                 formik.setFieldValue('AppHillside', !formik.values.AppHillside)
-            }}
-            color="#A3A3A3"
-            checked = {formik.values.AppHillside}
-            />
-            <Text style={styles.option}>
-            Em encostas
-            </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-            formik.setFieldValue('AppHillTop', !formik.values.AppHillTop)
-        }}>
-            <CheckBox 
-            onPress = {() => {
+                formik.setFieldValue('PresenceMaintenanceVegetation', !formik.values.AppHillside)
+
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('AppHillside', !formik.values.AppHillside)
+                    formik.setFieldValue('PresenceMaintenanceVegetation', !formik.values.AppHillside)
+                }}
+                color="#A3A3A3"
+                checked = {formik.values.AppHillside}
+                />
+                <Text style={styles.option}>
+                Em encostas
+                </Text>
+            </TouchableOpacity>
+        
+            <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
                 formik.setFieldValue('AppHillTop', !formik.values.AppHillTop)
-            }}
-            color="#A3A3A3"
-            checked = {formik.values.AppHillTop}
-            />
-            <Text style={styles.option}>
-            Em topo de morro
-            </Text>
-        </TouchableOpacity>
+            }}>
+                <CheckBox 
+                onPress = {() => {
+                    formik.setFieldValue('AppHillTop', !formik.values.AppHillTop)
+                }}
+                color="#A3A3A3"
+                checked = {formik.values.AppHillTop}
+                />
+                <Text style={styles.option}>
+                Em topo de morro
+                </Text>
+            </TouchableOpacity>
 
         </View>
 
