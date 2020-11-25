@@ -28,22 +28,16 @@ export default function Legislation() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            async function setEdited(bool){
-                let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
-                return response
-            }   
-            let editedReturn = await setEdited(true)
             let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
             let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
             let attributes = jsonValue.attributes!=null?jsonValue.attributes:{}
-            
-
             
             for (var key in values)  {
                 attributes[key] = values[key]                
             }
             
             try {
+                jsonValue.edited = true
                 await createLand.update({
                     ...jsonValue,
                     attributes

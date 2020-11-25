@@ -58,6 +58,7 @@ export default function Form( props ) {
       await api.post('farms', values)
       .then(async response => {
         newLand = response.data;
+        newLand.edited = true
         createLand.update(newLand);
         UniqueID.update(newLand.installation_id);
         
@@ -173,12 +174,12 @@ export default function Form( props ) {
       }
       </Text>
       <TouchableOpacity onPress={()=>{
-        formik.values.state_id != 9999?
+        formik.values.state_id != 9999 && city.name != '-'?
         loadCities(formik.values.state_id):null}
       }>
-      <View style={ styles.cityView}>
-        <Text style={styles.city}>{city.name}</Text>
-      </View>
+        <View style={ styles.cityView}>
+          <Text style={styles.city}>{city.name}</Text>
+        </View>
       </TouchableOpacity>
       <Text style={styles.caption}>
         Tamanho da propriedade (ha):
@@ -203,6 +204,7 @@ export default function Form( props ) {
       <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}
+        disabled={formik.isSubmitting}
         >
         {
           formik.isSubmitting ? 
@@ -211,7 +213,6 @@ export default function Form( props ) {
           :
           <Text style={styles.ButtonText}>Salvar</Text>
         }
-       
       </TouchableOpacity>
       { formik.errors.message && <Text>{formik.errors.message}</Text> }
       

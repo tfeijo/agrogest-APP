@@ -35,11 +35,6 @@ export default function WaterResource() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            async function setEdited(bool){
-                let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
-                return response
-            }   
-            let editedReturn = await setEdited(true)
             
             let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
             let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
@@ -50,11 +45,11 @@ export default function WaterResource() {
             }
             
             try {
+                jsonValue.edited = true
                 await createLand.update({
                     ...jsonValue,
                     attributes
                 })
-    
                 await control.update({
                 ...JSONcontrol,
                 'boolWaterResource': true

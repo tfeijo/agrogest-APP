@@ -148,6 +148,7 @@ export default function Form(props) {
         
       }
       let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+      
       if (erro) {
         erro = false
         
@@ -164,6 +165,8 @@ export default function Form(props) {
             farm_id: jsonValue.id,
           })
           .then(async response => {
+            jsonValue.edited = true
+
             await createLand.update({
               ...jsonValue,
               productions: response.data
@@ -589,6 +592,7 @@ export default function Form(props) {
       <TouchableOpacity
         style={styles.Button}
         onPress={formik.handleSubmit}
+        disabled={formik.isSubmitting}
         >
         { 
           formik.isSubmitting ? 

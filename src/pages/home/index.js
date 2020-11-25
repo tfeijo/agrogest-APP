@@ -30,8 +30,7 @@ export default function Home() {
     const [control,setControl] = useState();
     const [land,setLand] = useState();
     const [editFarm,setEdit] = useState(true);
-    const [edited,setEdited] = useState();
-        
+            
     const isFocused = useIsFocused();
     
     async function deleteData(){
@@ -40,7 +39,6 @@ export default function Home() {
             `Deseja remover esta propriedade?`,
             [
                 {text: 'Remover', onPress: async () => {            
-                    await AsyncStorage.setItem('edited',JSON.stringify(true))
                     await AsyncStorage.removeItem('control')
                     await AsyncStorage.removeItem('land')
                     await AsyncStorage.removeItem('UniqueIDLand')
@@ -79,14 +77,11 @@ export default function Home() {
               console.warn(err)
             }
         }
-        async function getEdited(){
-            let jsonValue = await AsyncStorage.getItem('edited')
-            return jsonValue != null ? JSON.parse(jsonValue): false
-        }
         async function getLand(){
             try{ 
               let jsonValue = await AsyncStorage.getItem('land');
               
+              jsonValue? setEdit(jsonValue.edited): setEdit(false)
               
               return jsonValue != null ? JSON.parse(jsonValue): {
                 "id": null,
@@ -116,11 +111,8 @@ export default function Home() {
             }
         }
 
-        setEdited(await getEdited());
         setControl(await getControl());
         setLand(await getLand());
-        setEdit(edited);
-        
     }
 
     async function fetchData() {
@@ -133,6 +125,7 @@ export default function Home() {
         if (isFocused && !isLoading){
             fetchData()
         }
+        
     }, [isFocused])
     
     useEffect(() => {
@@ -262,12 +255,11 @@ export default function Home() {
                             control={control}
                             page="Documents"/>
                         
-                        {(editFarm || land.documents.length == 0) && <>
+                        {(editFarm || land.documents.length == 0 || land.edited) && <>
                         <TouchableOpacity
                         style={styles.Button}
                         onPress={async ()=>{
                             
-                            await AsyncStorage.setItem('edited',JSON.stringify(false))
                             let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
 
                             if (jsonValue == null) jsonValue = {boolWasteManagement: false}
@@ -296,14 +288,10 @@ export default function Home() {
                                 await api.post('attributes', land.attributes)
                                 .then(async response => {
                                     let jsonFarm = JSON.parse(await AsyncStorage.getItem('land'));
+                                    jsonFarm.edited = false
                                     jsonFarm["documents"] = response.data
                                     
                                     await AsyncStorage.setItem('land', JSON.stringify(jsonFarm))
-                                    async function setEdited(bool){
-                                        let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
-                                        return response
-                                    }   
-                                    let editedReturn = await setEdited(false)
                                     setLand(jsonFarm);
                                     await fetchData()
                                     backHandler.remove()
@@ -311,7 +299,7 @@ export default function Home() {
                                 })
                                 .catch(err => {
                                     backHandler.remove()
-                                    alert('Pedimos desculpas, mas não conseguimos adicionar os atributos:( Pedimos que tenta mais uma vez.')
+                                    alert('Pedimos desculpas, mas não conseguimos adicionar os atributos:( Pedimos que tente mais uma vez.')
                                 });
                                 setSearchingDocs(false)
 
@@ -319,7 +307,7 @@ export default function Home() {
                                 alert(
                                     "Você precisa preencher todos os passos acima...",
                                 ) 
-                                
+
                             }
                         }}
                         disabled={searchingDocs}
@@ -330,7 +318,10 @@ export default function Home() {
                                 <ActivityIndicator color='#fff' size= 'large' />
                                 </>
                                 :
-                                <Text style={styles.ButtonText}>Buscar documentos</Text>
+                                land.edited?
+                                    <Text style={styles.ButtonText}>Atualizar documentos</Text>
+                                    :
+                                    <Text style={styles.ButtonText}>Buscar documentos</Text>
                             }
                         </TouchableOpacity>
                         </>}

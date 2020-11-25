@@ -49,11 +49,6 @@ export default function WasteManagement() {
         handleSubmit: () => {},
         onSubmit: async (values, {setSubmitting, setErrors}) => {
             setSubmitting(true);
-            async function setEdited(bool){
-                let response = await AsyncStorage.setItem('edited', JSON.stringify(bool))
-                return true
-            }   
-            let editedReturn = await setEdited(false)
             let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
             let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
             
@@ -64,7 +59,7 @@ export default function WasteManagement() {
             }
             
             try {
-                
+                jsonValue.edited = false
                 await createLand.update({
                     ...jsonValue,
                     attributes,

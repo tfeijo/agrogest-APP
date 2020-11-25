@@ -83,6 +83,7 @@ export default function SoilVegetation() {
             attributes.AgroforestrySystems
 
             try {
+                jsonValue.edited = true
                 await createLand.update({
                     ...jsonValue,
                     attributes
