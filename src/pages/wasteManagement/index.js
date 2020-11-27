@@ -79,8 +79,6 @@ export default function WasteManagement() {
         },
       });
     
-    
-    
     const isFocused = useIsFocused();
 
     async function getInfo(){
@@ -267,19 +265,18 @@ export default function WasteManagement() {
             </Text>
 
             <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-                formik.setFieldValue('DomesticSewageTreatment', 
+                formik.setFieldValue('DeadCompostAnimals', 
                     !r1 || r2 || r3 || r4
                 )
-                formik.setFieldValue('DeadCompostAnimals', !formik.values.DeadCompostAnimals)
                 setR1(!r1)
                 setR10(false)
             }}>
                 <CheckBox 
                 onPress = {() => {
-                    formik.setFieldValue('DomesticSewageTreatment', 
+                    formik.setFieldValue('DeadCompostAnimals', 
                         !r1 || r2 || r3 || r4
                     )
-                    formik.setFieldValue('DeadCompostAnimals', !formik.values.DeadCompostAnimals)
+                    
                     setR1(!r1)
                     setR10(false)
 
@@ -292,7 +289,7 @@ export default function WasteManagement() {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-                formik.setFieldValue('DomesticSewageTreatment', 
+                formik.setFieldValue('DeadCompostAnimals', 
                     r1 || !r2 || r3 || r4
                 )
                 setR2(!r2)
@@ -300,7 +297,7 @@ export default function WasteManagement() {
             }}>
                 <CheckBox 
                 onPress = {() => {
-                    formik.setFieldValue('DomesticSewageTreatment', 
+                    formik.setFieldValue('DeadCompostAnimals', 
                         r1 || !r2 || r3 || r4
                     )
                     setR2(!r2)
@@ -314,7 +311,7 @@ export default function WasteManagement() {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-                formik.setFieldValue('DomesticSewageTreatment', 
+                formik.setFieldValue('DeadCompostAnimals', 
                     r1 || r2 || !r3 || r4
                 )
                 setR3(!r3)
@@ -322,7 +319,7 @@ export default function WasteManagement() {
             }}>
                 <CheckBox 
                 onPress = {() => {
-                    formik.setFieldValue('DomesticSewageTreatment', 
+                    formik.setFieldValue('DeadCompostAnimals', 
                         r1 || r2 || !r3 || r4
                     )
                     setR3(!r3)
@@ -336,7 +333,7 @@ export default function WasteManagement() {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.flexViewOption} onPress={async () => {
-                formik.setFieldValue('DomesticSewageTreatment', 
+                formik.setFieldValue('DeadCompostAnimals', 
                     r1 || r2 || r3 || !r4
                 )
                 setR4(!r4)
@@ -344,7 +341,7 @@ export default function WasteManagement() {
             }}>
                 <CheckBox 
                 onPress = {() => {
-                    formik.setFieldValue('DomesticSewageTreatment', 
+                    formik.setFieldValue('DeadCompostAnimals', 
                         r1 || r2 || r3 || !r4
                     )
                     setR4(!r4)
@@ -363,7 +360,7 @@ export default function WasteManagement() {
                 setR2(false)
                 setR3(false)
                 setR4(false)
-                formik.setFieldValue('DomesticSewageTreatment', false)    
+                formik.setFieldValue('DeadCompostAnimals', false)    
             }}>
                 <CheckBox 
                 onPress = {() => {
@@ -372,7 +369,7 @@ export default function WasteManagement() {
                     setR2(false)
                     setR3(false)
                     setR4(false)
-                    formik.setFieldValue('DomesticSewageTreatment', false)
+                    formik.setFieldValue('DeadCompostAnimals', false)
                 }}
                 color="#A3A3A3"
                 checked = {r10}
@@ -514,14 +511,6 @@ export default function WasteManagement() {
             onValueChange = {text => {
                 formik.setFieldValue('AviaryWastinAgriculture', text)
             }}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
-            value = {formik.values.AviaryWastinAgriculture}
             value = {formik.values.AviaryWastinAgriculture}
             />
         </TouchableOpacity>

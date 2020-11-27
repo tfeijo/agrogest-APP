@@ -26,7 +26,7 @@ export default function BulletTitle(props){
     listDocs.length <= 0 ? 
     <View style={styles.step}>
       <Text style={{color: '#000', fontSize: 18, marginBottom: 10}}>Agora é com você!</Text>
-      <Text>Clique no botão abaixo e encontre os documentos que se encaixam com sua propriedade</Text>
+      <Text>Clique no botão abaixo e encontre os documentos que podem ser úteis para implementar melhorias na sua propriedade.</Text>
     </View>
     :
     <View style={styles.step}>

@@ -70,7 +70,8 @@ export default function Form(props) {
       let erro = false
       let JSONcontrol = JSON.parse(await AsyncStorage.getItem('control'))
       let productionControl = JSONcontrol.productions
-      
+      let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
+
       setSubmitting(true);
       
     
@@ -90,7 +91,6 @@ export default function Form(props) {
         bovi_corte: true
       }
     }
-
     if (values.avicultura.enabled) {
       productions.push(values.avicultura)
       isValidForm(values.avicultura)
@@ -109,9 +109,7 @@ export default function Form(props) {
       }
       if (values.agricultura.enabled) {
         productions.push(values.agricultura)
-        
         isValidForm(values.agricultura)
-
         productionControl = {
           ...productionControl,
           agricultura: true
@@ -122,7 +120,7 @@ export default function Form(props) {
                 
         function isValidNumber(num){
           return typeof num === "number"?
-            num > 0? true: false
+            num > 0 ? true: false
           :
           false
         }
@@ -136,22 +134,18 @@ export default function Form(props) {
             !isValidNumber(val.num_area) || 
             !isValidString(val.handling) ||
             !isValidString(val.cultivation)
-            ) erro = true
-           
+            ) erro = true  
         } else {
           if (
             !isValidNumber(val.num_area) || 
             !isValidNumber(val.num_animals) ||
-            !isValidString(val.handling)
-            ) erro =  true
+            !isValidString(val.handling) ||
+            val.num_area > jsonValue.hectare
+            ) erro = true
         }
-        
       }
-      let jsonValue = JSON.parse(await AsyncStorage.getItem('land'))
-      
       if (erro) {
         erro = false
-        
         Alert.alert('','Verifique os dados preenchidos.')
       } else {
         if (productions.length == 0){

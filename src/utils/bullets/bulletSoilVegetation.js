@@ -14,7 +14,7 @@ export default function SoilVegetation(props) {
       />
       <AnswerItem
           item={props.data.attributes.DiversifiedProduction}
-          text="Produção diversificada"
+          text="Cultivo diversificado ou rotacionado"
       />
       <AnswerItem
           item={props.data.attributes.CompactedArea}
