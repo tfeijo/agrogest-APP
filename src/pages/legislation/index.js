@@ -17,8 +17,10 @@ export default function Legislation() {
         initialValues: {
             EnvironmentalLicensing: false,
             CAR : false,
+            PresenceMaintenanceVegetation: false,
             NativeVegetationLegalReserve: false,
             AppAroundWaterCoursesWaterReservoirs: false,
+            IntegralVegetation: false,
             AppAroundSpringsWaterEyes: false,
             AppHillside: false,
             AppHillTop: false,

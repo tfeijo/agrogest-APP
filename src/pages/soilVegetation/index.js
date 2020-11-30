@@ -21,8 +21,6 @@ export default function SoilVegetation() {
     const [r3,setR3] = useState(false)
     
     async function getInfo(){
-
-    
         try{ 
             let jsonValue = JSON.parse(await AsyncStorage.getItem('control'));
             
@@ -109,7 +107,7 @@ export default function SoilVegetation() {
 
         <Header />
         <Text style={styles.tipsTitle}>
-          Selecione abaixo as características de sua propriedade em relação a solo e vegetação
+          Selecione abaixo as ResidueCompostingcaracterísticas de sua propriedade em relação a solo e vegetação
         </Text>
         
         <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>

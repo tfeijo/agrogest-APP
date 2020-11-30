@@ -285,6 +285,7 @@ export default function Home() {
                                 const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
                                 setSearchingDocs(true)
                                 land.attributes["farm_id"] = land.id
+                                
                                 await api.post('attributes', land.attributes)
                                 .then(async response => {
                                     let jsonFarm = JSON.parse(await AsyncStorage.getItem('land'));
