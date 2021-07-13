@@ -149,10 +149,26 @@ export default function Home() {
                         land.documents? Object.keys(land.documents).length: 0} recomendações</Text>.
                     </Text>
                 </View>
-                
+                <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
                     {!control.boolCaracterization? 
                     <>
                         <Text style={styles.title}>Bem-vindo!</Text>
+
+                        <Text style={styles.description}>
+                            Esse aplicativo é resultado de uma parceria da Universidade Federal de Juiz de Fora e da Embrapa - Gado de Leite.
+                        </Text>
+                        <Text style={styles.description}>
+                            O @grogestAmbiental tem como principal objetivo lhe ajudar a encontrar as informações certas para a melhoria de suas práticas ambientais, de acordo com o cenário de sua propriedade.
+
+                            Ao usá-lo, você deve responder alguns detalhes sobre sua propriedade, suas produções rurais e sobre as práticas ambientais que exerce. Com isso, lhe será apresentado informações sobre o porte da sua propriedade, potencial poluidor e biomas a qual você se encontra.
+
+                            Após uma análise, o aplicativo entregará documentos técnicos, auxiliando você em pontos de melhorias das suas práticas ambientais. Com essas informações, você saberá de técnicas e informações para melhorar o desempenho ambiental da sua propriedade.
+                        </Text>
+                        <Text style={styles.description}>
+                            Obrigado pela utilização e aproveite os benefícios!
+                            Quaisquer sugestões, entre em contato através do e-mail: tfeijo@ice.ufjf.br
+                        </Text>
+
                         <Text style={styles.description}>Siga os passos abaixo</Text>
                         </>
                         : editFarm ?
@@ -165,7 +181,7 @@ export default function Home() {
                         }}></Text>
                         
                     }
-                 <ScrollView style={styles.stepList} showsVerticalScrollIndicator={false}>
+                 
                     {(editFarm || !control.boolWasteManagement) && <>
                         {control.boolCaracterization && <TouchableOpacity onPress={() => deleteData()}>
                             <View style={styles.trashFarm}>
