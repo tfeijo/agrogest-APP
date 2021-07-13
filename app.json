@@ -21,6 +21,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "br.com.embrapa.agrogestAmbiental",
+      "versionCode": 1
+    },
     "ios": {
       "supportsTablet": true
     },

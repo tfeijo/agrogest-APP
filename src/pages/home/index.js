@@ -153,6 +153,21 @@ export default function Home() {
                     {!control.boolCaracterization? 
                     <>
                         <Text style={styles.title}>Bem-vindo!</Text>
+
+                        <Text style={styles.description}>
+                            Esse aplicativo é resultado de uma parceria da Universidade Federal de Juiz de Fora e da Embrapa - Gado de Leite.
+
+                            O @grogestAmbiental que tem como principal objetivo te ajudar a encontrar as informações certas para a melhoria de suas práticas ambientais, de acordo com o seu perfil.
+
+                            Ao usá-lo, você deve responder alguns detalhes sobre sua propriedade, suas produções rurais e práticas ambientais que exerce. Com isso, lhe apresentaremos informações sobre o porte da sua propriedade, potencial poluidor e biomas a qual você se encontra.
+
+                            Após a análise, o aplicativo te entregará documentos técnicos para lhe auxiliar em possíveis pontos de melhorias das suas práticas ambientais. Com essas informações, você saberá de maneiras para melhorar o desempenho ambiental da sua propriedade.
+
+                            Obrigado pela utilização e aproveite os benefícios!
+                            
+                            Quaisquer sugestões, entre em contato através do e-mail: tfeijo@ice.ufjf.br
+                        </Text>
+
                         <Text style={styles.description}>Siga os passos abaixo</Text>
                         </>
                         : editFarm ?
