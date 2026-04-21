@@ -1,71 +1,42 @@
-import * as React from 'react';
+import React from 'react';
 import {
-  Text,
-  View,
-  FlatList,
   ActivityIndicator,
+  FlatList,
+  StatusBar,
+  Text,
   TouchableOpacity,
-  AsyncStorage,
-  StatusBar
+  View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { SearchBar } from 'react-native-elements';
-import styles from "./styles";
+
+import styles from './styles';
+
+
 export default class CitySearch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isLoading: true, search: '' };
-    this.arrayholder = [];
+    this.state = { isLoading: true, search: '', dataSource: [] };
+    this.allCities = [];
   }
+
   componentDidMount() {
-    let responseJson = this.props.route.params.cities;
-    this.setState(
-      {
-        isLoading: false,
-        dataSource: responseJson ,
-      },
-      function() {
-        this.arrayholder = responseJson;
-      }
-    );
+    const cities = this.props.route?.params?.cities ?? [];
+    this.allCities = cities;
+    this.setState({ isLoading: false, dataSource: cities });
   }
 
-  search = text => {
-    console.log(text);
+  SearchFilterFunction = (text) => {
+    const upper = text.toUpperCase();
+    const filtered = this.allCities.filter((item) =>
+      (item.name || '').toUpperCase().includes(upper)
+    );
+    this.setState({ dataSource: filtered, search: text });
   };
-  clear = () => {
-    this.search.clear();
-  };
-  
+
   getCityById(id) {
-    return this.state.dataSource.filter(
-        (data) => data.id == id 
-    );
+    return this.allCities.find((data) => data.id === id);
   }
-
-  SearchFilterFunction(text) {
-    const newData = this.arrayholder.filter(function(item) {
-      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-
-    this.setState({
-      dataSource: newData,
-      search: text,
-    });
-  }
-
-  ListViewItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 0.3,
-          width: '90%',
-          backgroundColor: '#080808',
-        }}
-      />
-    );
-  };
 
   render() {
     if (this.state.isLoading) {
@@ -75,46 +46,46 @@ export default class CitySearch extends React.Component {
         </View>
       );
     }
-    return (<>
-      <StatusBar backgroundColor="#00753E" barStyle='light-content' />
-      <View style={styles.viewStyle}>
-        
-        <SearchBar
-          round
-          searchIcon={{ size: 24 }}
-          inputStyle={styles.inputStyle}
-          containerStyle={styles.containerStyle}
-          placeholderTextColor={'#fff'}
-          onChangeText={text => this.SearchFilterFunction(text)}
-          onClear={text => this.SearchFilterFunction('')}
-          placeholder="Pesquise sua cidade..."
-          value={this.state.search}
-        />
-        <FlatList
-          data={this.state.dataSource}
-          // ItemSeparatorComponent={this.ListViewItemSeparator}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={async () => {
-                let city = this.getCityById(item.id)[0]
-                
-                await AsyncStorage.setItem('city', 
-                  JSON.stringify(city)
-                );
-                this.props.navigation.goBack()
-              }}
-
-              style={styles.item}>
-              <Text style={styles.textItem}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-          enableEmptySections={true}
-          style={{ marginTop: 10 }}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+    return (
+      <>
+        <StatusBar backgroundColor="#00753E" barStyle="light-content" />
+        <View style={styles.viewStyle}>
+          <SearchBar
+            round
+            searchIcon={{ size: 24 }}
+            inputStyle={styles.inputStyle}
+            containerStyle={styles.containerStyle}
+            placeholderTextColor={'#fff'}
+            onChangeText={(text) => this.SearchFilterFunction(text)}
+            onClear={() => this.SearchFilterFunction('')}
+            placeholder="Pesquise sua cidade..."
+            value={this.state.search}
+          />
+          <FlatList
+            data={this.state.dataSource}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={async () => {
+                  const city = this.getCityById(item.id);
+                  if (city) {
+                    await AsyncStorage.setItem('city', JSON.stringify(city));
+                  }
+                  this.props.navigation.goBack();
+                }}
+                style={styles.item}
+              >
+                <Text style={styles.textItem}>{item.name}</Text>
+              </TouchableOpacity>
+            )}
+            enableEmptySections
+            style={{ marginTop: 10 }}
+            keyExtractor={(item) => String(item.id)}
+            initialNumToRender={20}
+            maxToRenderPerBatch={20}
+            windowSize={10}
+          />
+        </View>
       </>
     );
   }
 }
-
