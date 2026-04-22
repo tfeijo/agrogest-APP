@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main, 'claude/**']
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install eslint (standalone, no project deps)
+        run: npm install --no-save --no-audit --no-fund eslint@8
+
+      - name: ESLint
+        run: npx eslint 'src/**/*.js' 'App.js'
+
+      - name: Validate JSON config files
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('app.json', 'utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('.eslintrc.json', 'utf8'))"
