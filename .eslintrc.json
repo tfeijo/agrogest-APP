@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "ecmaFeatures": { "jsx": true }
+  },
+  "extends": ["eslint:recommended"],
+  "rules": {
+    "no-undef": "off",
+    "no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(_|React)" }
+    ],
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-useless-escape": "warn",
+    "no-prototype-builtins": "warn"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "web-build/",
+    "web-report/",
+    ".expo/",
+    "babel.config.js",
+    "*.config.js"
+  ]
+}

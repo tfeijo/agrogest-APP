@@ -1,15 +1,33 @@
-node_modules/**/*
-.expo/*
+node_modules/
+.expo/
+web-build/
+web-report/
+
+# Logs
 npm-debug.*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Credentials / signing
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
-web-report/
 
-# macOS
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
 .DS_Store
-node_modules
+Thumbs.db
+
+# Local env
+.env
+.env.*
+!.env.example
